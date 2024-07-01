@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex min-h-svh flex-col font-minecraft">
+      <body className="flex min-h-svh flex-col bg-black font-minecraft text-white">
         <main className="flex-1">{children}</main>
         <Header />
         <Footer />
