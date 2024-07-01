@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+@font-face {
+  font-family: 'Minecraft';
+  src: url('./assets/fonts/MinecraftRegular.otf');
+  font-weight: normal;
+  font-style: normal;
+}
