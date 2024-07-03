@@ -135,7 +135,7 @@ export default function Home() {
               </p>
             </div>
             <div className="bg-btn-primary pt-8">
-              <Image src={BEAR3} alt="bear" className="m-auto" />
+              <Image src={BEAR2} alt="bear" className="m-auto" />
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export default function Home() {
               </p>
             </div>
             <div className="bg-btn-primary pt-8">
-              <Image src={BEAR4} alt="bear" className="m-auto" />
+              <Image src={BEAR3} alt="bear" className="m-auto" />
             </div>
           </div>
 
@@ -177,7 +177,7 @@ export default function Home() {
               </p>
             </div>
             <div className="bg-btn-primary pt-8">
-              <Image src={BEAR2} alt="bear" className="m-auto" />
+              <Image src={BEAR4} alt="bear" className="m-auto" />
             </div>
           </div>
         </div>
