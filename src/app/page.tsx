@@ -1,13 +1,13 @@
 import BEAR1 from '@/assets/images/Bear1.png';
-import BEAR2 from '@/assets/images/Bear2.png';
-import BEAR3 from '@/assets/images/Bear3.png';
-import BEAR4 from '@/assets/images/Bear4.png';
-import BEAR5 from '@/assets/images/Bear5.png';
-import RectangleBottom from '@/assets/images/Rectangle_b.svg';
-import RectangleTop from '@/assets/images/Rectangle_t.svg';
+import BEAR2 from '@/assets/images/bear2.png';
+import BEAR3 from '@/assets/images/bear3.png';
+import BEAR4 from '@/assets/images/bear4.png';
+import BEAR5 from '@/assets/images/bear5.png';
 import Image1 from '@/assets/images/image1.svg';
 import Image2 from '@/assets/images/image2.svg';
 import Image3 from '@/assets/images/image3.svg';
+import RectangleBottom from '@/assets/images/Rectangle_b.svg';
+import RectangleTop from '@/assets/images/Rectangle_t.svg';
 import {
   faDiscord,
   faGithub,
