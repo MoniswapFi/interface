@@ -1,5 +1,6 @@
 import CongratesIcon from '@/assets/images/congrates.svg';
 import Logo from '@/assets/images/logo.svg';
+import { AlignRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ConnectButton } from '../ConnectButton';
@@ -36,15 +37,17 @@ export const Header = () => {
     <div className="sticky bottom-0">
       <div className="flex items-center justify-center gap-2 bg-secondary py-4">
         <Image src={CongratesIcon} alt="icon" />
-        <p>Moniswap V1 Live on Bartio Testnet. Swap Now!</p>
+        <p className="text-xs md:text-base">
+          Moniswap V1 Live on Bartio Testnet. Swap Now!
+        </p>
       </div>
 
-      <div className="bg-header py-4">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-10">
+      <div className="bg-header py-3 md:py-4">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
           <Link href={'/'}>
             <Image src={Logo} alt="icon" />
           </Link>
-          <div className="flex justify-center gap-7">
+          <div className="hidden justify-center gap-7 md:flex">
             {NavItems.map((item, index) => {
               return (
                 <Link key={index} href={item.href}>
@@ -53,7 +56,12 @@ export const Header = () => {
               );
             })}
           </div>
-          <ConnectButton />
+          <div className="flex items-center gap-4">
+            <ConnectButton />
+            <div className="block cursor-pointer bg-btn-black p-2 md:hidden">
+              <AlignRight size={28} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

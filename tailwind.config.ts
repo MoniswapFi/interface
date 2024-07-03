@@ -15,15 +15,21 @@ const config: Config = {
       },
       colors: {
         'btn-primary': '#F59855',
+        'btn-black': '#222121',
+        'content-gray': '#808080',
+        'arrow-yellow': '#FE910A',
       },
       backgroundColor: {
         primary: '#000000',
         secondary: '#00B2FF',
         header: '#496347',
         footer: '#161616',
+        black1: '#100F0F',
       },
       fontFamily: {
         minecraft: 'Minecraft',
+        luckiestGuy: 'LuckiestGuy',
+        barlow: 'Barlow',
       },
     },
   },

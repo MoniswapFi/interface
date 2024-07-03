@@ -6,8 +6,8 @@ export const Footer = () => {
   const today = new Date().getFullYear();
   return (
     <div className="bg-footer px-10 py-5">
-      <div className="flex h-[200px] items-start justify-between">
-        <div className="flex items-center gap-5">
+      <div className="flex items-end justify-between pb-[70px] md:items-start md:pb-[105px]">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-5">
           <Link href={'#'}>Documentation</Link>
           <Link href={'#'}>Security</Link>
           <Link href={'#'}>Brand Kit</Link>
@@ -16,8 +16,8 @@ export const Footer = () => {
         <div className="bg-btn-primary px-5 py-3">Mirror &lt;</div>
       </div>
 
-      <div className="flex justify-between">
-        <div>
+      <div className="justify-between max-md:space-y-10 max-md:pb-5 md:flex">
+        <div className="flex flex-col md:flex-row">
           <span>{today} &copy; Moniswap</span>
           <span>Terms of Service</span>
         </div>
