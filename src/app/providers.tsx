@@ -1,5 +1,6 @@
 'use client';
 
+import { NextUIProvider } from '@nextui-org/react';
 import { FC, PropsWithChildren, useState } from 'react';
 import { AsideBar } from './components/Aside';
 import { Footer } from './components/Footer';
@@ -15,11 +16,11 @@ export const Providers: FC<Props> = ({ children }) => {
   };
 
   return (
-    <>
+    <NextUIProvider className="flex min-h-svh flex-col">
       <AsideBar showMenu={showMenu} hideMenu={() => setShowMenu(false)} />
       {children}
       <Header toggleMenuOpen={toggleMenuOpen} />
       <Footer />
-    </>
+    </NextUIProvider>
   );
 };

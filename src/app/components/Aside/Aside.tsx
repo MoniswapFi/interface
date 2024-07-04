@@ -48,7 +48,11 @@ export const AsideBar: FC<Props> = ({ showMenu, hideMenu }) => {
           return (
             <Link href={item.href} key={index}>
               <div className="flex h-[40px] items-center gap-3 bg-navItemBackground">
-                <div className="h-full w-[7px] bg-navSelected"></div>
+                <div
+                  className={cn('h-full w-[7px] bg-navDefault', {
+                    'bg-navSelected': pathname === item.href,
+                  })}
+                ></div>
                 <div>{item.name}</div>
               </div>
             </Link>

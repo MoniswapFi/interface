@@ -86,7 +86,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
           isLoading={isLoading}
           size={size}
           className={cn(
-            'px-4 font-medium data-[pressed=true]:scale-100',
+            'rounded-none px-4 font-medium data-[pressed=true]:scale-100',
             classNames?.base,
             className,
           )}
