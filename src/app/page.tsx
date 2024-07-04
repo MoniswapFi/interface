@@ -47,7 +47,7 @@ export default function Home() {
         <Image
           src={RectangleBottom}
           alt="image"
-          className="absolute -left-[100px] bottom-[100px] w-[200px] lg:bottom-[-50px] lg:left-0 xl:w-[400px]"
+          className="absolute -left-[100px] bottom-[100px] w-[200px] lg:bottom-[-50px] lg:left-[-30px] lg:w-[250px] xl:left-0 xl:w-[400px]"
         />
         <div className="max-w-[640px]">
           <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.08] max-md:text-center md:text-9xl">
@@ -92,13 +92,24 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="relative px-5 md:px-20">
+      <div className="relative overflow-hidden px-5 py-40 md:px-20 md:py-10 lg:py-40">
+        <Image
+          src={RectangleBottom}
+          alt="image"
+          className="absolute -left-[100px] top-[-70px] w-[200px] scale-y-[-1] lg:left-[-30px] lg:top-[50px] lg:w-[250px] xl:top-[-50px] xl:w-[400px]"
+        />
+        <Image
+          src={RectangleBottom}
+          alt="image"
+          className="absolute bottom-0 right-[-50px] w-[200px] scale-x-[-1] md:right-[-50px] lg:bottom-[-50px] lg:right-0 xl:w-[400px]"
+        />
+
         <h2 className="ml-auto max-w-[840px] text-right text-2xl md:text-5xl">
           Designed to reward participants that enable the sustainable growth of
           the protocol.
         </h2>
 
-        <div className="mt-20 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-28 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col justify-between bg-footer">
             <div className="space-y-4 px-4 pb-10 pt-4">
               <div className="flex items-start justify-between">
@@ -183,12 +194,21 @@ export default function Home() {
         </div>
 
         <div className="mt-20 space-y-10 pb-20 text-center">
+          <Image
+            src={Image2}
+            alt="image"
+            className="bottom-[270px] left-[20px] w-[150px] sm:bottom-[200px] md:absolute md:bottom-[300px] lg:left-[15%] lg:w-[200px] xl:w-[250px]"
+          />
           <p className="m-auto max-w-[400px] text-2xl md:text-3xl">
             Looking to get started with Moniswap?
           </p>
 
           <Button variant="primary">Onboarding Guide</Button>
-
+          <Image
+            src={Image3}
+            alt="image"
+            className="bottom-[400px] right-[70px] ml-auto mr-[10%] w-[150px] md:absolute md:bottom-[350px] lg:right-[15%] lg:w-[200px] xl:w-[250px]"
+          />
           <p className="font-luckiestGuy text-6xl uppercase opacity-[0.08] md:text-9xl">
             moniswap
           </p>
