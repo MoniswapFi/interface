@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
-import { Footer } from './components/Footer';
-import { Header } from './components/Header';
 import './globals.css';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'Moniswap',
@@ -16,9 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex min-h-svh flex-col bg-black font-minecraft text-white">
-        <main className="flex-1">{children}</main>
-        <Header />
-        <Footer />
+        <Providers>
+          <main className="flex-1">{children}</main>
+        </Providers>
       </body>
     </html>
   );

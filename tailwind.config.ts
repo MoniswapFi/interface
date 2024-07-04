@@ -25,6 +25,9 @@ const config: Config = {
         header: '#496347',
         footer: '#161616',
         black1: '#100F0F',
+        navItemBackground: '#212121',
+        navBackground: '#120F0F',
+        navSelected: '#ABABAB',
       },
       fontFamily: {
         minecraft: 'Minecraft',

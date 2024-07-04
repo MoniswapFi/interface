@@ -3,9 +3,10 @@ import Logo from '@/assets/images/logo.svg';
 import { AlignRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { FC } from 'react';
 import { ConnectButton } from '../ConnectButton';
 
-const NavItems = [
+export const NavItems = [
   {
     name: 'Swap',
     href: '/swap',
@@ -32,7 +33,11 @@ const NavItems = [
   },
 ];
 
-export const Header = () => {
+type Props = {
+  toggleMenuOpen: () => void;
+};
+
+export const Header: FC<Props> = ({ toggleMenuOpen }) => {
   return (
     <div className="sticky bottom-0">
       <div className="flex items-center justify-center gap-2 bg-secondary py-4">
@@ -58,7 +63,10 @@ export const Header = () => {
           </div>
           <div className="flex items-center gap-4">
             <ConnectButton />
-            <div className="block cursor-pointer bg-btn-black p-2 md:hidden">
+            <div
+              className="block cursor-pointer bg-btn-black p-2 md:hidden"
+              onClick={toggleMenuOpen}
+            >
               <AlignRight size={28} />
             </div>
           </div>
