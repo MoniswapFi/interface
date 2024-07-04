@@ -20,7 +20,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
         </Providers>
       </body>
-      <GoogleAnalytics gaId="GTM-5J4ZNS4Z" />
+      <GoogleAnalytics gaId="G-HFEN1RRYYP" />
     </html>
   );
 }
