@@ -274,6 +274,13 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.4.tgz#e65a1c6539a671f97bb86d5183d6e3a1733c29c7"
   integrity sha512-tkLrjBzqFTP8DVrAAQmZelEahfR9OxWpFR++vAI9FBhCiIxtwHwBHC23SBHCTURBtwB4kc/x44imVOnkKGNVGg==
 
+"@next/third-parties@^14.2.4":
+  version "14.2.4"
+  resolved "https://registry.yarnpkg.com/@next/third-parties/-/third-parties-14.2.4.tgz#9b3e24779fa19a8a30e115570cf98090be54c16c"
+  integrity sha512-bf5d5m4a+Fh9syLz0Pf9Ax7LdLazlp7ur7DqX0LUMDyIx9Z/F0J/XxieklA9lRqM9KjrCVNT8Tkhg0AvotTBTQ==
+  dependencies:
+    third-party-capital "1.0.20"
+
 "@nextui-org/accordion@2.0.35":
   version "2.0.35"
   resolved "https://registry.yarnpkg.com/@nextui-org/accordion/-/accordion-2.0.35.tgz#381cc4b514a4ab7f06dfc8d151ebf88c000c685c"
@@ -5002,6 +5009,11 @@ thenify-all@^1.0.0:
   integrity sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==
   dependencies:
     any-promise "^1.0.0"
+
+third-party-capital@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/third-party-capital/-/third-party-capital-1.0.20.tgz#e218a929a35bf4d2245da9addb8ab978d2f41685"
+  integrity sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==
 
 to-regex-range@^5.0.1:
   version "5.0.1"

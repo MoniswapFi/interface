@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from './providers';
@@ -19,6 +20,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
         </Providers>
       </body>
+      <GoogleAnalytics gaId="GTM-5J4ZNS4Z" />
     </html>
   );
 }
