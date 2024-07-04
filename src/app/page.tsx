@@ -69,8 +69,12 @@ export default function Home() {
         />
 
         <div className="flex w-full items-center justify-center gap-5">
-          <Button variant="primary">Swap</Button>
-          <Button variant="secondary">Join Quest</Button>
+          <Button variant="primary" className="w-[150px]">
+            Swap
+          </Button>
+          <Button variant="secondary" className="w-[150px]">
+            Join Quest
+          </Button>
         </div>
 
         <div className="flex items-center justify-center gap-5 pt-32 lg:pt-10">
