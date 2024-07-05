@@ -1,4 +1,5 @@
 import { GoogleAnalytics } from '@next/third-parties/google';
+import '@rainbow-me/rainbowkit/styles.css';
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from './providers';

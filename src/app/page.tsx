@@ -18,6 +18,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MoveUpRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from './components/ui/button';
 
 export default function Home() {
@@ -69,9 +70,11 @@ export default function Home() {
         />
 
         <div className="flex w-full items-center justify-center gap-5">
-          <Button variant="primary" className="w-[150px]">
-            Swap
-          </Button>
+          <Link href={'/swap'}>
+            <Button variant="primary" className="w-[150px]">
+              Swap
+            </Button>
+          </Link>
           <Button variant="secondary" className="w-[150px]">
             Join Quest
           </Button>

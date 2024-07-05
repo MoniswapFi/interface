@@ -67,7 +67,7 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
               className="block cursor-pointer bg-btn-black p-2 md:hidden"
               onClick={toggleMenuOpen}
             >
-              <AlignRight size={28} />
+              <AlignRight size={30} />
             </div>
           </div>
         </div>
