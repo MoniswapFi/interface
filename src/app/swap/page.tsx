@@ -1,13 +1,21 @@
+'use client';
+
 import BEAR1 from '@/assets/images/Bear1.png';
 import BeraLogo from '@/assets/images/Bera.png';
 import Logo from '@/assets/images/logo.svg';
 import SwapIcon from '@/assets/images/swapIcon.svg';
+import { ConnectButton } from '@/components/ConnectButton';
+import { TokenSelectModal } from '@/components/TokenSelectModal';
 import { Button } from '@/components/ui/button';
 import { Divider, Input } from '@nextui-org/react';
-import { ChevronDown } from 'lucide-react';
+import { ArrowRightLeft, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
 
 export default function Page() {
+  const [showModal, setShowModal] = useState(false);
+  const { isConnected } = useAccount();
   return (
     <div className="p-5 pb-20">
       <Image
@@ -21,11 +29,14 @@ export default function Page() {
           <div className="flex flex-col gap-3">
             <p className="flex justify-between">
               <span>Swap</span>
-              <span>Available 0.0 MONI</span>
+              <span className="text-swapBox">Available 0.0 MONI</span>
             </p>
 
             <div className="flex items-center justify-between">
-              <div className="flex h-[50px] flex-[2_2_0%] items-center justify-between border-b border-l border-t border-swapBox bg-btn-black px-3">
+              <div
+                className="flex h-[50px] flex-[2_2_0%] cursor-pointer items-center justify-between border-b border-l border-t border-swapBox bg-btn-black px-3"
+                onClick={() => setShowModal(true)}
+              >
                 <p className="flex items-center gap-3">
                   <Image src={Logo} alt="token image" width={24} />
                   <span>MONI</span>
@@ -45,6 +56,7 @@ export default function Page() {
                 />
               </div>
             </div>
+            <p className="text-right text-swapBox">$23.45</p>
           </div>
 
           <div className="relative">
@@ -57,11 +69,14 @@ export default function Page() {
           <div className="flex flex-col gap-3">
             <p className="flex justify-between">
               <span>For</span>
-              <span>Available 0.0 BERA</span>
+              <span className="text-swapBox">Available 0.0 BERA</span>
             </p>
 
             <div className="flex items-center justify-between">
-              <div className="flex h-[50px] flex-[2_2_0%] items-center justify-between border-b border-l border-t border-swapBox bg-btn-black px-3">
+              <div
+                className="flex h-[50px] flex-[2_2_0%] cursor-pointer items-center justify-between border-b border-l border-t border-swapBox bg-btn-black px-3"
+                onClick={() => setShowModal(true)}
+              >
                 <p className="flex items-center gap-3">
                   <Image src={BeraLogo} alt="token image" width={24} />
                   <span>BERA</span>
@@ -81,15 +96,56 @@ export default function Page() {
                 />
               </div>
             </div>
+            <p className="text-right text-swapBox">$23.45</p>
           </div>
         </div>
 
         <div>
-          <Button variant="primary" size="full">
-            Connect Wallet
-          </Button>
+          {isConnected ? (
+            <>
+              <Button variant="primary" size="full">
+                Swap
+              </Button>
+            </>
+          ) : (
+            <ConnectButton className="w-full" />
+          )}
         </div>
+
+        {isConnected && (
+          <div className="flex flex-col gap-5 bg-footer p-8">
+            <div className="flex items-center justify-between">
+              <p className="text-swapBox">
+                Exchange rate found...{' '}
+                <span className="cursor-pointer underline">Refresh</span>
+              </p>
+              <p className="flex gap-2 text-textgray">
+                1 MONI <ArrowRightLeft /> 0.05188 BERA
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <p className="text-swapBox">
+                Slippage applied...{' '}
+                <span className="cursor-pointer underline">Adjust</span>
+              </p>
+              <p className="text-textgray">1.0%</p>
+            </div>
+
+            <p className="flex items-center justify-between">
+              <span className="text-swapBox">Minimum received</span>
+              <span className="text-textgray">0.28988 BERA</span>
+            </p>
+
+            <p className="flex items-center justify-between">
+              <span className="text-swapBox">Price impact</span>
+              <span className="text-green1">0.09671%</span>
+            </p>
+          </div>
+        )}
       </div>
+
+      <TokenSelectModal isOpen={showModal} close={() => setShowModal(false)} />
     </div>
   );
 }

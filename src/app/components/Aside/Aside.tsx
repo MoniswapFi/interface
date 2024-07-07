@@ -38,8 +38,8 @@ export const AsideBar: FC<Props> = ({ showMenu, hideMenu }) => {
 
         <div className="flex items-center gap-4">
           <ConnectButton />
-          <div className="bg-btn-black p-2" onClick={hideMenu}>
-            <X size={28} />
+          <div className="cursor-pointer bg-btn-black p-2" onClick={hideMenu}>
+            <X size={32} />
           </div>
         </div>
       </div>
