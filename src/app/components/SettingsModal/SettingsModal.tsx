@@ -48,7 +48,7 @@ export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
                       className={cn(
                         'flex cursor-pointer items-center justify-center bg-walletItem py-7 hover:border hover:border-btn-primary/40',
                         {
-                          'border border-btn-primary text-white':
+                          'border border-btn-primary bg-gradient-to-b from-btn-primary/10 to-arrow-yellow/10 text-white':
                             slippage === '0.1',
                         },
                       )}
@@ -60,7 +60,7 @@ export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
                       className={cn(
                         'flex cursor-pointer items-center justify-center bg-walletItem py-7 hover:border hover:border-btn-primary/40',
                         {
-                          'border border-btn-primary text-white':
+                          'border border-btn-primary bg-gradient-to-b from-btn-primary/10 to-arrow-yellow/10 text-white':
                             slippage === '0.5',
                         },
                       )}
@@ -72,7 +72,7 @@ export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
                       className={cn(
                         'flex cursor-pointer items-center justify-center bg-walletItem py-7 hover:border hover:border-btn-primary/40',
                         {
-                          'border border-btn-primary text-white':
+                          'border border-btn-primary bg-gradient-to-b from-btn-primary/10 to-arrow-yellow/10 text-white':
                             slippage === '1',
                         },
                       )}
@@ -84,7 +84,7 @@ export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
                       className={cn(
                         'flex cursor-pointer items-center justify-center bg-walletItem py-7',
                         {
-                          'border border-btn-primary text-white':
+                          'border border-btn-primary bg-gradient-to-b from-btn-primary/10 to-arrow-yellow/10 text-white':
                             slippage !== '0.1' &&
                             slippage !== '0.5' &&
                             slippage !== '1',
