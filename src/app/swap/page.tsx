@@ -26,7 +26,7 @@ export default function Page() {
       />
       <div className="z-1 relative m-auto mt-32 flex max-w-[620px] flex-col gap-10">
         <div className="flex w-full flex-col gap-10 bg-footer p-8">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 text-sm sm:text-base">
             <p className="flex justify-between">
               <span>Swap</span>
               <span className="text-swapBox">Available 0.0 MONI</span>
@@ -66,7 +66,7 @@ export default function Page() {
             <Divider className="my-4 bg-[#494646]" />
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 text-sm sm:text-base">
             <p className="flex justify-between">
               <span>For</span>
               <span className="text-swapBox">Available 0.0 BERA</span>
@@ -113,14 +113,17 @@ export default function Page() {
         </div>
 
         {isConnected && (
-          <div className="flex flex-col gap-5 bg-footer p-8">
+          <div className="flex flex-col gap-5 bg-footer p-8 text-xs sm:text-base">
             <div className="flex items-center justify-between">
               <p className="text-swapBox">
                 Exchange rate found...{' '}
                 <span className="cursor-pointer underline">Refresh</span>
               </p>
-              <p className="flex gap-2 text-textgray">
-                1 MONI <ArrowRightLeft /> 0.05188 BERA
+              <p className="flex flex-col gap-2 text-textgray sm:flex-row">
+                <span className="flex gap-2">
+                  1 MONI <ArrowRightLeft />
+                </span>{' '}
+                <span>0.05188 BERA</span>
               </p>
             </div>
 
