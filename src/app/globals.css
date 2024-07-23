@@ -22,6 +22,12 @@
   }
 }
 
+@layer components {
+  .text-gradient {
+    @apply w-fit bg-gradient-to-r bg-clip-text text-transparent;
+  }
+}
+
 @font-face {
   font-family: 'Minecraft';
   src: url('./assets/fonts/MinecraftRegular.otf');
