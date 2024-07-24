@@ -1,6 +1,7 @@
 'use client';
 
 import AirdropImage from '@/assets/images/AirdropWeb.png';
+import Rectangle from '@/assets/images/Rectangle_t.svg';
 import RingIcon from '@/assets/images/ring.svg';
 import StarIcon from '@/assets/images/star.svg';
 import { Button } from '@/components/ui/button';
@@ -67,7 +68,14 @@ const pointsArray = [
 
 export default function Page() {
   return (
-    <div className="space-y-5 p-5 lg:px-20">
+    <div className="relative space-y-5 p-5 lg:px-20">
+      <Image
+        alt="image"
+        src={Rectangle}
+        width={200}
+        height={200}
+        className="absolute right-[-100px] top-[-100px] lg:right-[-70px] lg:top-[-70px]"
+      />
       <div className="flex flex-col-reverse gap-3 pt-5 lg:flex-row">
         <div className="flex-1 space-y-5 lg:pt-32">
           <div className="lg:space-y-5">
@@ -132,7 +140,20 @@ export default function Page() {
                   title: 'text-white',
                 }}
               >
-                Content here
+                <div className="space-y-5">
+                  <p className="text-xs italic text-gray1 lg:text-base">
+                    To pass this challenge, you must Follow Cappo on X (Twitter)
+                    and turn on your notification.
+                  </p>
+                  <p className="text-xs italic text-gray1 lg:text-base">
+                    Please note, we sync this challenge every hour so please be
+                    patient and your progress will automatically update.
+                  </p>
+
+                  <Button variant="primary" size="full">
+                    Follow
+                  </Button>
+                </div>
               </AccordionItem>
             );
           })}
