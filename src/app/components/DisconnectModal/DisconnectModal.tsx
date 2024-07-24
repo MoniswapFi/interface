@@ -34,7 +34,7 @@ export const DisconnectModal: FC<ModalProps> = ({ isOpen, close }) => {
             <ModalBody>
               <div className="py-5">
                 <div
-                  className="cursor-pointer bg-walletItem py-5 text-center"
+                  className="cursor-pointer bg-brightBlack py-5 text-center"
                   onClick={() => handleDisconnect()}
                 >
                   Disconnect wallet
