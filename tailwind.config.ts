@@ -30,6 +30,8 @@ const config: Config = {
         footer: '#161616',
         navDefault: '#ABABAB',
         navSelected: '#FC8415',
+        gray1: '#CFCFCF',
+        gray2: '#5A5B5A',
       },
       backgroundColor: {
         primary: '#000000',
@@ -38,14 +40,17 @@ const config: Config = {
         black1: '#100F0F',
         navItemBackground: '#212121',
         navBackground: '#120F0F',
-        walletItem: '#1E1E1E',
+        brightBlack: '#1E1E1E',
+        darkBlack: '#000004',
       },
       fontFamily: {
         minecraft: 'Minecraft',
         luckiestGuy: 'LuckiestGuy',
         barlow: 'Barlow',
       },
-      borderColor: {},
+      borderColor: {
+        lightGray: '#33332D',
+      },
     },
   },
   plugins: [nextui()],

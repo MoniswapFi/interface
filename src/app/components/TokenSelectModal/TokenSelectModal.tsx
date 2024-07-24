@@ -37,19 +37,19 @@ export const TokenSelectModal: FC<ModalProps> = ({ isOpen, close }) => {
                 <Input placeholder="Search by name, symbol or address" />
 
                 <div className="grid grid-cols-4 gap-3">
-                  <div className="flex items-center gap-2 bg-walletItem px-2 py-3">
+                  <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
                     <Image src={BeraLogo} alt="token logo" />
                     <span className="text-xl">BERA</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-walletItem px-2 py-3">
+                  <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
                     <Image src={BeraLogo} alt="token logo" />
                     <span className="text-xl">BERA</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-walletItem px-2 py-3">
+                  <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
                     <Image src={BeraLogo} alt="token logo" />
                     <span className="text-xl">BERA</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-walletItem px-2 py-3">
+                  <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
                     <Image src={BeraLogo} alt="token logo" />
                     <span className="text-xl">BERA</span>
                   </div>
@@ -61,7 +61,7 @@ export const TokenSelectModal: FC<ModalProps> = ({ isOpen, close }) => {
                   {Array.from({ length: 20 }).map((item, index) => {
                     return (
                       <div
-                        className="flex cursor-pointer items-center justify-between px-2 py-2 hover:bg-walletItem"
+                        className="flex cursor-pointer items-center justify-between px-2 py-2 hover:bg-brightBlack"
                         key={index}
                       >
                         <div className="flex items-center gap-2">

@@ -70,21 +70,21 @@ export const ConnectButton: FC<Props> = ({ className }) => {
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-5 py-5 uppercase">
-                  <div className="flex cursor-pointer items-center bg-walletItem py-5">
+                  <div className="flex cursor-pointer items-center bg-brightBlack py-5">
                     <div className="flex w-[70px] justify-center">
                       <Image src={Metamask} alt="metamask" />
                     </div>
                     <p>Connect with metamask</p>
                   </div>
 
-                  <div className="flex cursor-pointer items-center bg-walletItem py-5">
+                  <div className="flex cursor-pointer items-center bg-brightBlack py-5">
                     <div className="flex w-[70px] justify-center">
                       <Image src={WalletConnect} alt="walletconnect" />
                     </div>
                     <p>Connect with walletconnect</p>
                   </div>
 
-                  <div className="flex cursor-pointer items-center bg-walletItem py-5">
+                  <div className="flex cursor-pointer items-center bg-brightBlack py-5">
                     <div className="flex w-[70px] justify-center">
                       <Image src={Coinbase} alt="coinbase" />
                     </div>
