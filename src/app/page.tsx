@@ -75,9 +75,11 @@ export default function Home() {
               Swap
             </Button>
           </Link>
-          <Button variant="secondary" className="w-[150px]">
-            Join Quest
-          </Button>
+          <Link href={'/quest'}>
+            <Button variant="secondary" className="w-[150px]">
+              Join Quest
+            </Button>
+          </Link>
         </div>
 
         <div className="flex items-center justify-center gap-5 pt-32 lg:pt-10">
