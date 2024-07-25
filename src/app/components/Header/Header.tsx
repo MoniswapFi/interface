@@ -42,9 +42,11 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
     <div className="sticky bottom-0">
       <div className="flex items-center justify-center gap-2 bg-secondary py-4">
         <Image src={CongratesIcon} alt="icon" />
-        <p className="text-xs md:text-base">
-          Moniswap V1 Live on Bartio Testnet. Swap Now!
-        </p>
+        <Link href={'/swap'}>
+          <p className="text-xs md:text-base">
+            Moniswap V1 Live on Bartio Testnet. Swap Now!
+          </p>
+        </Link>
       </div>
 
       <div className="bg-header py-3 md:py-4">
