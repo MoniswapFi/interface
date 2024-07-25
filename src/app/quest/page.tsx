@@ -68,7 +68,7 @@ const pointsArray = [
 
 export default function Page() {
   return (
-    <div className="relative space-y-5 p-5 lg:px-20">
+    <div className="relative space-y-5 overflow-hidden p-5 lg:px-20">
       <Image
         alt="image"
         src={Rectangle}
@@ -120,7 +120,7 @@ export default function Page() {
                 key={index}
                 aria-label={item.title}
                 title={
-                  <div className="flex justify-between gap-2 text-xs lg:text-base">
+                  <div className="flex items-center justify-between gap-2 text-xs lg:text-base">
                     <div className="flex items-center">
                       <Checkbox
                         size="lg"
@@ -136,7 +136,7 @@ export default function Page() {
                   </div>
                 }
                 classNames={{
-                  base: '!bg-darkBlack',
+                  base: '!bg-darkBlack !rounded-none',
                   title: 'text-white',
                 }}
               >
