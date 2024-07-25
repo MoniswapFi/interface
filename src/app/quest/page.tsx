@@ -145,7 +145,7 @@ export default function Page() {
                     To pass this challenge, you must Follow Cappo on X (Twitter)
                     and turn on your notification.
                   </p>
-                  <p className="text-xs italic text-gray1 lg:text-base">
+                  <p className="text-xs text-gray1 lg:text-base">
                     Please note, we sync this challenge every hour so please be
                     patient and your progress will automatically update.
                   </p>
