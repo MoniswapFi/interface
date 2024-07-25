@@ -141,7 +141,7 @@ export default function Page() {
                 }}
               >
                 <div className="space-y-5">
-                  <p className="text-xs italic text-gray1 lg:text-base">
+                  <p className="text-xs text-gray1 lg:text-base">
                     To pass this challenge, you must Follow Cappo on X (Twitter)
                     and turn on your notification.
                   </p>
