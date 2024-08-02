@@ -32,6 +32,7 @@ const config: Config = {
         navSelected: '#FC8415',
         gray1: '#CFCFCF',
         gray2: '#5A5B5A',
+        lightblue: '#00B2FF',
       },
       backgroundColor: {
         primary: '#000000',
@@ -42,6 +43,7 @@ const config: Config = {
         navBackground: '#120F0F',
         brightBlack: '#1E1E1E',
         darkBlack: '#000004',
+        darkgray: '#47473F',
       },
       fontFamily: {
         minecraft: 'Minecraft',
