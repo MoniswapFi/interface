@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Popover } from '@/components/ui/Popover';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Select, SelectItem, Tab, Tabs } from '@nextui-org/react';
+import { Chip, Select, SelectItem, Tab, Tabs } from '@nextui-org/react';
 import { RotateCw } from 'lucide-react';
 import Image from 'next/image';
 
@@ -48,7 +48,7 @@ export default function Page() {
         <Image
           src={Bear6}
           alt="bear"
-          className="-top-[90px] right-0 md:absolute"
+          className="-top-[90px] right-0 m-auto lg:absolute"
         />
         {/* <Image
           src={Image2}
@@ -104,7 +104,7 @@ export default function Page() {
       </div>
 
       <div className="space-y-5 bg-footer p-5">
-        <div className="flex items-center justify-between border-b border-swapBox">
+        <div className="flex flex-col-reverse items-center justify-between border-b border-swapBox md:flex-row">
           <Tabs
             variant={'underlined'}
             aria-label="Tabs variants"
@@ -117,7 +117,22 @@ export default function Page() {
               cursor: 'border-b-3 border-btn-primary w-full',
             }}
           >
-            <Tab key="pools" title="Pools" />
+            <Tab
+              key="pools"
+              title={
+                <span>
+                  Pools{' '}
+                  <Chip
+                    radius="none"
+                    classNames={{
+                      base: 'bg-darkgray text-xs text-lightblue p-1 h-fit w-fit',
+                    }}
+                  >
+                    158
+                  </Chip>
+                </span>
+              }
+            />
             <Tab key="position" title="My Position" />
           </Tabs>
           <div className="flex items-center gap-2">
@@ -134,8 +149,8 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="w-[25%]">
+        <div className="items-center justify-between lg:flex">
+          <div className="lg:w-[25%]">
             <Select
               label="Select an animal"
               classNames={{
@@ -154,32 +169,39 @@ export default function Page() {
               labelPlacement="outside"
             >
               {PoolTypes.map((item, index) => {
-                return <SelectItem key={item.key}>{item.text}</SelectItem>;
+                return (
+                  <SelectItem
+                    key={item.key}
+                    className="data-[hover=true]:border data-[hover=true]:border-btn-primary data-[hover=true]:bg-transparent data-[hover=true]:text-white"
+                  >
+                    {item.text}
+                  </SelectItem>
+                );
               })}
             </Select>
           </div>
-          <div className="text-right">
+          <div className="hidden w-[130px] text-right lg:block">
             TVL <Popover content="Popover content here." />
           </div>
-          <div className="text-right">
+          <div className="hidden w-[130px] text-right lg:block">
             {'Fees <24H>'} <Popover content="Popover content here." />
           </div>
-          <div className="text-right">
+          <div className="hidden w-[130px] text-right lg:block">
             {'Volumn <24H>'} <Popover content="Popover content here." />
           </div>
-          <div className="text-right">
+          <div className="hidden w-[130px] text-right lg:block">
             {'APR <24H>'} <Popover content="Popover content here." />
           </div>
-          <div className="text-right">{'Action'}</div>
+          <div className="hidden text-right lg:block">{'Action'}</div>
         </div>
 
         {Array.from({ length: 20 }).map((item, index) => {
           return (
             <div
-              className="flex items-center justify-between border-t border-swapBox pt-5"
+              className="flex flex-col justify-between gap-3 border-t border-swapBox pt-5 lg:flex-row lg:items-center lg:gap-0"
               key={index}
             >
-              <div className="flex w-[25%]">
+              <div className="flex lg:w-[25%]">
                 <div className="flex items-center">
                   <Image src={BearIcon} alt="icon" width={30} />
                   <Image
@@ -197,13 +219,34 @@ export default function Page() {
                 </div>
               </div>
 
-              <div>$9,062,352.53</div>
-              <div>$19,233.02</div>
-              <div>$7,693,210.16</div>
-              <div>143.95%</div>
+              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
+                <span className="text-textgray lg:hidden">
+                  TVL <Popover content="Popover content here." />
+                </span>
+                <span>$9,062,352.53</span>
+              </div>
+              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
+                <span className="text-textgray lg:hidden">
+                  {'Fees <24H>'} <Popover content="Popover content here." />
+                </span>
+                $19,233.02
+              </div>
+              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
+                <span className="text-textgray lg:hidden">
+                  {'Volumn <24H>'} <Popover content="Popover content here." />
+                </span>
+                $7,693,210.16
+              </div>
+              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
+                <span className="text-textgray lg:hidden">
+                  {'APR <24H>'} <Popover content="Popover content here." />
+                </span>
+                143.95%
+              </div>
               <div>
-                <Button className="min-w-0">
-                  <FontAwesomeIcon icon={faPlus} />
+                <Button className="w-full text-btn-primary lg:min-w-0">
+                  <FontAwesomeIcon icon={faPlus} />{' '}
+                  <span className="lg:hidden">Add Liquidity</span>
                 </Button>
               </div>
             </div>
