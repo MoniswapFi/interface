@@ -3,46 +3,19 @@
 import Bear2 from '@/assets/images/bear2.png';
 import Bear5 from '@/assets/images/bear5.png';
 import Bear6 from '@/assets/images/bear6.png';
-import BearIcon from '@/assets/images/Bera.png';
 import Image2 from '@/assets/images/image2.svg';
-import MoniIcon from '@/assets/images/logo.svg';
 import Rectangle from '@/assets/images/Rectangle_t.svg';
 import { Button } from '@/components/ui/button';
-import { Popover } from '@/components/ui/Popover';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Chip, Select, SelectItem, Tab, Tabs } from '@nextui-org/react';
+import { Chip, Tab, Tabs } from '@nextui-org/react';
 import { RotateCw } from 'lucide-react';
 import Image from 'next/image';
-
-const PoolTypes = [
-  {
-    key: 'all',
-    text: 'All Pools',
-  },
-  {
-    key: 'stable',
-    text: 'Stable',
-  },
-  {
-    key: 'volatile',
-    text: 'Volatile',
-  },
-  {
-    key: 'concentrated',
-    text: 'Concentrated',
-  },
-  {
-    key: 'incentivized',
-    text: 'Incentivized',
-  },
-  {
-    key: 'low',
-    text: 'Low TVL',
-  },
-];
+import { useState } from 'react';
+import { MyPosition } from './_components/MyPosition';
+import { Pools } from './_components/Pools';
 
 export default function Page() {
+  const [selectedTab, setSelectedTab] = useState('pools');
+
   return (
     <div className="relative overflow-hidden p-5 md:p-20">
       <Image
@@ -113,7 +86,9 @@ export default function Page() {
         <div className="flex flex-col-reverse items-center justify-between border-b border-swapBox md:flex-row">
           <Tabs
             variant={'underlined'}
-            aria-label="Tabs variants"
+            aria-label="Options"
+            selectedKey={selectedTab}
+            onSelectionChange={(key) => setSelectedTab(key as string)}
             classNames={{
               base: 'w-fit',
               tabList: 'w-full border-none p-0 ',
@@ -155,112 +130,10 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="items-center justify-between lg:flex">
-          <div className="lg:w-[25%]">
-            <Select
-              label="Select an animal"
-              classNames={{
-                trigger:
-                  'bg-transparent data-[hover=true]:bg-transparent border border-btn-primary',
-                listbox: 'bg-footer',
-                listboxWrapper: 'bg-footer',
-                popoverContent:
-                  'p-0 bg-footer border rounded-none border-btn-primary',
-                label: 'hidden',
-                base: '!m-0',
-                value: '!text-white',
-              }}
-              radius="none"
-              defaultSelectedKeys={'all'}
-              labelPlacement="outside"
-            >
-              {PoolTypes.map((item, index) => {
-                return (
-                  <SelectItem
-                    key={item.key}
-                    className="data-[hover=true]:border data-[hover=true]:border-btn-primary data-[hover=true]:bg-transparent data-[hover=true]:text-white"
-                  >
-                    {item.text}
-                  </SelectItem>
-                );
-              })}
-            </Select>
-          </div>
-          <div className="hidden w-[130px] text-right lg:block">
-            TVL <Popover content="Popover content here." />
-          </div>
-          <div className="hidden w-[130px] text-right lg:block">
-            {'Fees <24H>'} <Popover content="Popover content here." />
-          </div>
-          <div className="hidden w-[130px] text-right lg:block">
-            {'Volumn <24H>'} <Popover content="Popover content here." />
-          </div>
-          <div className="hidden w-[130px] text-right lg:block">
-            {'APR <24H>'} <Popover content="Popover content here." />
-          </div>
-          <div className="hidden text-right lg:block">{'Action'}</div>
-        </div>
-
-        {Array.from({ length: 20 }).map((item, index) => {
-          return (
-            <div
-              className="flex flex-col justify-between gap-3 border-t border-swapBox pt-5 lg:flex-row lg:items-center lg:gap-0"
-              key={index}
-            >
-              <div className="flex lg:w-[25%]">
-                <div className="flex items-center">
-                  <Image src={BearIcon} alt="icon" width={30} />
-                  <Image
-                    src={MoniIcon}
-                    alt="icon"
-                    width={30}
-                    className="-translate-x-3"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm">vAMM-MONI/BERA</span>
-                  <span className="bg-darkgray p-1 text-xs text-lightblue">
-                    Basic Volatile • 1.0%
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
-                <span className="text-textgray lg:hidden">
-                  TVL <Popover content="Popover content here." />
-                </span>
-                <span>$9,062,352.53</span>
-              </div>
-              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
-                <span className="text-textgray lg:hidden">
-                  {'Fees <24H>'} <Popover content="Popover content here." />
-                </span>
-                $19,233.02
-              </div>
-              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
-                <span className="text-textgray lg:hidden">
-                  {'Volumn <24H>'} <Popover content="Popover content here." />
-                </span>
-                $7,693,210.16
-              </div>
-              <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
-                <span className="text-textgray lg:hidden">
-                  {'APR <24H>'} <Popover content="Popover content here." />
-                </span>
-                143.95%
-              </div>
-              <div>
-                <Button className="w-full text-btn-primary lg:min-w-0">
-                  <FontAwesomeIcon icon={faPlus} />{' '}
-                  <span className="lg:hidden">Add Liquidity</span>
-                </Button>
-              </div>
-            </div>
-          );
-        })}
+        {selectedTab === 'pools' ? <Pools /> : <MyPosition />}
       </div>
 
-      <div className="text-center">
+      <div className="mt-10 text-center">
         <Button>View More</Button>
       </div>
     </div>
