@@ -4,8 +4,9 @@ import Bear2 from '@/assets/images/bear2.png';
 import Bear5 from '@/assets/images/bear5.png';
 import Bear6 from '@/assets/images/bear6.png';
 import BearIcon from '@/assets/images/Bera.png';
-// import Image2 from '@/assets/images/image2.svg';
+import Image2 from '@/assets/images/image2.svg';
 import MoniIcon from '@/assets/images/logo.svg';
+import Rectangle from '@/assets/images/Rectangle_t.svg';
 import { Button } from '@/components/ui/button';
 import { Popover } from '@/components/ui/Popover';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -43,18 +44,23 @@ const PoolTypes = [
 
 export default function Page() {
   return (
-    <div className="space-y-10 p-5 md:p-20">
-      <div className="relative space-y-5">
-        <Image
-          src={Bear6}
-          alt="bear"
-          className="-top-[90px] right-0 m-auto lg:absolute"
-        />
-        {/* <Image
-          src={Image2}
-          alt="image"
-          className="absolute -top-[100px] w-[300px] xl:right-[350px] 2xl:right-[400px]"
-        /> */}
+    <div className="relative overflow-hidden p-5 md:p-20">
+      <Image
+        src={Rectangle}
+        alt="image"
+        className="absolute -right-[100px] -top-[100px] w-[250px] lg:w-[200px]"
+      />
+      <Image
+        src={Image2}
+        alt="image"
+        className="absolute top-0 w-[200px] lg:right-[350px] lg:w-[300px] xl:right-[350px] 2xl:right-[400px]"
+      />
+      <Image
+        src={Bear6}
+        alt="bear"
+        className="relative right-0 z-[1] m-auto mt-20 lg:absolute lg:right-20 lg:top-10 lg:m-0"
+      />
+      <div className="relative space-y-5 pt-10">
         <div className="flex max-w-[520px] flex-col gap-5">
           <div className="flex flex-col gap-3">
             <h2 className="text-3xl md:text-[50px]">
@@ -79,7 +85,7 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col gap-7 md:flex-row">
-          <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[300px]">
+          <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[50%] lg:w-[300px]">
             <div>
               <p className="text-xl">$114,525,813.45</p>
               <p className="text-textgray">Total Value Locked</p>
@@ -90,7 +96,7 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[300px]">
+          <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[50%] lg:w-[300px]">
             <div>
               <p className="text-xl">$16,328,705.38</p>
               <p className="text-textgray">Trading Volume (24H)</p>
@@ -103,7 +109,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="space-y-5 bg-footer p-5">
+      <div className="mt-10 space-y-5 bg-footer p-5">
         <div className="flex flex-col-reverse items-center justify-between border-b border-swapBox md:flex-row">
           <Tabs
             variant={'underlined'}
