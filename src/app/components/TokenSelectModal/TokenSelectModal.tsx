@@ -1,4 +1,5 @@
 import BeraLogo from '@/assets/images/Bera.png';
+import { TOKENS } from '@/config/tokens';
 import {
   Divider,
   Input,
@@ -58,7 +59,7 @@ export const TokenSelectModal: FC<ModalProps> = ({ isOpen, close }) => {
                 <Divider className="bg-swapBox" />
 
                 <div className="max-h-[300px] overflow-y-auto">
-                  {Array.from({ length: 20 }).map((item, index) => {
+                  {TOKENS.map((item, index) => {
                     return (
                       <div
                         className="flex cursor-pointer items-center justify-between px-2 py-2 hover:bg-brightBlack"
@@ -66,7 +67,7 @@ export const TokenSelectModal: FC<ModalProps> = ({ isOpen, close }) => {
                       >
                         <div className="flex items-center gap-2">
                           <Image src={BeraLogo} alt="token logo" />
-                          <span className="text-xl">BERA</span>
+                          <span className="text-xl">{item.name}</span>
                         </div>
 
                         <div className="flex flex-col">
