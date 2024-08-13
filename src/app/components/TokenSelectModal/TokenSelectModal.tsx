@@ -1,5 +1,5 @@
 import BeraLogo from '@/assets/images/Bera.png';
-import { TOKENS } from '@/config/tokens';
+import { TokenType } from '@/types';
 import {
   Divider,
   Input,
@@ -14,9 +14,14 @@ import { FC } from 'react';
 type ModalProps = {
   isOpen: boolean;
   close: () => void;
+  tokenLists: TokenType[];
 };
 
-export const TokenSelectModal: FC<ModalProps> = ({ isOpen, close }) => {
+export const TokenSelectModal: FC<ModalProps> = ({
+  isOpen,
+  close,
+  tokenLists,
+}) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -59,14 +64,19 @@ export const TokenSelectModal: FC<ModalProps> = ({ isOpen, close }) => {
                 <Divider className="bg-swapBox" />
 
                 <div className="max-h-[300px] overflow-y-auto">
-                  {TOKENS.map((item, index) => {
+                  {tokenLists.map((item, index) => {
                     return (
                       <div
                         className="flex cursor-pointer items-center justify-between px-2 py-2 hover:bg-brightBlack"
                         key={index}
                       >
                         <div className="flex items-center gap-2">
-                          <Image src={BeraLogo} alt="token logo" />
+                          <Image
+                            src={item.logoURI}
+                            alt="token logo"
+                            width={30}
+                            height={30}
+                          />
                           <span className="text-xl">{item.name}</span>
                         </div>
 
