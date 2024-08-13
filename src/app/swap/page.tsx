@@ -7,6 +7,7 @@ import SwapIcon from '@/assets/images/swapIcon.svg';
 import { ConnectButton } from '@/components/ConnectButton';
 import { TokenSelectModal } from '@/components/TokenSelectModal';
 import { Button } from '@/components/ui/button';
+import { useGetTokenLists } from '@/hooks/api/tokens';
 import { Divider, Input } from '@nextui-org/react';
 import { ArrowRightLeft, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
@@ -16,6 +17,9 @@ import { useAccount } from 'wagmi';
 export default function Page() {
   const [showModal, setShowModal] = useState(false);
   const { isConnected } = useAccount();
+
+  const { data: tokenLists = [] } = useGetTokenLists({});
+
   return (
     <div className="p-5 pb-20">
       <Image
@@ -148,7 +152,11 @@ export default function Page() {
         )}
       </div>
 
-      <TokenSelectModal isOpen={showModal} close={() => setShowModal(false)} />
+      <TokenSelectModal
+        isOpen={showModal}
+        close={() => setShowModal(false)}
+        tokenLists={tokenLists}
+      />
     </div>
   );
 }

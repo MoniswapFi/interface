@@ -28,6 +28,7 @@
     "pino-pretty": "^11.2.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-query-kit": "^3.3.0",
     "viem": "2.x",
     "wagmi": "^2.10.9"
   },
