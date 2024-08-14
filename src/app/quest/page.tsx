@@ -23,46 +23,101 @@ const pointsArray = [
   {
     title: 'Follow Moniswap on X (Twitter) and turn on notification',
     points: 500,
+    content: [
+      'To pass this challenge, you must Follow Moniswap on X (Twitter) and turn on your notification.',
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Follow',
   },
   {
     title: 'Follow Cappo on X (Twitter) and turn on notification',
     points: 500,
+    content: [
+      'To pass this challenge, you must Follow Cappo on X (Twitter) and turn on your notification.',
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Follow',
   },
   {
     title: 'Follow Beraland on X (Twitter) and turn on notification',
     points: 500,
+    content: [
+      'To pass this challenge, you must Follow Beraland on X (Twitter) and turn on your notification.',
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ',
+    ],
+    button: 'Follow',
   },
   {
     title: 'Join Moniswap Discord',
     points: 500,
-  },
-  {
-    title: 'Join Cappo Telegram group',
-    points: 500,
+    content: [
+      "To pass this challenge, you must Join Moniswap's Discord server and engage with the community.",
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ',
+    ],
+    button: 'Join Discord',
   },
   {
     title: 'Join Beraland Discord',
     points: 500,
+    content: [
+      "To pass this challenge, you must Join Berachain's Discord server and engage with the community.",
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ',
+    ],
+    button: 'Join Discord',
+  },
+  {
+    title: 'Join Cappo Telegram group',
+    points: 500,
+    content: [
+      "To pass this challenge, you must Join Cappo's Telegram group and communicate with fellow community members.",
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Join Telegram',
   },
   {
     title: 'Join Moniswap Telegram group',
     points: 500,
+    content: [
+      "To pass this challenge, you must Join Moniswap's Telegram group and communicate with fellow community members.",
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Join Telegram',
   },
   {
     title: 'Join Moniswap Telegram announcement',
     points: 500,
+    content: [
+      "To pass this challenge, you must Join Moniswap's Telegram announcement channel.",
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Join Telegram',
   },
   {
     title: 'Trade on Moniswap',
     points: 1000,
+    content: [
+      'To pass this challenge, you must Participate in atleast 10 trading activities on the Moniswap platform.',
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Trade Now!',
   },
   {
     title: 'Provide Liquidity on Moniswap',
     points: 2000,
+    content: [
+      'To pass this challenge, you must Contribute liquidity to the Moniswap platform by providing assets to liquidity pools.',
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Add Liquidity',
   },
   {
     title: 'Hold Bera Pack NFT',
     points: 20000,
+    content: [
+      'To pass this challenge, you must Hold Bera Pack NFT.',
+      'Please note, we sync this challenge every hour so please be patient and your progress will automatically update.',
+    ],
+    button: 'Check',
   },
 ];
 
@@ -141,17 +196,19 @@ export default function Page() {
                 }}
               >
                 <div className="space-y-5">
-                  <p className="text-xs text-gray1 lg:text-base">
-                    To pass this challenge, you must Follow Cappo on X (Twitter)
-                    and turn on your notification.
-                  </p>
-                  <p className="text-xs text-gray1 lg:text-base">
-                    Please note, we sync this challenge every hour so please be
-                    patient and your progress will automatically update.
-                  </p>
+                  {item.content?.map((text, index) => {
+                    return (
+                      <p
+                        className="text-xs text-gray1 lg:text-base"
+                        key={index}
+                      >
+                        {text}
+                      </p>
+                    );
+                  })}
 
                   <Button variant="primary" size="full">
-                    Follow
+                    {item?.button}
                   </Button>
                 </div>
               </AccordionItem>
