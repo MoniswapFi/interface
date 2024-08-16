@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Vote page</div>;
+    return <div>Vote page</div>;
 }
