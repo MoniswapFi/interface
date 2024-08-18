@@ -1,8 +1,6 @@
-import { Address } from "viem";
-
 export type TokenType = {
     name: string;
-    address: Address;
+    address: string;
     symbol: string;
     decimals: number;
     logoURI: string;

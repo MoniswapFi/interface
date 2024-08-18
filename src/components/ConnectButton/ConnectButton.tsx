@@ -26,7 +26,7 @@ type Props = {
 };
 
 export const ConnectButton: FC<Props> = ({ className }) => {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { isOpen, onOpenChange } = useDisclosure();
     const { openConnectModal } = useConnectModal();
     const { isConnected, address } = useAccount();
     const [showSettingModal, setShowSettingModal] = useState(false);
@@ -63,10 +63,10 @@ export const ConnectButton: FC<Props> = ({ className }) => {
                 placement="center"
             >
                 <ModalContent>
-                    {(onClose) => (
+                    {() => (
                         <>
                             <ModalHeader className="flex flex-col gap-1 pt-10 text-4xl uppercase text-yellow1">
-                                Connect Wallet
+                                connect wallet
                             </ModalHeader>
                             <ModalBody>
                                 <div className="flex flex-col gap-5 py-5 uppercase">
@@ -77,7 +77,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
                                                 alt="metamask"
                                             />
                                         </div>
-                                        <p>Connect with metamask</p>
+                                        <p>Connect with Metamask</p>
                                     </div>
 
                                     <div className="flex cursor-pointer items-center bg-brightBlack py-5">
@@ -87,7 +87,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
                                                 alt="walletconnect"
                                             />
                                         </div>
-                                        <p>Connect with walletconnect</p>
+                                        <p>Connect with Walletconnect</p>
                                     </div>
 
                                     <div className="flex cursor-pointer items-center bg-brightBlack py-5">
@@ -97,7 +97,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
                                                 alt="coinbase"
                                             />
                                         </div>
-                                        <p>Connect with coinbase wallet</p>
+                                        <p>Connect with Coinbase</p>
                                     </div>
                                 </div>
                             </ModalBody>

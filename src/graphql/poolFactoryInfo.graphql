@@ -1,0 +1,10 @@
+query IndexPoolFactoryInfo($id: ID!) {
+    poolFactory(id: $id) {
+        id
+        pairCount
+        totalVolumeUSD
+        totalLiquidityUSD
+        txCount
+        feesUSD
+    }
+}

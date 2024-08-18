@@ -1,0 +1,37 @@
+query IndexFees {
+    fees(first: 1000, skip: 0) {
+        id
+        pair {
+            id
+            stable
+            volumeUSD
+            reserveUSD
+            reserve0
+            reserve1
+            volumeToken0
+            volumeToken1
+            untrackedVolumeUSD
+            feesUSD
+            totalAmount0Claimable
+            totalAmount1Claimable
+            token0 {
+                id
+                symbol
+                name
+                decimals
+                totalSupply
+            }
+            token1 {
+                id
+                symbol
+                name
+                decimals
+                totalSupply
+            }
+        }
+        amount0Claimable
+        amount1Claimable
+        amountClaimableUSD
+        account
+    }
+}

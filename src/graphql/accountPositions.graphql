@@ -1,0 +1,34 @@
+query IndexAccountPositions($account: Bytes!) {
+    accountPositions(where: { account: $account }) {
+        id
+        position
+        pair {
+            id
+            stable
+            volumeUSD
+            reserveUSD
+            reserve0
+            reserve1
+            volumeToken0
+            volumeToken1
+            untrackedVolumeUSD
+            feesUSD
+            totalAmount0Claimable
+            totalAmount1Claimable
+            token0 {
+                id
+                symbol
+                name
+                decimals
+                totalSupply
+            }
+            token1 {
+                id
+                symbol
+                name
+                decimals
+                totalSupply
+            }
+        }
+    }
+}

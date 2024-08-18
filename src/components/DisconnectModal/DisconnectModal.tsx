@@ -1,5 +1,5 @@
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { useDisconnect } from "wagmi";
 
 type ModalProps = {
@@ -10,10 +10,10 @@ type ModalProps = {
 export const DisconnectModal: FC<ModalProps> = ({ isOpen, close }) => {
     const { disconnect } = useDisconnect();
 
-    const handleDisconnect = () => {
+    const handleDisconnect = useCallback(() => {
         disconnect();
         close();
-    };
+    }, [close, disconnect]);
 
     return (
         <Modal
@@ -26,19 +26,19 @@ export const DisconnectModal: FC<ModalProps> = ({ isOpen, close }) => {
             placement="center"
         >
             <ModalContent>
-                {(onClose) => (
+                {() => (
                     <>
                         <ModalHeader className="flex flex-col gap-1 pt-10 text-4xl uppercase text-yellow1">
                             Disconnect Wallet
                         </ModalHeader>
                         <ModalBody>
                             <div className="py-5">
-                                <div
+                                <button
                                     className="cursor-pointer bg-brightBlack py-5 text-center"
                                     onClick={() => handleDisconnect()}
                                 >
                                     Disconnect wallet
-                                </div>
+                                </button>
                             </div>
                         </ModalBody>
                     </>

@@ -1,4 +1,7 @@
 import BeraLogo from "@/assets/images/Bera.png";
+import { __ETHER__ } from "@/config/constants";
+import { useERC20Balance, useNativeBalance } from "@/hooks/onchain/wallet";
+import { TokenType } from "@/types";
 import {
     Divider,
     Input,
@@ -6,21 +9,83 @@ import {
     ModalBody,
     ModalContent,
     ModalHeader,
+    Spinner,
 } from "@nextui-org/react";
+import clsx from "clsx";
 import Image from "next/image";
-import { FC } from "react";
-import { TokenType } from "../../types";
+import { FC, MouseEventHandler, useMemo } from "react";
 
 type ModalProps = {
     isOpen: boolean;
     close: () => void;
     tokenLists: TokenType[];
+    onItemClick: (token: TokenType) => any;
+    selectedTokens: [TokenType, TokenType];
+};
+
+type TokenSelectableItemProps = {
+    onSelect: MouseEventHandler<HTMLButtonElement>;
+    disabled?: boolean;
+    item: TokenType;
+};
+
+const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
+    onSelect,
+    disabled,
+    item,
+}) => {
+    const { isLoading: erc20BalanceLoading, balance: erc20Balance } =
+        useERC20Balance(item.address as any);
+    const { isLoading: nativeBalanceLoading, balance: nativeBalance } =
+        useNativeBalance();
+    const isLoading = useMemo(
+        () => erc20BalanceLoading || nativeBalanceLoading,
+        [erc20BalanceLoading, nativeBalanceLoading],
+    );
+    const balance = useMemo(
+        () => (item.address === __ETHER__ ? nativeBalance : erc20Balance),
+        [item.address, nativeBalance, erc20Balance],
+    );
+
+    return (
+        <button
+            onClick={onSelect}
+            disabled={disabled}
+            className={clsx(
+                "flex w-full cursor-pointer items-center justify-between border-none px-2 py-2 hover:bg-brightBlack",
+                {
+                    "bg-brightBlack": disabled,
+                },
+            )}
+        >
+            <div className="flex items-center gap-2">
+                <Image
+                    src={item.logoURI}
+                    alt="token logo"
+                    width={30}
+                    height={30}
+                />
+                <span className="text-xl">{item.name}</span>
+            </div>
+
+            {isLoading ? (
+                <Spinner size="sm" />
+            ) : (
+                <div className="flex flex-col">
+                    <span className="text-xl">{balance}</span>
+                    <span className="text-textlightgray">$254.89</span>
+                </div>
+            )}
+        </button>
+    );
 };
 
 export const TokenSelectModal: FC<ModalProps> = ({
     isOpen,
     close,
     tokenLists,
+    onItemClick,
+    selectedTokens,
 }) => {
     return (
         <Modal
@@ -33,7 +98,7 @@ export const TokenSelectModal: FC<ModalProps> = ({
             placement="center"
         >
             <ModalContent>
-                {(onClose) => (
+                {() => (
                     <>
                         <ModalHeader className="flex flex-col gap-1 pt-10 text-3xl text-yellow1">
                             Select a Token
@@ -75,34 +140,20 @@ export const TokenSelectModal: FC<ModalProps> = ({
 
                                 <Divider className="bg-swapBox" />
 
-                                <div className="max-h-[300px] overflow-y-auto">
+                                <div className="max-h-[300px] w-full overflow-y-auto">
                                     {tokenLists.map((item, index) => {
                                         return (
-                                            <div
-                                                className="flex cursor-pointer items-center justify-between px-2 py-2 hover:bg-brightBlack"
+                                            <TokenSelectableItem
                                                 key={index}
-                                            >
-                                                <div className="flex items-center gap-2">
-                                                    <Image
-                                                        src={item.logoURI}
-                                                        alt="token logo"
-                                                        width={30}
-                                                        height={30}
-                                                    />
-                                                    <span className="text-xl">
-                                                        {item.name}
-                                                    </span>
-                                                </div>
-
-                                                <div className="flex flex-col">
-                                                    <span className="text-xl">
-                                                        345.78
-                                                    </span>
-                                                    <span className="text-textlightgray">
-                                                        $254.89
-                                                    </span>
-                                                </div>
-                                            </div>
+                                                item={item}
+                                                onSelect={() => {
+                                                    onItemClick(item);
+                                                    close();
+                                                }}
+                                                disabled={selectedTokens.includes(
+                                                    item,
+                                                )}
+                                            />
                                         );
                                     })}
                                 </div>

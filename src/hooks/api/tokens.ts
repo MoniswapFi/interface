@@ -1,6 +1,6 @@
+import { TokenType } from "@/types";
 import { APIURL } from "@/utils/api";
 import { createQuery } from "react-query-kit";
-import { TokenType } from "../../types";
 
 export const useGetTokenLists = createQuery({
     queryKey: ["points"],
