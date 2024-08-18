@@ -1,0 +1,8 @@
+sources:
+    - name: PoolFactory
+      handler:
+          graphql:
+              endpoint: ${NEXT_PUBLIC_POOLS_ENDPOINT}
+
+documents:
+    - src/graphql/*.graphql
