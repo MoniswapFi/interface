@@ -8,6 +8,7 @@ import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { Chip, Tab, Tabs } from "@nextui-org/react";
 import { RotateCw } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { MyPosition } from "./_components/MyPosition";
@@ -15,6 +16,7 @@ import { Pools } from "./_components/Pools";
 
 export default function Page() {
     const [selectedTab, setSelectedTab] = useState("pools");
+    const { push } = useRouter();
 
     return (
         <div className="relative overflow-hidden p-5 md:p-20">
@@ -122,7 +124,11 @@ export default function Page() {
                     </Tabs>
                     <div className="flex items-center gap-2">
                         <div className="flex gap-5">
-                            <Button variant="primary" size="md">
+                            <Button
+                                variant="primary"
+                                size="md"
+                                onClick={() => push("/liquidity/deposit")}
+                            >
                                 Create Pool
                             </Button>
                             <Button size="md">Add Liquidity</Button>

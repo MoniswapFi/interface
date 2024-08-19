@@ -20,7 +20,7 @@ import { TokenType } from "@/types";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ArrowRightLeft, ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
 import { ConnectButton } from "../../components/ConnectButton";
@@ -165,12 +165,6 @@ export default function Page() {
             }
         },
     });
-
-    useEffect(() => {
-        console.log(bestPathError);
-        console.log(bestPathData);
-        console.log(bestQueryData);
-    }, [bestPathData, bestQueryData]);
 
     return (
         <div className="p-5 pb-20">
