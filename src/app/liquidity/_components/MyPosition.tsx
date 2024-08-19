@@ -1,10 +1,12 @@
+"use client";
+
 import BearIcon from "@/assets/images/Bera.png";
 import MoniIcon from "@/assets/images/logo.svg";
+import { Button } from "@/components/ui/button";
+import { Popover } from "@/components/ui/Popover";
+import { PoolTypes } from "@/config/constants";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
-import { Button } from "../../../components/ui/button";
-import { Popover } from "../../../components/ui/Popover";
-import { PoolTypes } from "../../../config/constants";
 
 export const MyPosition = () => {
     return (
