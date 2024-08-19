@@ -1,3 +1,5 @@
+'use client';
+
 import BearIcon from '@/assets/images/Bera.png';
 import MoniIcon from '@/assets/images/logo.svg';
 import { Button } from '@/components/ui/button';
