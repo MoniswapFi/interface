@@ -3,14 +3,19 @@
 import BearIcon from "@/assets/images/Bera.png";
 import MoniIcon from "@/assets/images/logo.svg";
 import { useGetTokenLists } from "@/hooks/api/tokens";
+import { TokenType } from "@/types";
 import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
+import { useState } from "react";
 import { Button } from "../../../components/ui/button";
 
 export default function Page() {
     const { data: tokenLists = [] } = useGetTokenLists({});
+    const [selectedTokens, setSelectedTokens] = useState<
+        [TokenType | null, TokenType | null]
+    >([null, null]);
 
     return (
         <div className="mx-auto flex max-w-[1300px] flex-col gap-10 px-5 pb-10 pt-10 md:pt-20 lg:pt-36">
@@ -18,8 +23,7 @@ export default function Page() {
 
             <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
                 <div className="flex flex-1 flex-col gap-5 bg-footer p-5">
-                    <div>First Token</div>
-
+                    <span className="capitalize">first token</span>
                     <Select
                         label="Select Token"
                         className="max-w-xs"
@@ -40,7 +44,13 @@ export default function Page() {
                         {tokenLists.map((token, index) => {
                             return (
                                 <SelectItem
-                                    key={token.symbol}
+                                    onPress={() =>
+                                        setSelectedTokens([
+                                            token,
+                                            selectedTokens[1],
+                                        ])
+                                    }
+                                    key={index}
                                     classNames={{
                                         base: "data-[selectable=true]:bg-footer data-[hover=true]:bg-footer data-[hover=true]:text-white",
                                     }}
@@ -56,7 +66,7 @@ export default function Page() {
                 </div>
 
                 <div className="flex flex-1 flex-col gap-5 bg-footer p-5">
-                    <div>Second Token</div>
+                    <span className="capitalize">second token</span>
 
                     <Select
                         label="Select Token"
@@ -78,7 +88,13 @@ export default function Page() {
                         {tokenLists.map((token, index) => {
                             return (
                                 <SelectItem
-                                    key={token.symbol}
+                                    key={index}
+                                    onPress={() =>
+                                        setSelectedTokens([
+                                            selectedTokens[0],
+                                            token,
+                                        ])
+                                    }
                                     classNames={{
                                         base: "data-[selectable=true]:bg-footer data-[hover=true]:bg-footer data-[hover=true]:text-white",
                                     }}

@@ -71,8 +71,8 @@ const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
             {isLoading ? (
                 <Spinner size="sm" />
             ) : (
-                <div className="flex flex-col">
-                    <span className="text-xl">{balance}</span>
+                <div className="flex flex-col items-end">
+                    <span className="text-xl">{balance.toFixed(4)}</span>
                     <span className="text-textlightgray">$254.89</span>
                 </div>
             )}
