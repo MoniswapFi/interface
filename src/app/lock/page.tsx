@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Lock page</div>;
+    return <div>Lock page</div>;
 }

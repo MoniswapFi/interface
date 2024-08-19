@@ -1,0 +1,30 @@
+query IndexAllPools($first: Int = 1000) {
+    pairs(first: $first, skip: 0) {
+        id
+        stable
+        volumeUSD
+        reserveUSD
+        reserve0
+        reserve1
+        volumeToken0
+        volumeToken1
+        untrackedVolumeUSD
+        feesUSD
+        totalAmount0Claimable
+        totalAmount1Claimable
+        token0 {
+            id
+            symbol
+            name
+            decimals
+            totalSupply
+        }
+        token1 {
+            id
+            symbol
+            name
+            decimals
+            totalSupply
+        }
+    }
+}
