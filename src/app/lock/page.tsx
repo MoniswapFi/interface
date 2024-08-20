@@ -8,6 +8,7 @@ import Vector from "@/assets/images/Vector.svg";
 import { Button } from "@/components/ui/button";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Page() {
     return (
@@ -56,9 +57,11 @@ export default function Page() {
                     <div className="flex items-center justify-between">
                         <div>Locks</div>
 
-                        <Button variant="primary" size="sm">
-                            Create Lock
-                        </Button>
+                        <Link href={"/lock/create"}>
+                            <Button variant="primary" size="sm">
+                                Create Lock
+                            </Button>
+                        </Link>
                     </div>
 
                     <div className="flex flex-col justify-between gap-3 bg-footer p-5 text-sm lg:flex-row lg:gap-0">

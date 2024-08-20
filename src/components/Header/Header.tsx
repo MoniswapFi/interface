@@ -44,7 +44,7 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                 <Image src={CongratesIcon} alt="icon" />
                 <Link href={"/swap"}>
                     <p className="text-xs md:text-base">
-                        Moniswap V1 Live on Bartio Testnet. Swap Now!
+                        Moniswap V1 Live on Bratio Testnet. Swap Now!
                     </p>
                 </Link>
             </div>
