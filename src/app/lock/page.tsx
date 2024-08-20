@@ -150,67 +150,94 @@ export default function Page() {
                     <div className="space-y-5 text-sm">
                         {Array.from({ length: 3 }).map((item, index) => {
                             return (
-                                <div
-                                    key={index}
-                                    className="flex flex-col gap-3 bg-footer p-5"
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-fit bg-black p-5">
-                                                <Image
-                                                    src={Vector}
-                                                    alt="vector"
-                                                />
+                                <div key={index}>
+                                    <div className="flex flex-col gap-3 bg-footer p-5 md:pb-0">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-5">
+                                                <div className="w-fit bg-black p-5">
+                                                    <Image
+                                                        src={Vector}
+                                                        alt="vector"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <p>veMONI Maxi</p>
+                                                    <p className="text-btn-primary underline">
+                                                        Updated a day ago ·
+                                                        0xc981...EF14f
+                                                    </p>
+                                                </div>
                                             </div>
+                                            <Button
+                                                size="sm"
+                                                className="hidden md:block"
+                                            >
+                                                Deposit Lock
+                                            </Button>
+                                        </div>
+
+                                        <Divider className="bg-swapBox" />
+
+                                        <div className="flex flex-col justify-between gap-5 text-textgray md:flex-row md:items-center md:gap-0">
                                             <div>
-                                                <p>veMONI Maxi</p>
-                                                <p className="text-btn-primary underline">
-                                                    Updated a day ago ·
-                                                    0xc981...EF14f
+                                                Voting Power{" "}
+                                                <span className="text-white">
+                                                    22,358,450.56
+                                                </span>{" "}
+                                                ~ 3.55%
+                                            </div>
+
+                                            <div className="flex flex-col gap-5 md:flex-row md:gap-10">
+                                                <p>
+                                                    Reward{" "}
+                                                    <span className="text-white">
+                                                        MONI
+                                                    </span>
+                                                </p>
+                                                <p>
+                                                    APR{" "}
+                                                    <span className="text-white">
+                                                        63.23%
+                                                    </span>
                                                 </p>
                                             </div>
                                         </div>
+
                                         <Button
                                             size="sm"
-                                            className="hidden md:block"
+                                            className="block w-full md:hidden"
                                         >
                                             Deposit Lock
                                         </Button>
                                     </div>
 
-                                    <Divider className="bg-swapBox" />
+                                    <div className="px-5">
+                                        <div className="bg-brightBlack p-5">
+                                            <div className="flex flex-col justify-between gap-3 bg-footer p-5 text-textgray md:flex-row md:gap-0">
+                                                <p className="text-white">
+                                                    Lock ID 12337
+                                                </p>
 
-                                    <div className="flex flex-col justify-between gap-5 text-textgray md:flex-row md:items-center md:gap-0">
-                                        <div>
-                                            Voting Power{" "}
-                                            <span className="text-white">
-                                                22,358,450.56
-                                            </span>{" "}
-                                            ~ 3.55%
-                                        </div>
+                                                <p>
+                                                    <span className="text-white">
+                                                        35.41
+                                                    </span>{" "}
+                                                    MONI locked for 12 hours
+                                                </p>
 
-                                        <div className="flex flex-col gap-5 md:flex-row md:gap-10">
-                                            <p>
-                                                Reward{" "}
-                                                <span className="text-white">
-                                                    MONI
-                                                </span>
-                                            </p>
-                                            <p>
-                                                APR{" "}
-                                                <span className="text-white">
-                                                    63.23%
-                                                </span>
-                                            </p>
+                                                <p>
+                                                    <span className="text-white">
+                                                        0.1 MONI
+                                                    </span>{" "}
+                                                    compounded
+                                                </p>
+
+                                                <p className="text-btn-primary underline">
+                                                    Withdraw Lock
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <Button
-                                        size="sm"
-                                        className="block w-full md:hidden"
-                                    >
-                                        Deposit Lock
-                                    </Button>
                                 </div>
                             );
                         })}
