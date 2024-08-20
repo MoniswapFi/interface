@@ -2,6 +2,7 @@
 
 import BEAR1 from "@/assets/images/Bear1.png";
 import SwapIcon from "@/assets/images/swapIcon.svg";
+import { TransactionInfoModal } from "@/components/Modal";
 import { SettingsModal } from "@/components/SettingsModal";
 import {
     __AGGREGATOR_ROUTERS__,
@@ -28,6 +29,7 @@ import { TokenSelectModal } from "../../components/TokenSelectModal";
 import { Button } from "../../components/ui/button";
 
 export default function Page() {
+    const [showTXInfoModal, setShowTXInfoModal] = useState(true);
     const [showModal0, setShowModal0] = useState(false);
     const [showModal1, setShowModal1] = useState(false);
     const { isConnected } = useAccount();
@@ -398,6 +400,11 @@ export default function Page() {
             <SettingsModal
                 isOpen={showSettingsModal}
                 close={() => setShowSettingsModal(false)}
+            />
+            <TransactionInfoModal
+                isOpen={showTXInfoModal}
+                close={() => setShowTXInfoModal(false)}
+                type="success"
             />
         </div>
     );
