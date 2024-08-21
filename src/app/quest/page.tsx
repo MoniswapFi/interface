@@ -277,7 +277,7 @@ export default function Page() {
                     <div>
                         <p className="text-lg lg:text-2xl">The Leaderboard</p>
                         <p className="text-xs text-gray1 lg:text-sm">
-                            Complete to get the highest score, you can do it!
+                            Compete to get the highest score, you can do it!
                         </p>
                     </div>
                     <p className="text-base lg:text-xl">
