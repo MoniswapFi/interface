@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # Lint files
-yarn format
-yarn lint-staged
+sudo yarn format
+sudo yarn lint-staged
