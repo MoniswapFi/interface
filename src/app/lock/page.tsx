@@ -171,12 +171,14 @@ export default function Page() {
                                                     </p>
                                                 </div>
                                             </div>
-                                            <Button
-                                                size="sm"
-                                                className="hidden md:block"
-                                            >
-                                                Deposit Lock
-                                            </Button>
+                                            <Link href={"/lock/deposit"}>
+                                                <Button
+                                                    size="sm"
+                                                    className="hidden md:block"
+                                                >
+                                                    Deposit Lock
+                                                </Button>
+                                            </Link>
                                         </div>
 
                                         <Divider className="bg-swapBox" />
