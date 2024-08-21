@@ -34,6 +34,8 @@ const config: Config = {
                 gray2: "#5A5B5A",
                 lightblue: "#00B2FF",
                 "text-error": "#FF0F00",
+                darkestGray: "#141414",
+                brightGray: "#7D7D7D",
             },
             backgroundColor: {
                 primary: "#000000",
