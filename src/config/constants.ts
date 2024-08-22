@@ -47,3 +47,4 @@ export const __POOL_FACTORIES__ = {
 export const __WRAPPED_ETHER__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
 };
+export const __IDEAL_GAS__ = BigInt(400000);
