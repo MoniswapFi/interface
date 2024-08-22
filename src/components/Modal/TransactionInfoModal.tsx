@@ -17,13 +17,15 @@ import { Button } from "../ui/button";
 type Props = {
     isOpen: boolean;
     close: () => void;
-    type: string;
+    type: "success" | "failure";
+    txHash?: string;
 };
 
 export const TransactionInfoModal: FC<Props> = ({
     isOpen,
     close,
     type = "success",
+    txHash,
 }) => {
     return (
         <Modal
@@ -36,7 +38,7 @@ export const TransactionInfoModal: FC<Props> = ({
             placement="center"
         >
             <ModalContent>
-                {(onClose) => (
+                {() => (
                     <>
                         <ModalHeader></ModalHeader>
                         <ModalBody className="flex flex-col items-center pb-5">
@@ -64,19 +66,21 @@ export const TransactionInfoModal: FC<Props> = ({
                             >
                                 <p>Transaction</p>
                                 {type === "success" ? (
-                                    <p>Successful</p>
+                                    <span>Successful</span>
                                 ) : (
-                                    <p>ERROR</p>
+                                    <span>ERROR</span>
                                 )}
                             </div>
 
-                            <Link
-                                href={"https://bartio.beratrail.io/"}
-                                target="_blank"
-                                className="uppercase underline"
-                            >
-                                View explorer
-                            </Link>
+                            {txHash && (
+                                <Link
+                                    href={`https://bartio.beratrail.io/tx/${txHash}`}
+                                    target="_blank"
+                                    className="uppercase underline"
+                                >
+                                    View on explorer
+                                </Link>
+                            )}
 
                             <Button
                                 className="w-full"

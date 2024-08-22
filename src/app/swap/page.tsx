@@ -31,7 +31,7 @@ import { ConnectButton } from "../../components/ConnectButton";
 import { Button } from "../../components/ui/button";
 
 export default function Page() {
-    const [showTXInfoModal, setShowTXInfoModal] = useState(true);
+    const [showTXInfoModal, setShowTXInfoModal] = useState(false);
     const [showModal0, setShowModal0] = useState(false);
     const [showModal1, setShowModal1] = useState(false);
     const { isConnected } = useAccount();
@@ -128,19 +128,23 @@ export default function Page() {
         hash: swapHash,
         reset: resetSwap,
         error: txError,
-    } = useSwap({
-        amountIn: BigInt(
-            Number(amount.toFixed(3)) *
-                Math.pow(10, selectedTokens[0]?.decimals ?? 18),
-        ),
-        amountOut: BigInt(
-            (parseFloat(amountOutFormatted.toFixed(3)) -
-                (slippage / 100) * parseFloat(amountOutFormatted.toFixed(2))) *
-                Math.pow(10, selectedTokens[1]?.decimals ?? 18),
-        ),
-        path: bestPathData?.path ?? [],
-        adapters: bestPathData?.adapters ?? [],
-    });
+    } = useSwap(
+        {
+            amountIn: BigInt(
+                Number(amount.toFixed(3)) *
+                    Math.pow(10, selectedTokens[0]?.decimals ?? 18),
+            ),
+            amountOut: BigInt(
+                (parseFloat(amountOutFormatted.toFixed(3)) -
+                    (slippage / 100) *
+                        parseFloat(amountOutFormatted.toFixed(2))) *
+                    Math.pow(10, selectedTokens[1]?.decimals ?? 18),
+            ),
+            path: bestPathData?.path ?? [],
+            adapters: bestPathData?.adapters ?? [],
+        },
+        () => setShowTXInfoModal(true),
+    );
 
     const { useAllowance, useApproval } = useERC20Allowance(address0 as any);
     const {
@@ -405,8 +409,14 @@ export default function Page() {
             />
             <TransactionInfoModal
                 isOpen={showTXInfoModal}
-                close={() => setShowTXInfoModal(false)}
-                type="success"
+                close={() => {
+                    setShowTXInfoModal(false);
+                    resetSwap();
+                }}
+                type={
+                    swapSuccess ? "success" : swapError ? "failure" : "failure"
+                }
+                txHash={swapHash}
             />
         </div>
     );
