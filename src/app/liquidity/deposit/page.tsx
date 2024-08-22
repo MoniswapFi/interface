@@ -4,12 +4,14 @@ import BearIcon from "@/assets/images/Bera.png";
 import MoniIcon from "@/assets/images/logo.svg";
 import { ChipBadge } from "@/components/ui/chipBadge";
 import { useGetTokenLists } from "@/hooks/api/tokens";
+import { useProtocolCore } from "@/hooks/onchain/core";
 import { TokenType } from "@/types";
 import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { zeroAddress } from "viem";
 import { Button } from "../../../components/ui/button";
 
 export default function Page() {
@@ -17,6 +19,36 @@ export default function Page() {
     const [selectedTokens, setSelectedTokens] = useState<
         [TokenType | null, TokenType | null]
     >([null, null]);
+
+    const { useGetPool } = useProtocolCore();
+    const {
+        data: stablePoolAddress,
+        isFetching: stablePoolFetching,
+        refetch: refetchStablePool,
+    } = useGetPool(
+        (selectedTokens[0]?.address as any) ?? zeroAddress,
+        (selectedTokens[1]?.address as any) ?? zeroAddress,
+        true,
+    );
+    const {
+        data: volatilePoolAddress,
+        isFetching: volatilePoolFetching,
+        refetch: refetchVolatilePool,
+    } = useGetPool(
+        (selectedTokens[0]?.address as any) ?? zeroAddress,
+        (selectedTokens[1]?.address as any) ?? zeroAddress,
+        false,
+    );
+
+    const isStablePool = useMemo(
+        () => stablePoolAddress !== zeroAddress,
+        [stablePoolAddress],
+    );
+
+    const isVolatilePool = useMemo(
+        () => volatilePoolAddress !== zeroAddress,
+        [volatilePoolAddress],
+    );
 
     return (
         <div className="mx-auto flex max-w-[1300px] flex-col gap-10 px-5 pb-10 pt-10 md:pt-20 lg:pt-36">
