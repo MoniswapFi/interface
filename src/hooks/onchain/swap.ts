@@ -61,7 +61,7 @@ export function useAggregatorRouter() {
             path: readonly `0x${string}`[];
             adapters: readonly `0x${string}`[];
         },
-        onSuccess?: () => any,
+        onSettled?: () => any,
     ) => {
         const {
             writeContract,
@@ -87,7 +87,7 @@ export function useAggregatorRouter() {
                             ? trade.amountIn
                             : BigInt(0),
                 },
-                { onSuccess, onError: (err) => console.error(err) },
+                { onError: (err) => console.error(err), onSettled },
             );
 
         return {
