@@ -2,6 +2,7 @@
 
 import BearIcon from "@/assets/images/Bera.png";
 import MoniIcon from "@/assets/images/logo.svg";
+import { ChipBadge } from "@/components/ui/chipBadge";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { TokenType } from "@/types";
 import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -135,9 +136,7 @@ export default function Page() {
 
                             <div>
                                 <p>vAMM-MONI/BERA</p>
-                                <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                    Basic Volatile · 1.0%
-                                </p>
+                                <ChipBadge>Basic Volatile · 1.0%</ChipBadge>
                             </div>
                         </div>
 
@@ -188,9 +187,7 @@ export default function Page() {
 
                             <div>
                                 <p>vAMM-MONI/BERA</p>
-                                <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                    Basic Volatile · 1.0%
-                                </p>
+                                <ChipBadge>Basic Volatile · 1.0%</ChipBadge>
                             </div>
                         </div>
 

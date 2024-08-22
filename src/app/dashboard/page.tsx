@@ -5,6 +5,7 @@ import CheckIcon from "@/assets/images/check.svg";
 import Image2 from "@/assets/images/image2.svg";
 import MoniIcon from "@/assets/images/logo.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
+import { ChipBadge } from "@/components/ui/chipBadge";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -165,9 +166,9 @@ export default function Page() {
                                             MONI
                                         </span>
                                     </div>
-                                    <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                        FEE
-                                    </p>
+                                    <ChipBadge>
+                                        <span>FEE</span>
+                                    </ChipBadge>
                                 </div>
                                 <div className="flex items-center justify-between gap-3 lg:justify-end">
                                     <div className="flex items-center gap-3">
@@ -181,9 +182,7 @@ export default function Page() {
                                             BERA
                                         </span>
                                     </div>
-                                    <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                        FEE
-                                    </p>
+                                    <ChipBadge>FEE</ChipBadge>
                                 </div>
                                 <div className="flex items-center justify-between gap-3 lg:justify-end">
                                     <div className="flex items-center gap-3">
@@ -197,9 +196,7 @@ export default function Page() {
                                             BERA
                                         </span>
                                     </div>
-                                    <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                        INCENTIVES
-                                    </p>
+                                    <ChipBadge>INCENTIVES</ChipBadge>
                                 </div>
                                 <div className="flex items-center justify-between gap-3 lg:justify-end">
                                     <div className="flex items-center gap-3">
@@ -213,9 +210,7 @@ export default function Page() {
                                             BERA
                                         </span>
                                     </div>
-                                    <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                        INCENTIVES
-                                    </p>
+                                    <ChipBadge>INCENTIVES</ChipBadge>
                                 </div>
                                 <div className="flex items-center justify-between gap-3 lg:justify-end">
                                     <div className="flex items-center gap-3">
@@ -229,9 +224,7 @@ export default function Page() {
                                             BERA
                                         </span>
                                     </div>
-                                    <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                        INCENTIVES
-                                    </p>
+                                    <ChipBadge>INCENTIVES</ChipBadge>
                                 </div>
                                 <div className="flex items-center justify-between gap-3 lg:justify-end">
                                     <div className="flex items-center gap-3">
@@ -245,9 +238,7 @@ export default function Page() {
                                             BERA
                                         </span>
                                     </div>
-                                    <p className="w-fit bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                        INCENTIVES
-                                    </p>
+                                    <ChipBadge>INCENTIVES</ChipBadge>
                                 </div>
                             </div>
                             <p className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end">
