@@ -2,8 +2,11 @@
 
 import BEAR1 from "@/assets/images/Bear1.png";
 import SwapIcon from "@/assets/images/swapIcon.svg";
-import { TransactionInfoModal } from "@/components/Modal";
-import { SettingsModal } from "@/components/SettingsModal";
+import {
+    SettingsModal,
+    TokenSelectModal,
+    TransactionInfoModal,
+} from "@/components/Modal";
 import {
     __AGGREGATOR_ROUTERS__,
     __ETHER__,
@@ -25,7 +28,6 @@ import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
 import { ConnectButton } from "../../components/ConnectButton";
-import { TokenSelectModal } from "../../components/TokenSelectModal";
 import { Button } from "../../components/ui/button";
 
 export default function Page() {

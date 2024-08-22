@@ -18,7 +18,7 @@ import { FC, useState } from "react";
 import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";
 import { DisconnectModal } from "../DisconnectModal/DisconnectModal";
-import { SettingsModal } from "../SettingsModal";
+import { SettingsModal } from "../Modal";
 import { Button } from "../ui/button";
 
 type Props = {
