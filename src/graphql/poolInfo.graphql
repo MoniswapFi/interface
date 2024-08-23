@@ -26,5 +26,10 @@ query IndexSinglePair($id: ID!) {
             decimals
             totalSupply
         }
+        pairHourData {
+            id
+            hourlyVolumeUSD
+            hourStartUnix
+        }
     }
 }

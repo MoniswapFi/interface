@@ -97,7 +97,6 @@ export default function Page() {
     const {
         data: bestQueryData,
         isFetching: bestQueryFetching,
-        isError: bestQueryError,
         refetch: refetchBestQuery,
     } = useBestQuery(
         address0 as any,
@@ -110,12 +109,7 @@ export default function Page() {
             Math.pow(10, selectedTokens[1]?.decimals ?? 18),
         [bestQueryData?.amountOut, selectedTokens[1]?.decimals],
     );
-    const {
-        data: bestPathData,
-        isFetching: bestPathFetching,
-        refetch: refetchBestPath,
-        error: bestPathError,
-    } = useFindBestPath(
+    const { data: bestPathData, refetch: refetchBestPath } = useFindBestPath(
         amount * Math.pow(10, selectedTokens[0]?.decimals ?? 18),
         address0 as any,
         address1 as any,
@@ -127,7 +121,6 @@ export default function Page() {
         isSuccess: swapSuccess,
         hash: swapHash,
         reset: resetSwap,
-        error: txError,
     } = useSwap(
         {
             amountIn: BigInt(
@@ -147,12 +140,9 @@ export default function Page() {
     );
 
     const { useAllowance, useApproval } = useERC20Allowance(address0 as any);
-    const {
-        data: allowance,
-        isFetching: allowanceFetching,
-        isError: allowanceError,
-        refetch: refetchAllowance,
-    } = useAllowance(router as any);
+    const { data: allowance, refetch: refetchAllowance } = useAllowance(
+        router as any,
+    );
     const allowedToSpend = useMemo(
         () =>
             Number(allowance ?? 0) /
