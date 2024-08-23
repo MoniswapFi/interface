@@ -22,7 +22,7 @@ export function useFactoryInfo() {
     return useMemo(
         () =>
             createQuery({
-                queryKey: ["factoryInfo"],
+                queryKey: [`${Date.now()}=${Math.random() * 7000}=factoryInfo`],
                 fetcher: async (): Promise<PoolFactory> => {
                     const { data } = await execute(
                         IndexPoolFactoryInfoDocument,
@@ -42,7 +42,9 @@ export function useSinglePoolInfo(poolId?: string) {
     return useMemo(
         () =>
             createQuery({
-                queryKey: ["singlePoolInfo"],
+                queryKey: [
+                    `${Date.now()}=${Math.random() * 7000}=singlePoolInfo`,
+                ],
                 fetcher: async (): Promise<Pair> => {
                     const { data } = await execute(
                         IndexSinglePairDocument,
@@ -63,7 +65,7 @@ export function useAllPools(first: number = 1000) {
     return useMemo(
         () =>
             createQuery({
-                queryKey: ["allPools"],
+                queryKey: [`${Date.now()}=${Math.random() * 7000}=allPools`],
                 fetcher: async (): Promise<Pair[]> => {
                     const { data } = await execute(
                         IndexAllPoolsDocument,
@@ -85,7 +87,9 @@ export function usePoolPositions() {
     return useMemo(
         () =>
             createQuery({
-                queryKey: ["poolPositions"],
+                queryKey: [
+                    `${Date.now()}=${Math.random() * 7000}=poolPositions`,
+                ],
                 fetcher: async (): Promise<AccountPosition[]> => {
                     const { data } = await execute(
                         IndexAccountPositionsDocument,
@@ -107,7 +111,7 @@ export function usePoolRewards() {
     return useMemo(
         () =>
             createQuery({
-                queryKey: ["poolRewards"],
+                queryKey: [`${Date.now()}=${Math.random() * 7000}=poolRewards`],
                 fetcher: async (): Promise<Fee[]> => {
                     if (address) {
                         const { data } = await execute(

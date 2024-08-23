@@ -2,6 +2,7 @@
 
 import BearIcon from "@/assets/images/Bera.png";
 import MoniIcon from "@/assets/images/logo.svg";
+import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { useSinglePoolInfo } from "@/hooks/graphql/core";
@@ -13,9 +14,9 @@ import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { zeroAddress } from "viem";
-import { Button } from "../../../components/ui/button";
+import { useWatchBlocks } from "wagmi";
 
 export default function Page() {
     const { data: tokenLists = [] } = useGetTokenLists({});
@@ -24,42 +25,36 @@ export default function Page() {
     >([null, null]);
 
     const { useGetPool } = useProtocolCore();
-    const {
-        data: stablePoolAddress,
-        isFetching: stablePoolFetching,
-        refetch: refetchStablePool,
-    } = useGetPool(
+    const { data: stablePoolAddress, refetch: refetchStablePool } = useGetPool(
         (selectedTokens[0]?.address as any) ?? zeroAddress,
         (selectedTokens[1]?.address as any) ?? zeroAddress,
         true,
     );
-    const {
-        data: volatilePoolAddress,
-        isFetching: volatilePoolFetching,
-        refetch: refetchVolatilePool,
-    } = useGetPool(
-        (selectedTokens[0]?.address as any) ?? zeroAddress,
-        (selectedTokens[1]?.address as any) ?? zeroAddress,
-        false,
-    );
+    const { data: volatilePoolAddress, refetch: refetchVolatilePool } =
+        useGetPool(
+            (selectedTokens[0]?.address as any) ?? zeroAddress,
+            (selectedTokens[1]?.address as any) ?? zeroAddress,
+            false,
+        );
 
-    const isStablePool = useMemo(
-        () => stablePoolAddress !== zeroAddress,
-        [stablePoolAddress],
+    const useStablePoolQuery = useSinglePoolInfo(
+        stablePoolAddress?.toLowerCase(),
     );
-
-    const isVolatilePool = useMemo(
-        () => volatilePoolAddress !== zeroAddress,
-        [volatilePoolAddress],
-    );
-
-    const useStablePoolQuery = useSinglePoolInfo(stablePoolAddress);
     const { data: stablePool } = useStablePoolQuery();
 
-    const useVolatilePoolQuery = useSinglePoolInfo(volatilePoolAddress);
+    const useVolatilePoolQuery = useSinglePoolInfo(
+        volatilePoolAddress?.toLowerCase(),
+    );
     const { data: volatilePool } = useVolatilePoolQuery();
 
     const timeInMotion = useTimeInMotion();
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchStablePool();
+            await refetchVolatilePool();
+        },
+    });
 
     return (
         <div className="mx-auto flex max-w-[1300px] flex-col gap-10 px-5 pb-10 pt-10 md:pt-20 lg:pt-36">
@@ -174,9 +169,9 @@ export default function Page() {
 
             <div className="flex flex-col gap-5">
                 <h5>Available Pools</h5>
-                {(typeof stablePool !== "undefined" ||
-                    typeof volatilePool !== "undefined") &&
-                (stablePool !== null || volatilePool !== null) &&
+                {(!!stablePoolAddress || !!volatilePoolAddress) &&
+                (stablePoolAddress !== zeroAddress ||
+                    volatilePoolAddress !== zeroAddress) &&
                 selectedTokens[0] !== null &&
                 selectedTokens[1] !== null ? (
                     <>
@@ -189,12 +184,15 @@ export default function Page() {
                                                 src={selectedTokens[0].logoURI}
                                                 alt="icon"
                                                 width={30}
+                                                height={30}
+                                                className="rounded-full"
                                             />
                                             <Image
                                                 src={selectedTokens[1].logoURI}
                                                 alt="icon"
                                                 width={30}
-                                                className="-translate-x-3"
+                                                height={30}
+                                                className="-translate-x-3 rounded-full"
                                             />
                                         </div>
 
@@ -257,12 +255,15 @@ export default function Page() {
                                                 src={selectedTokens[0].logoURI}
                                                 alt="icon"
                                                 width={30}
+                                                height={30}
+                                                className="rounded-full"
                                             />
                                             <Image
                                                 src={selectedTokens[1].logoURI}
                                                 alt="icon"
                                                 width={30}
-                                                className="-translate-x-3"
+                                                height={30}
+                                                className="-translate-x-3 rounded-full"
                                             />
                                         </div>
 
@@ -300,7 +301,7 @@ export default function Page() {
                                                         timeInMotion -
                                                             p.hourStartUnix <=
                                                         24,
-                                                )?.hourlyVolumeUSD,
+                                                )?.hourlyVolumeUSD ?? 0,
                                             )}
                                         </p>
                                     </div>
@@ -361,11 +362,6 @@ export default function Page() {
 
                         <div className="flex justify-between lg:flex-col lg:text-right">
                             <p className="text-textgray">Volume (24H)</p>
-                            <p>$0.00</p>
-                        </div>
-
-                        <div className="flex justify-between lg:flex-col lg:text-right">
-                            <p className="text-textgray">APR (24H)</p>
                             <p>$0.00</p>
                         </div>
 
