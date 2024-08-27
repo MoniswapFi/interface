@@ -1,7 +1,5 @@
 "use client";
 
-import BearIcon from "@/assets/images/Bera.png";
-import MoniIcon from "@/assets/images/logo.svg";
 import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
 import { __ETHER__, __WRAPPED_ETHER__ } from "@/config/constants";
@@ -44,7 +42,8 @@ export default function Page() {
                 : selectedTokens[1]?.address,
         [wrappedEther, selectedTokens[1]?.address],
     );
-    const { useGetPool } = useProtocolCore();
+    const { useGetPool, usePoolFee, useStableFee, useVolatileFee } =
+        useProtocolCore();
     const { data: stablePoolAddress, refetch: refetchStablePool } = useGetPool(
         (firstAddress as any) ?? zeroAddress,
         (secondAddress as any) ?? zeroAddress,
@@ -68,6 +67,12 @@ export default function Page() {
     const { data: volatilePool } = useVolatilePoolQuery();
 
     const timeInMotion = useTimeInMotion();
+
+    const { data: fee0 } = usePoolFee(stablePoolAddress as any, true);
+    const { data: fee1 } = usePoolFee(volatilePoolAddress as any, true);
+
+    const { data: stableFee } = useStableFee();
+    const { data: volatileFee } = useVolatileFee();
 
     useWatchBlocks({
         onBlock: async () => {
@@ -239,7 +244,10 @@ export default function Page() {
                                                         }
                                                     </span>
                                                     <ChipBadge>
-                                                        Basic Stable · 1.0%
+                                                        Basic Stable ·{" "}
+                                                        {Number(fee0 ?? 0) /
+                                                            100}
+                                                        %
                                                     </ChipBadge>
                                                 </div>
                                             </div>
@@ -345,7 +353,10 @@ export default function Page() {
                                                         }
                                                     </span>
                                                     <ChipBadge>
-                                                        Basic Volatile · 1.0%
+                                                        Basic Volatile ·{" "}
+                                                        {Number(fee1 ?? 0) /
+                                                            100}
+                                                        %
                                                     </ChipBadge>
                                                 </div>
                                             </div>
@@ -426,57 +437,219 @@ export default function Page() {
 
                     <div className="flex flex-col gap-5">
                         <h5>Low Liquidity Pools</h5>
-                        <div className="bg-footer p-5">
-                            <div className="flex flex-col justify-between gap-5 lg:flex-row lg:gap-0">
-                                <div className="flex items-center">
-                                    <div className="flex items-center">
-                                        <Image
-                                            src={BearIcon}
-                                            alt="icon"
-                                            width={30}
+                        <div className="flex w-full flex-col gap-2">
+                            {(!volatilePool || !stablePool) &&
+                            selectedTokens[0] !== null &&
+                            selectedTokens[1] !== null ? (
+                                <>
+                                    {!volatilePool &&
+                                        selectedTokens[0] !== null &&
+                                        selectedTokens[1] !== null && (
+                                            <div className="bg-footer p-5">
+                                                <div className="flex flex-col justify-between gap-5 lg:flex-row lg:gap-0">
+                                                    <div className="flex items-center">
+                                                        <div className="flex items-center">
+                                                            <Image
+                                                                src={
+                                                                    selectedTokens[0]
+                                                                        .logoURI
+                                                                }
+                                                                alt="icon"
+                                                                width={30}
+                                                                height={30}
+                                                                className="rounded-full"
+                                                            />
+                                                            <Image
+                                                                src={
+                                                                    selectedTokens[1]
+                                                                        .logoURI
+                                                                }
+                                                                alt="icon"
+                                                                width={30}
+                                                                height={30}
+                                                                className="-translate-x-3 rounded-full"
+                                                            />
+                                                        </div>
+
+                                                        <div>
+                                                            <p>
+                                                                vAMM-
+                                                                {
+                                                                    selectedTokens[0]
+                                                                        .symbol
+                                                                }
+                                                                /
+                                                                {
+                                                                    selectedTokens[1]
+                                                                        .symbol
+                                                                }
+                                                            </p>
+                                                            <ChipBadge>
+                                                                Basic Volatile ·{" "}
+                                                                {Number(
+                                                                    volatileFee ??
+                                                                        0,
+                                                                ) / 100}
+                                                                %
+                                                            </ChipBadge>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex justify-between lg:flex-col lg:text-right">
+                                                        <p className="text-textgray">
+                                                            TVL
+                                                        </p>
+                                                        <p>$0.00</p>
+                                                    </div>
+
+                                                    <div className="flex justify-between lg:flex-col lg:text-right">
+                                                        <p className="text-textgray">
+                                                            Fees (24H)
+                                                        </p>
+                                                        <p>$0.00</p>
+                                                    </div>
+
+                                                    <div className="flex justify-between lg:flex-col lg:text-right">
+                                                        <p className="text-textgray">
+                                                            Volume (24H)
+                                                        </p>
+                                                        <p>$0.00</p>
+                                                    </div>
+
+                                                    <div>
+                                                        <Button
+                                                            onClick={() => {
+                                                                setIsStableDeposit(
+                                                                    false,
+                                                                );
+                                                                setShowDepositComponent(
+                                                                    true,
+                                                                );
+                                                            }}
+                                                            className="w-full min-w-0 text-btn-primary"
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faPlus}
+                                                            />{" "}
+                                                            <span className="lg:hidden">
+                                                                Add Liquidity
+                                                            </span>
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                    {!stablePool &&
+                                        selectedTokens[0] !== null &&
+                                        selectedTokens[1] !== null && (
+                                            <div className="bg-footer p-5">
+                                                <div className="flex flex-col justify-between gap-5 lg:flex-row lg:gap-0">
+                                                    <div className="flex items-center">
+                                                        <div className="flex items-center">
+                                                            <Image
+                                                                src={
+                                                                    selectedTokens[0]
+                                                                        .logoURI
+                                                                }
+                                                                alt="icon"
+                                                                width={30}
+                                                                height={30}
+                                                                className="rounded-full"
+                                                            />
+                                                            <Image
+                                                                src={
+                                                                    selectedTokens[1]
+                                                                        .logoURI
+                                                                }
+                                                                alt="icon"
+                                                                width={30}
+                                                                height={30}
+                                                                className="-translate-x-3 rounded-full"
+                                                            />
+                                                        </div>
+
+                                                        <div>
+                                                            <p>
+                                                                sMM-
+                                                                {
+                                                                    selectedTokens[0]
+                                                                        .symbol
+                                                                }
+                                                                /
+                                                                {
+                                                                    selectedTokens[1]
+                                                                        .symbol
+                                                                }
+                                                            </p>
+                                                            <ChipBadge>
+                                                                Basic Stable ·{" "}
+                                                                {Number(
+                                                                    stableFee ??
+                                                                        0,
+                                                                ) / 100}
+                                                                %
+                                                            </ChipBadge>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex justify-between lg:flex-col lg:text-right">
+                                                        <p className="text-textgray">
+                                                            TVL
+                                                        </p>
+                                                        <p>$0.00</p>
+                                                    </div>
+
+                                                    <div className="flex justify-between lg:flex-col lg:text-right">
+                                                        <p className="text-textgray">
+                                                            Fees (24H)
+                                                        </p>
+                                                        <p>$0.00</p>
+                                                    </div>
+
+                                                    <div className="flex justify-between lg:flex-col lg:text-right">
+                                                        <p className="text-textgray">
+                                                            Volume (24H)
+                                                        </p>
+                                                        <p>$0.00</p>
+                                                    </div>
+
+                                                    <div>
+                                                        <Button
+                                                            onClick={() => {
+                                                                setIsStableDeposit(
+                                                                    true,
+                                                                );
+                                                                setShowDepositComponent(
+                                                                    true,
+                                                                );
+                                                            }}
+                                                            className="w-full min-w-0 text-btn-primary"
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faPlus}
+                                                            />{" "}
+                                                            <span className="lg:hidden">
+                                                                Add Liquidity
+                                                            </span>
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                </>
+                            ) : (
+                                <div className="flex gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                                    <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                                        <FontAwesomeIcon
+                                            icon={faInfo}
+                                            size="xs"
                                         />
-                                        <Image
-                                            src={MoniIcon}
-                                            alt="icon"
-                                            width={30}
-                                            className="-translate-x-3"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <p>vAMM-MONI/BERA</p>
-                                        <ChipBadge>
-                                            Basic Volatile · 1.0%
-                                        </ChipBadge>
-                                    </div>
+                                    </span>
+                                    There are no available low LPs. Add to
+                                    available ones instead.
                                 </div>
-
-                                <div className="flex justify-between lg:flex-col lg:text-right">
-                                    <p className="text-textgray">TVL</p>
-                                    <p>$0.00</p>
-                                </div>
-
-                                <div className="flex justify-between lg:flex-col lg:text-right">
-                                    <p className="text-textgray">Fees (24H)</p>
-                                    <p>$0.00</p>
-                                </div>
-
-                                <div className="flex justify-between lg:flex-col lg:text-right">
-                                    <p className="text-textgray">
-                                        Volume (24H)
-                                    </p>
-                                    <p>$0.00</p>
-                                </div>
-
-                                <div>
-                                    <Button className="w-full min-w-0 text-btn-primary">
-                                        <FontAwesomeIcon icon={faPlus} />{" "}
-                                        <span className="lg:hidden">
-                                            Add Liquidity
-                                        </span>
-                                    </Button>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
