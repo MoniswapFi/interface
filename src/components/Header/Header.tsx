@@ -39,7 +39,7 @@ type Props = {
 
 export const Header: FC<Props> = ({ toggleMenuOpen }) => {
     return (
-        <div className="sticky bottom-0">
+        <div className="sticky bottom-0 mt-auto">
             <div className="flex items-center justify-center gap-2 bg-secondary py-4">
                 <Image src={CongratesIcon} alt="icon" />
                 <Link href={"/swap"}>

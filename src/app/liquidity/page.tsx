@@ -125,13 +125,11 @@ export default function Page() {
                     <div className="flex items-center gap-2">
                         <div className="flex gap-5">
                             <Button
-                                variant="primary"
-                                size="md"
                                 onClick={() => push("/liquidity/deposit")}
+                                size="md"
                             >
-                                Create Pool
+                                Add Liquidity
                             </Button>
-                            <Button size="md">Add Liquidity</Button>
                         </div>
 
                         <div className="rounded-full border border-swapBox p-2 text-navDefault">
