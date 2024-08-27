@@ -13,7 +13,8 @@ import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { zeroAddress } from "viem";
 import { useChainId, useWatchBlocks } from "wagmi";
 import { Deposit } from "../_components/Deposit";
@@ -25,6 +26,10 @@ export default function Page() {
     const [selectedTokens, setSelectedTokens] = useState<
         [TokenType | null, TokenType | null]
     >([null, null]);
+
+    const query = useSearchParams();
+    const { push } = useRouter();
+    const pathName = usePathname();
 
     const chainId = useChainId();
     const wrappedEther = useMemo(() => __WRAPPED_ETHER__[chainId], [chainId]);
@@ -80,6 +85,38 @@ export default function Page() {
             await refetchVolatilePool();
         },
     });
+
+    useEffect(() => {
+        if (!!query.get("token0") && tokenLists.length > 0) {
+            const token0 = tokenLists.find(
+                (token) =>
+                    token.address.toLowerCase() ===
+                    query.get("token0")!.toLowerCase(),
+            );
+            setSelectedTokens([token0 ?? null, selectedTokens[1]]);
+
+            const clearableParams = new URLSearchParams(query);
+            clearableParams.delete("token0");
+
+            push(pathName + `?${clearableParams.toString()}`);
+        }
+    }, [query, tokenLists, selectedTokens[1]]);
+
+    useEffect(() => {
+        if (!!query.get("token1") && tokenLists.length > 0) {
+            const token1 = tokenLists.find(
+                (token) =>
+                    token.address.toLowerCase() ===
+                    query.get("token1")!.toLowerCase(),
+            );
+            setSelectedTokens([selectedTokens[0], token1 ?? null]);
+
+            const clearableParams = new URLSearchParams(query);
+            clearableParams.delete("token1");
+
+            push(pathName + `?${clearableParams.toString()}`);
+        }
+    }, [query, tokenLists, selectedTokens[0]]);
 
     return (
         <>
@@ -571,7 +608,7 @@ export default function Page() {
 
                                                         <div>
                                                             <p>
-                                                                sMM-
+                                                                sAMM-
                                                                 {
                                                                     selectedTokens[0]
                                                                         .symbol
