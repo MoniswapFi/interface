@@ -2,11 +2,13 @@
 
 import BEAR1 from "@/assets/images/Bear1.png";
 import SwapIcon from "@/assets/images/swapIcon.svg";
+import { ConnectButton } from "@/components/ConnectButton";
 import {
     SettingsModal,
     TokenSelectModal,
     TransactionInfoModal,
 } from "@/components/Modal";
+import { Button } from "@/components/ui/button";
 import {
     __AGGREGATOR_ROUTERS__,
     __ETHER__,
@@ -26,9 +28,8 @@ import { ArrowRightLeft, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { formatUnits, parseUnits } from "viem";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
-import { ConnectButton } from "../../components/ConnectButton";
-import { Button } from "../../components/ui/button";
 
 export default function Page() {
     const [showTXInfoModal, setShowTXInfoModal] = useState(false);
@@ -101,7 +102,9 @@ export default function Page() {
     } = useBestQuery(
         address0 as any,
         address1 as any,
-        amount * Math.pow(10, selectedTokens[0]?.decimals ?? 18),
+        Number(
+            parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
+        ),
     );
     const amountOutFormatted = useMemo(
         () =>
@@ -110,7 +113,9 @@ export default function Page() {
         [bestQueryData?.amountOut, selectedTokens[1]?.decimals],
     );
     const { data: bestPathData, refetch: refetchBestPath } = useFindBestPath(
-        amount * Math.pow(10, selectedTokens[0]?.decimals ?? 18),
+        Number(
+            parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
+        ),
         address0 as any,
         address1 as any,
     );
@@ -123,15 +128,16 @@ export default function Page() {
         reset: resetSwap,
     } = useSwap(
         {
-            amountIn: BigInt(
-                Number(amount.toFixed(3)) *
-                    Math.pow(10, selectedTokens[0]?.decimals ?? 18),
+            amountIn: parseUnits(
+                amount.toString(),
+                selectedTokens[0]?.decimals ?? 18,
             ),
-            amountOut: BigInt(
-                (parseFloat(amountOutFormatted.toFixed(3)) -
-                    (slippage / 100) *
-                        parseFloat(amountOutFormatted.toFixed(2))) *
-                    Math.pow(10, selectedTokens[1]?.decimals ?? 18),
+            amountOut: parseUnits(
+                (
+                    amountOutFormatted -
+                    (slippage / 100) * amountOutFormatted
+                ).toString(),
+                selectedTokens[1]?.decimals ?? 18,
             ),
             path: bestPathData?.path ?? [],
             adapters: bestPathData?.adapters ?? [],
@@ -145,13 +151,19 @@ export default function Page() {
     );
     const allowedToSpend = useMemo(
         () =>
-            Number(allowance ?? 0) /
-            Math.pow(10, selectedTokens[0]?.decimals ?? 18),
+            Number(
+                formatUnits(
+                    allowance ?? BigInt(0),
+                    selectedTokens[0]?.decimals ?? 18,
+                ),
+            ),
         [allowance, selectedTokens[0]?.decimals],
     );
     const { executeApproval, isPending: approvalPending } = useApproval(
         router as any,
-        amount * Math.pow(10, selectedTokens[0]?.decimals ?? 18),
+        Number(
+            parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
+        ),
     );
 
     useWatchBlocks({
@@ -281,7 +293,8 @@ export default function Page() {
                 <div>
                     {isConnected ? (
                         <>
-                            {allowedToSpend >= amount ? (
+                            {allowedToSpend >= amount ||
+                            selectedTokens[0]?.address === __ETHER__ ? (
                                 <Button
                                     onClick={executeSwap}
                                     isLoading={swapPending}
