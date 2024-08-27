@@ -117,6 +117,7 @@ export function useProtocolCore() {
         stable: boolean,
         amount0Desired: number,
         amount1Desired: number,
+        onSettled?: () => any,
     ) => {
         const {
             writeContract,
@@ -147,44 +148,54 @@ export function useProtocolCore() {
         );
 
         const executeAddLiquidityETH = () =>
-            writeContract({
-                abi: protocolRouterAbi,
-                address: routerAddress as `0x${string}`,
-                functionName: "addLiquidityETH",
-                args: [
-                    nonETHToken as `0x${string}`,
-                    stable,
-                    nonETHToken === token0
-                        ? BigInt(amount0Desired)
-                        : BigInt(amount1Desired),
-                    BigInt(0),
-                    BigInt(0),
-                    address as `0x${string}`,
-                    BigInt(Math.floor(Date.now() / 1000) + mul(deadline, 60)),
-                ],
-                value:
-                    nonETHToken === token0
-                        ? BigInt(amount1Desired)
-                        : BigInt(amount0Desired),
-            });
+            writeContract(
+                {
+                    abi: protocolRouterAbi,
+                    address: routerAddress as `0x${string}`,
+                    functionName: "addLiquidityETH",
+                    args: [
+                        nonETHToken as `0x${string}`,
+                        stable,
+                        nonETHToken === token0
+                            ? BigInt(amount0Desired)
+                            : BigInt(amount1Desired),
+                        BigInt(0),
+                        BigInt(0),
+                        address as `0x${string}`,
+                        BigInt(
+                            Math.floor(Date.now() / 1000) + mul(deadline, 60),
+                        ),
+                    ],
+                    value:
+                        nonETHToken === token0
+                            ? BigInt(amount1Desired)
+                            : BigInt(amount0Desired),
+                },
+                { onSettled },
+            );
 
         const executeAddLiquidity = () =>
-            writeContract({
-                abi: protocolRouterAbi,
-                address: routerAddress as `0x${string}`,
-                functionName: "addLiquidity",
-                args: [
-                    token0,
-                    token1,
-                    stable,
-                    BigInt(amount0Desired),
-                    BigInt(amount1Desired),
-                    BigInt(0),
-                    BigInt(0),
-                    address as `0x${string}`,
-                    BigInt(Math.floor(Date.now() / 1000) + mul(deadline, 60)),
-                ],
-            });
+            writeContract(
+                {
+                    abi: protocolRouterAbi,
+                    address: routerAddress as `0x${string}`,
+                    functionName: "addLiquidity",
+                    args: [
+                        token0,
+                        token1,
+                        stable,
+                        BigInt(amount0Desired),
+                        BigInt(amount1Desired),
+                        BigInt(0),
+                        BigInt(0),
+                        address as `0x${string}`,
+                        BigInt(
+                            Math.floor(Date.now() / 1000) + mul(deadline, 60),
+                        ),
+                    ],
+                },
+                { onSettled },
+            );
 
         return {
             executeAddLiquidity,
