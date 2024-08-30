@@ -8,9 +8,15 @@ import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
 import { Divider, Slider } from "@nextui-org/react";
 import Image from "next/image";
-import { useState } from "react";
+import { FC, useState } from "react";
 
-export default function Page() {
+type PageProps = {
+    params: {
+        poolId: string;
+    };
+};
+
+const Page: FC<PageProps> = ({ params }) => {
     const [amount, setAmount] = useState(0.0);
     const [showModal, setShowModal] = useState(false);
 
@@ -126,4 +132,6 @@ export default function Page() {
             />
         </div>
     );
-}
+};
+
+export default Page;

@@ -148,16 +148,12 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
         useERC20Allowance(firstAddress as any);
     const { useAllowance: useAllowance1, useApproval: useApproval1 } =
         useERC20Allowance(secondAddress as any);
-    const {
-        data: allowance0,
-        isFetching: allowance0Fetching,
-        refetch: refetchAllowance0,
-    } = useAllowance0(router as any);
-    const {
-        data: allowance1,
-        isFetching: allowance1Fetching,
-        refetch: refetchAllowance1,
-    } = useAllowance1(router as any);
+    const { data: allowance0, refetch: refetchAllowance0 } = useAllowance0(
+        router as any,
+    );
+    const { data: allowance1, refetch: refetchAllowance1 } = useAllowance1(
+        router as any,
+    );
     const allowedToSpend0 = useMemo(
         () => Number(formatUnits(allowance0 ?? BigInt(0), token0.decimals)),
         [allowance0, token0.decimals],

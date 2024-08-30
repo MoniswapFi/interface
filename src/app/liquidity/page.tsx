@@ -5,12 +5,17 @@ import Bear5 from "@/assets/images/bear5.png";
 import Bear6 from "@/assets/images/bear6.png";
 import Image2 from "@/assets/images/image2.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
-import { useAllPools, useFactoryInfo } from "@/hooks/graphql/core";
+import {
+    useAllPools,
+    useFactoryInfo,
+    usePoolPositions,
+} from "@/hooks/graphql/core";
 import { Chip, Tab, Tabs } from "@nextui-org/react";
 import { RotateCw } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useWatchBlocks } from "wagmi";
 import { Button } from "../../components/ui/button";
 import { MyPosition } from "./_components/MyPosition";
 import { Pools } from "./_components/Pools";
@@ -21,9 +26,20 @@ export default function Page() {
 
     const useFactoryInfoQuery = useFactoryInfo();
     const useAllPoolsQuery = useAllPools();
+    const useAccountPositionsQuery = usePoolPositions();
     const { data: factoryInfo, refetch: refetchFactoryInfo } =
         useFactoryInfoQuery();
     const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
+    const { data: positions = [], refetch: refetchPositions } =
+        useAccountPositionsQuery();
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchPairs();
+            await refetchFactoryInfo();
+            await refetchPositions();
+        },
+    });
 
     return (
         <div className="relative overflow-hidden p-5 md:p-20">
@@ -168,7 +184,7 @@ export default function Page() {
                 {selectedTab === "pools" ? (
                     <Pools data={pairs} />
                 ) : (
-                    <MyPosition />
+                    <MyPosition data={positions} />
                 )}
             </div>
 
