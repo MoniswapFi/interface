@@ -1,4 +1,4 @@
-import { __GRAPH__URLs__, __POOL_FACTORIES__ } from "@/config/constants";
+import { __POOL__GRAPH__URLs__, __POOL_FACTORIES__ } from "@/config/constants";
 import {
     execute,
     IndexAccountPositionsDocument,
@@ -18,7 +18,7 @@ import { useAccount, useChainId } from "wagmi";
 export function useFactoryInfo() {
     const chainId = useChainId();
     const id = useMemo(() => __POOL_FACTORIES__[chainId], [chainId]);
-    const url = useMemo(() => __GRAPH__URLs__[chainId], [chainId]);
+    const url = useMemo(() => __POOL__GRAPH__URLs__[chainId], [chainId]);
     return useMemo(
         () =>
             createQuery({
@@ -38,7 +38,7 @@ export function useFactoryInfo() {
 
 export function useSinglePoolInfo(poolId?: string) {
     const chainId = useChainId();
-    const url = useMemo(() => __GRAPH__URLs__[chainId], [chainId]);
+    const url = useMemo(() => __POOL__GRAPH__URLs__[chainId], [chainId]);
     return useMemo(
         () =>
             createQuery({
@@ -60,7 +60,7 @@ export function useSinglePoolInfo(poolId?: string) {
 
 export function useAllPools(first: number = 1000) {
     const chainId = useChainId();
-    const url = useMemo(() => __GRAPH__URLs__[chainId], [chainId]);
+    const url = useMemo(() => __POOL__GRAPH__URLs__[chainId], [chainId]);
 
     return useMemo(
         () =>
@@ -82,7 +82,7 @@ export function useAllPools(first: number = 1000) {
 export function usePoolPositions() {
     const { address } = useAccount();
     const chainId = useChainId();
-    const url = useMemo(() => __GRAPH__URLs__[chainId], [chainId]);
+    const url = useMemo(() => __POOL__GRAPH__URLs__[chainId], [chainId]);
 
     return useMemo(
         () =>
@@ -93,7 +93,7 @@ export function usePoolPositions() {
                 fetcher: async (): Promise<AccountPosition[]> => {
                     const { data } = await execute(
                         IndexAccountPositionsDocument,
-                        { account: address },
+                        { account: address?.toLowerCase() },
                         { url },
                     );
                     return data.accountPositions || [];
@@ -106,7 +106,7 @@ export function usePoolPositions() {
 export function usePoolRewards() {
     const { address } = useAccount();
     const chainId = useChainId();
-    const url = useMemo(() => __GRAPH__URLs__[chainId], [chainId]);
+    const url = useMemo(() => __POOL__GRAPH__URLs__[chainId], [chainId]);
 
     return useMemo(
         () =>

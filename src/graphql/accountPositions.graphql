@@ -21,6 +21,7 @@ query IndexAccountPositions($account: Bytes!) {
                 name
                 decimals
                 totalSupply
+                derivedUSD
             }
             token1 {
                 id
@@ -28,6 +29,7 @@ query IndexAccountPositions($account: Bytes!) {
                 name
                 decimals
                 totalSupply
+                derivedUSD
             }
         }
     }

@@ -3,6 +3,10 @@ sources:
       handler:
           graphql:
               endpoint: ${NEXT_PUBLIC_POOLS_ENDPOINT}
+    - name: Voter
+      handler:
+          graphql:
+              endpoint: ${NEXT_PUBLIC_VOTER_ENDPOINT}
 
 documents:
     - src/graphql/*.graphql

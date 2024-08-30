@@ -57,7 +57,7 @@ export const Pools: FC<PoolsProps> = ({ data }) => {
                     </Select>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    TVL <Popover content="Popover content here." />
+                    TVL <Popover content="Popover con." />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
                     {"Fees <24H>"} <Popover content="Popover content here." />
