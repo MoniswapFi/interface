@@ -1,0 +1,11 @@
+query IndexLocks($account: Bytes!) {
+    locks(where: { owner: $account }) {
+        id
+        owner
+        tokenId
+        tokenURI
+        amountLocked
+        timestamp
+        lockTime
+    }
+}
