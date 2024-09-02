@@ -7,6 +7,10 @@ sources:
       handler:
           graphql:
               endpoint: ${NEXT_PUBLIC_VOTER_ENDPOINT}
+    - name: VotingEscrow
+      handler:
+          graphql:
+              endpoint: ${NEXT_PUBLIC_ESCROW_ENDPOINT}
 
 documents:
     - src/graphql/*.graphql

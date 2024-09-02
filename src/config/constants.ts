@@ -49,6 +49,12 @@ export const __POOL_FACTORIES__ = {
 export const __VOTER__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x6399081084Aff4A927E8704E77bC939703bd892c",
 };
+export const __MULTICALL__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0x7A723417Ff14DD3CF58917e46614479edFEE5eAD",
+};
+export const __VOTING_ESCROW__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0xd11163343Ca6a4e5feADdbB979567A7853e6F20a",
+};
 export const __WRAPPED_ETHER__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
 };
