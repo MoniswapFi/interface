@@ -1,14 +1,28 @@
-import BearIcon from "@/assets/images/Bera.png";
-import MoniIcon from "@/assets/images/logo.svg";
+import { type Pair } from "@/graphclient";
+import { useGetTokenLists } from "@/hooks/api/tokens";
+import { useProtocolCore } from "@/hooks/onchain/core";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { FC } from "react";
 import { Button } from "../../../components/ui/button";
 import { Popover } from "../../../components/ui/Popover";
 import { PoolTypes } from "../../../config/constants";
 
-export const Pools = () => {
+type PoolsProps = {
+    data: Pair[];
+};
+
+export const Pools: FC<PoolsProps> = ({ data }) => {
+    const { data: tokenlist = [] } = useGetTokenLists({});
+    const { useStableFee, useVolatileFee } = useProtocolCore();
+    const { data: stableFee } = useStableFee();
+    const { data: volatileFee } = useVolatileFee();
+
+    const { push } = useRouter();
+
     return (
         <>
             <div className="items-center justify-between lg:flex">
@@ -43,7 +57,7 @@ export const Pools = () => {
                     </Select>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    TVL <Popover content="Popover content here." />
+                    TVL <Popover content="Popover con." />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
                     {"Fees <24H>"} <Popover content="Popover content here." />
@@ -57,7 +71,7 @@ export const Pools = () => {
                 <div className="hidden text-right lg:block">{"Action"}</div>
             </div>
 
-            {Array.from({ length: 20 }).map((item, index) => {
+            {data.map((item, index) => {
                 return (
                     <div
                         className="flex flex-col justify-between gap-3 border-t border-swapBox pt-5 lg:flex-row lg:items-center lg:gap-0"
@@ -65,18 +79,47 @@ export const Pools = () => {
                     >
                         <div className="flex lg:w-[25%]">
                             <div className="flex items-center">
-                                <Image src={BearIcon} alt="icon" width={30} />
                                 <Image
-                                    src={MoniIcon}
+                                    src={
+                                        tokenlist.find(
+                                            (tt) =>
+                                                tt.address.toLowerCase() ===
+                                                item.token0.id.toLowerCase(),
+                                        )?.logoURI ?? ""
+                                    }
                                     alt="icon"
                                     width={30}
-                                    className="-translate-x-3"
+                                    height={30}
+                                    className="rounded-full"
+                                />
+                                <Image
+                                    src={
+                                        tokenlist.find(
+                                            (tt) =>
+                                                tt.address.toLowerCase() ===
+                                                item.token1.id.toLowerCase(),
+                                        )?.logoURI ?? ""
+                                    }
+                                    alt="icon"
+                                    width={30}
+                                    height={30}
+                                    className="-translate-x-3 rounded-full"
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-sm">vAMM-MONI/BERA</span>
+                                <span className="text-sm">
+                                    {item.stable ? "sAMM" : "vAMM"}-
+                                    {item.token0.symbol}/{item.token1.symbol}
+                                </span>
                                 <span className="bg-darkgray p-1 text-xs text-lightblue">
-                                    Basic Volatile • 1.0%
+                                    Basic {item.stable ? "Stable" : "Volatile"}{" "}
+                                    •{" "}
+                                    {Number(
+                                        (item.stable
+                                            ? stableFee
+                                            : volatileFee) ?? 0,
+                                    ) / 100}
+                                    %
                                 </span>
                             </div>
                         </div>
@@ -85,31 +128,55 @@ export const Pools = () => {
                             <span className="text-textgray lg:hidden">
                                 TVL <Popover content="Popover content here." />
                             </span>
-                            <span>$9,062,352.53</span>
+                            <span>
+                                $
+                                {Number(item.reserveUSD).toLocaleString(
+                                    "en-US",
+                                    {
+                                        useGrouping: true,
+                                        maximumFractionDigits: 3,
+                                    },
+                                )}
+                            </span>
                         </div>
                         <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
                             <span className="text-textgray lg:hidden">
                                 {"Fees <24H>"}{" "}
                                 <Popover content="Popover content here." />
                             </span>
-                            $19,233.02
+                            $
+                            {Number(item.feesUSD).toLocaleString("en-US", {
+                                useGrouping: true,
+                                maximumFractionDigits: 3,
+                            })}
                         </div>
                         <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
                             <span className="text-textgray lg:hidden">
                                 {"Volumn <24H>"}{" "}
                                 <Popover content="Popover content here." />
                             </span>
-                            $7,693,210.16
+                            $
+                            {Number(item.volumeUSD).toLocaleString("en-US", {
+                                useGrouping: true,
+                                maximumFractionDigits: 3,
+                            })}
                         </div>
                         <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
                             <span className="text-textgray lg:hidden">
                                 {"APR <24H>"}{" "}
                                 <Popover content="Popover content here." />
                             </span>
-                            143.95%
+                            0.00%
                         </div>
                         <div>
-                            <Button className="w-full text-btn-primary lg:min-w-0">
+                            <Button
+                                onClick={() =>
+                                    push(
+                                        `/liquidity/deposit?token0=${item.token0.id}&token1=${item.token1.id}`,
+                                    )
+                                }
+                                className="w-full text-btn-primary lg:min-w-0"
+                            >
                                 <FontAwesomeIcon icon={faPlus} />{" "}
                                 <span className="lg:hidden">Add Liquidity</span>
                             </Button>

@@ -1,0 +1,8 @@
+query IndexVoter($id: ID!) {
+    voter(id: $id) {
+        id
+        gaugesCount
+        gaugesAlive
+        gaugesDead
+    }
+}

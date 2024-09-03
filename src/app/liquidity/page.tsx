@@ -5,11 +5,17 @@ import Bear5 from "@/assets/images/bear5.png";
 import Bear6 from "@/assets/images/bear6.png";
 import Image2 from "@/assets/images/image2.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
+import {
+    useAllPools,
+    useFactoryInfo,
+    usePoolPositions,
+} from "@/hooks/graphql/core";
 import { Chip, Tab, Tabs } from "@nextui-org/react";
 import { RotateCw } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useWatchBlocks } from "wagmi";
 import { Button } from "../../components/ui/button";
 import { MyPosition } from "./_components/MyPosition";
 import { Pools } from "./_components/Pools";
@@ -17,6 +23,23 @@ import { Pools } from "./_components/Pools";
 export default function Page() {
     const [selectedTab, setSelectedTab] = useState("pools");
     const { push } = useRouter();
+
+    const useFactoryInfoQuery = useFactoryInfo();
+    const useAllPoolsQuery = useAllPools();
+    const useAccountPositionsQuery = usePoolPositions();
+    const { data: factoryInfo, refetch: refetchFactoryInfo } =
+        useFactoryInfoQuery();
+    const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
+    const { data: positions = [], refetch: refetchPositions } =
+        useAccountPositionsQuery();
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchPairs();
+            await refetchFactoryInfo();
+            await refetchPositions();
+        },
+    });
 
     return (
         <div className="relative overflow-hidden p-5 md:p-20">
@@ -62,7 +85,15 @@ export default function Page() {
                 <div className="flex flex-col gap-7 md:flex-row">
                     <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[50%] lg:w-[300px]">
                         <div>
-                            <p className="text-xl">$114,525,813.45</p>
+                            <p className="text-xl">
+                                $
+                                {Number(
+                                    factoryInfo?.totalLiquidityUSD ?? 0,
+                                ).toLocaleString("en-US", {
+                                    maximumFractionDigits: 3,
+                                    useGrouping: true,
+                                })}
+                            </p>
                             <p className="text-textgray">Total Value Locked</p>
                         </div>
 
@@ -73,10 +104,16 @@ export default function Page() {
 
                     <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[50%] lg:w-[300px]">
                         <div>
-                            <p className="text-xl">$16,328,705.38</p>
-                            <p className="text-textgray">
-                                Trading Volume (24H)
+                            <p className="text-xl">
+                                $
+                                {Number(
+                                    factoryInfo?.totalVolumeUSD ?? 0,
+                                ).toLocaleString("en-US", {
+                                    maximumFractionDigits: 3,
+                                    useGrouping: true,
+                                })}
                             </p>
+                            <p className="text-textgray">Trading Volume</p>
                         </div>
 
                         <div>
@@ -115,7 +152,7 @@ export default function Page() {
                                             base: "bg-darkgray text-xs text-lightblue p-1 h-fit w-fit",
                                         }}
                                     >
-                                        158
+                                        {factoryInfo?.pairCount ?? 0}
                                     </Chip>
                                 </span>
                             }
@@ -132,13 +169,23 @@ export default function Page() {
                             </Button>
                         </div>
 
-                        <div className="rounded-full border border-swapBox p-2 text-navDefault">
+                        <button
+                            onClick={async () => {
+                                await refetchPairs();
+                                await refetchFactoryInfo();
+                            }}
+                            className="rounded-full border border-swapBox p-2 text-navDefault"
+                        >
                             <RotateCw />
-                        </div>
+                        </button>
                     </div>
                 </div>
 
-                {selectedTab === "pools" ? <Pools /> : <MyPosition />}
+                {selectedTab === "pools" ? (
+                    <Pools data={pairs} />
+                ) : (
+                    <MyPosition data={positions} />
+                )}
             </div>
 
             <div className="mt-10 text-center">
