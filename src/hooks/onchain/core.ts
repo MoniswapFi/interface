@@ -296,7 +296,44 @@ export function useProtocolCore() {
     };
 }
 
+export function usePoolExecutions(poolAddress: string) {
+    const useClaimFees = (onSettled?: () => any) => {
+        const {
+            writeContract,
+            isError,
+            isSuccess,
+            isPending,
+            data: hash,
+            reset,
+            error,
+        } = useWriteContract();
+
+        const executeClaimFees = () =>
+            writeContract(
+                {
+                    address: poolAddress as `0x${string}`,
+                    abi: poolAbi,
+                    functionName: "claimFees",
+                },
+                { onSettled },
+            );
+
+        return {
+            executeClaimFees,
+            isError,
+            isSuccess,
+            isPending,
+            hash,
+            reset,
+            error,
+        };
+    };
+
+    return { useClaimFees };
+}
+
 export function usePoolMetadata(poolAddress: `0x${string}`) {
+    const { address } = useAccount();
     const usePoolName = () =>
         useReadContract({
             address: poolAddress,
@@ -332,11 +369,58 @@ export function usePoolMetadata(poolAddress: `0x${string}`) {
             functionName: "stable",
         });
 
+    const useToken0 = () =>
+        useReadContract({
+            address: poolAddress,
+            abi: poolAbi,
+            functionName: "token0",
+        });
+    const useToken1 = () =>
+        useReadContract({
+            address: poolAddress,
+            abi: poolAbi,
+            functionName: "token1",
+        });
+    const useReserve0 = () =>
+        useReadContract({
+            address: poolAddress,
+            abi: poolAbi,
+            functionName: "reserve0",
+        });
+    const useReserve1 = () =>
+        useReadContract({
+            address: poolAddress,
+            abi: poolAbi,
+            functionName: "reserve1",
+        });
+
+    const useClaimable0 = () =>
+        useReadContract({
+            address: poolAddress,
+            abi: poolAbi,
+            functionName: "claimable0",
+            args: [address as any],
+        });
+
+    const useClaimable1 = () =>
+        useReadContract({
+            address: poolAddress,
+            abi: poolAbi,
+            functionName: "claimable1",
+            args: [address as any],
+        });
+
     return {
         usePoolName,
         usePoolSymbol,
         usePoolDecimals,
         usePoolTotalSupply,
         usePoolStability,
+        useToken0,
+        useToken1,
+        useReserve0,
+        useReserve1,
+        useClaimable0,
+        useClaimable1,
     };
 }

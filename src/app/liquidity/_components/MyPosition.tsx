@@ -10,6 +10,7 @@ import { useERC20Balance } from "@/hooks/onchain/wallet";
 import { div } from "@/utils/math";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC, useMemo } from "react";
 import { formatUnits } from "viem";
 import { useWatchBlocks } from "wagmi";
@@ -23,6 +24,8 @@ type SinglePositionProps = {
 };
 
 const Position: FC<SinglePositionProps> = ({ data }) => {
+    const { push } = useRouter();
+
     const { data: tokenlist = [] } = useGetTokenLists({});
     const { useStableFee, useVolatileFee } = useProtocolCore();
     const { data: stableFee } = useStableFee();
@@ -180,10 +183,17 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
                 </div>
             </div>
             <div className="flex w-full flex-col gap-2 lg:w-[150px]">
-                <Button className="w-full text-sm lg:min-w-0" variant="primary">
+                <Button
+                    onClick={() => push(`/liquidity/stake/${data.pair.id}`)}
+                    className="w-full text-sm lg:min-w-0"
+                    variant="primary"
+                >
                     <span>Stake Deposit</span>
                 </Button>
-                <Button className="w-full text-sm text-btn-primary lg:min-w-0">
+                <Button
+                    onClick={() => push(`/liquidity/withdraw/${data.pair.id}`)}
+                    className="w-full text-sm text-btn-primary lg:min-w-0"
+                >
                     <span>Withdraw Deposit</span>
                 </Button>
             </div>
