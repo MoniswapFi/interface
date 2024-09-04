@@ -38,7 +38,7 @@ export default function Page() {
                             </div>
 
                             <div>
-                                <p>vAMM-HONEY/BERA</p>
+                                <span>vAMM-HONEY/BERA</span>
                                 <ChipBadge>Basic Stable · 1.0%</ChipBadge>
                             </div>
                         </div>

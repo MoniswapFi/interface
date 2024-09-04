@@ -16,7 +16,7 @@ export function useVoterCore() {
             args: [poolId as `0x${string}`],
         });
 
-    const useVotingExecutions = () => {
+    const useVotingExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
             isError,
@@ -28,24 +28,33 @@ export function useVoterCore() {
         } = useWriteContract();
 
         const createGauge = (poolId: string) =>
-            writeContract({
-                abi: voterAbi,
-                address: voterAddress as `0x${string}`,
-                functionName: "createGauge",
-                args: [poolFactory as `0x${string}`, poolId as `0x${string}`],
-            });
+            writeContract(
+                {
+                    abi: voterAbi,
+                    address: voterAddress as `0x${string}`,
+                    functionName: "createGauge",
+                    args: [
+                        poolFactory as `0x${string}`,
+                        poolId as `0x${string}`,
+                    ],
+                },
+                { onSettled },
+            );
 
         const vote = (lockId: number, poolIds: string[], weights: number[]) =>
-            writeContract({
-                abi: voterAbi,
-                address: voterAddress as `0x${string}`,
-                functionName: "vote",
-                args: [
-                    BigInt(lockId),
-                    poolIds as `0x${string}`[],
-                    weights.map(BigInt),
-                ],
-            });
+            writeContract(
+                {
+                    abi: voterAbi,
+                    address: voterAddress as `0x${string}`,
+                    functionName: "vote",
+                    args: [
+                        BigInt(lockId),
+                        poolIds as `0x${string}`[],
+                        weights.map(BigInt),
+                    ],
+                },
+                { onSettled },
+            );
 
         return {
             createGauge,

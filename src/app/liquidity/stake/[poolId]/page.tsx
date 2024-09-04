@@ -1,14 +1,22 @@
 "use client";
 
 import BEAR1 from "@/assets/images/Bear1.png";
-import BearIcon from "@/assets/images/Bera.png";
-import MoniIcon from "@/assets/images/logo.svg";
-import { IncentiveSelectModal } from "@/components/Modal/IncentiveSelectModal";
+import { ConnectButton } from "@/components/ConnectButton";
+import { TransactionInfoModal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
+import { useGetTokenLists } from "@/hooks/api/tokens";
+import { useSinglePoolInfo } from "@/hooks/graphql/core";
+import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
+import { useGaugeCore } from "@/hooks/onchain/gauge";
+import { useVoterCore } from "@/hooks/onchain/voting";
+import { useERC20Allowance, useERC20Balance } from "@/hooks/onchain/wallet";
+import { div } from "@/utils/math";
 import { Divider, Slider } from "@nextui-org/react";
 import Image from "next/image";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
+import { formatUnits, parseUnits, zeroAddress } from "viem";
+import { useAccount, useWatchBlocks } from "wagmi";
 
 type PageProps = {
     params: {
@@ -17,8 +25,113 @@ type PageProps = {
 };
 
 const Page: FC<PageProps> = ({ params }) => {
-    const [amount, setAmount] = useState(0.0);
-    const [showModal, setShowModal] = useState(false);
+    const [percentage, setPercentage] = useState(0.0);
+    // const [showSettingsModal, setShowSettingsModal] = useState(false);
+    const [showTXInfoModal, setShowTXInfoModal] = useState(false);
+
+    const { isConnected } = useAccount();
+
+    const { data: tokenlist = [] } = useGetTokenLists();
+
+    const { usePoolFee } = useProtocolCore();
+    const { usePoolSymbol, usePoolTotalSupply, usePoolStability } =
+        usePoolMetadata(params.poolId as any);
+    const { data: stable = false } = usePoolStability();
+    const { data: fee } = usePoolFee(params.poolId as any, stable);
+    const { data: poolSymbol } = usePoolSymbol();
+    const { data: poolTotalSupply, refetch: refetchPoolSupply } =
+        usePoolTotalSupply();
+    const useIndexedPool = useSinglePoolInfo(params.poolId.toLowerCase());
+    const { data: pair, refetch: refetchPair } = useIndexedPool();
+
+    const { balance: position } = useERC20Balance(params.poolId as any);
+    const formattedTS = useMemo(
+        () => Number(formatUnits(poolTotalSupply ?? BigInt(1), 18)),
+        [poolTotalSupply],
+    );
+    const positionRatio = useMemo(
+        () => div(position, formattedTS),
+        [formattedTS, position],
+    );
+    const token0Deposited = useMemo(
+        () => positionRatio * Number(pair?.reserve0 ?? "0"),
+        [pair?.reserve0, positionRatio],
+    );
+    const token1Deposited = useMemo(
+        () => positionRatio * Number(pair?.reserve1 ?? "0"),
+        [pair?.reserve1, positionRatio],
+    );
+
+    const token0 = useMemo(
+        () =>
+            tokenlist.find(
+                (token) =>
+                    token.address.toLowerCase() ===
+                    pair?.token0.id.toLowerCase(),
+            ),
+        [tokenlist, pair?.token0.id],
+    );
+    const token1 = useMemo(
+        () =>
+            tokenlist.find(
+                (token) =>
+                    token.address.toLowerCase() ===
+                    pair?.token1.id.toLowerCase(),
+            ),
+        [tokenlist, pair?.token1.id],
+    );
+
+    const { useGetPoolGauge, useVotingExecutions } = useVoterCore();
+    const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
+        useGetPoolGauge(params.poolId);
+    const {
+        createGauge,
+        isPending: createGaugePending,
+        isError: createGaugeErrored,
+        isSuccess: createGaugeSuccess,
+        hash: createGaugeHash,
+        reset: resetCreateGauge,
+    } = useVotingExecutions(() => setShowTXInfoModal(true));
+
+    const stakable = useMemo(
+        () => percentage * position,
+        [percentage, position],
+    );
+
+    const { useGaugeExecutions } = useGaugeCore();
+    const {
+        deposit,
+        isPending: depositPending,
+        isError: depositError,
+        isSuccess: depositSuccess,
+        hash: depositHash,
+        reset: resetDeposit,
+    } = useGaugeExecutions(gaugeId, () => setShowTXInfoModal(true));
+    const { useAllowance, useApproval } = useERC20Allowance(
+        params.poolId as any,
+    );
+
+    const { data: allowance, refetch: refetchAllowance } =
+        useAllowance(gaugeId);
+
+    const allowedToSpend = useMemo(
+        () => Number(formatUnits(allowance ?? BigInt(0), 18)),
+        [allowance],
+    );
+
+    const { executeApproval, isPending: approvalPending } = useApproval(
+        gaugeId,
+        Number(parseUnits(stakable.toString(), 18)),
+    );
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchGaugeId();
+            await refetchPoolSupply();
+            await refetchPair();
+            await refetchAllowance();
+        },
+    });
 
     return (
         <div className="p-5 pb-20">
@@ -34,43 +147,108 @@ const Page: FC<PageProps> = ({ params }) => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <div className="flex items-center">
-                                <Image src={BearIcon} alt="icon" width={30} />
                                 <Image
-                                    src={MoniIcon}
+                                    src={token0?.logoURI || ""}
                                     alt="icon"
                                     width={30}
-                                    className="-translate-x-3"
+                                    height={30}
+                                    className="rounded-full"
+                                />
+                                <Image
+                                    src={token1?.logoURI || ""}
+                                    alt="icon"
+                                    width={30}
+                                    height={30}
+                                    className="-translate-x-3 rounded-full"
                                 />
                             </div>
 
                             <div>
-                                <p>vAMM-HONEY/BERA</p>
-                                <ChipBadge>Basic Stable · 1.0%</ChipBadge>
+                                <span>{poolSymbol}</span>
+                                <ChipBadge>
+                                    Basic {stable ? "Stable" : "Volatile"} ·
+                                    {Number(fee ?? 0) / 100}%
+                                </ChipBadge>
                             </div>
                         </div>
 
                         <div className="text-right text-navDefault">
                             <p>APR</p>
-                            <p>21.34%</p>
+                            <p>0.00%</p>
                         </div>
                     </div>
 
                     <Divider className="bg-swapBox" />
 
-                    <div className="flex flex-col gap-2 text-navDefault">
-                        <div className="flex justify-between">
-                            <p>Liquidity</p>
-                            <p>Your Deposits #0</p>
+                    <div className="flex w-full items-start justify-between gap-3">
+                        <div className="flex flex-col items-start justify-start gap-2">
+                            <span className="capitalize text-swapBox">
+                                liquidity
+                            </span>
+                            <div className="flex flex-col items-start justify-start gap-1">
+                                <div>
+                                    <span className="text-swapBox">
+                                        {!!pair
+                                            ? Number(
+                                                  pair.reserve0,
+                                              ).toLocaleString("en-US", {
+                                                  maximumFractionDigits: 3,
+                                                  useGrouping: true,
+                                              })
+                                            : 0.0}
+                                    </span>{" "}
+                                    <span>{pair?.token0.symbol}</span>
+                                </div>
+
+                                <div>
+                                    <span className="text-swapBox">
+                                        {!!pair
+                                            ? Number(
+                                                  pair.reserve1,
+                                              ).toLocaleString("en-US", {
+                                                  maximumFractionDigits: 3,
+                                                  useGrouping: true,
+                                              })
+                                            : 0.0}
+                                    </span>{" "}
+                                    <span>{pair?.token1.symbol}</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="flex justify-between">
-                            <p>456.87 HONEY</p>
-                            <p>0.00 HONEY</p>
-                        </div>
+                        <div className="flex flex-col items-end justify-start gap-2">
+                            <span className="capitalize text-swapBox">
+                                your positions
+                            </span>
+                            <div className="flex flex-col items-end justify-start gap-1">
+                                <div>
+                                    <span className="text-swapBox">
+                                        {!!pair
+                                            ? Number(
+                                                  token0Deposited,
+                                              ).toLocaleString("en-US", {
+                                                  maximumFractionDigits: 3,
+                                                  useGrouping: true,
+                                              })
+                                            : 0.0}
+                                    </span>{" "}
+                                    <span>{pair?.token0.symbol}</span>
+                                </div>
 
-                        <div className="flex justify-between">
-                            <p>456.87 BERA</p>
-                            <p>0.00 BERA</p>
+                                <div>
+                                    <span className="text-swapBox">
+                                        {!!pair
+                                            ? Number(
+                                                  token1Deposited,
+                                              ).toLocaleString("en-US", {
+                                                  maximumFractionDigits: 3,
+                                                  useGrouping: true,
+                                              })
+                                            : 0.0}
+                                    </span>{" "}
+                                    <span>{pair?.token1.symbol}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -78,17 +256,20 @@ const Page: FC<PageProps> = ({ params }) => {
 
                     <div>
                         <div className="flex justify-between">
-                            <p>Stake 100%</p>
+                            <p>Stake {percentage * 100}%</p>
                         </div>
                     </div>
 
                     <Slider
+                        onChange={(value) =>
+                            setPercentage((value as number) / 100)
+                        }
                         size="md"
                         step={25}
                         maxValue={100}
                         minValue={0}
                         aria-label="Temperature"
-                        defaultValue={25}
+                        defaultValue={percentage}
                         color="warning"
                         classNames={{
                             mark: "w-max",
@@ -121,14 +302,81 @@ const Page: FC<PageProps> = ({ params }) => {
                     />
                 </div>
 
-                <Button variant="primary" className="w-full capitalize">
-                    stake
-                </Button>
+                {isConnected ? (
+                    <>
+                        {gaugeId !== zeroAddress ? (
+                            <>
+                                {allowedToSpend >= stakable ? (
+                                    <Button
+                                        variant="primary"
+                                        disabled={
+                                            depositPending || stakable <= 0
+                                        }
+                                        onClick={() =>
+                                            deposit(
+                                                parseUnits(
+                                                    stakable.toString(),
+                                                    18,
+                                                ),
+                                            )
+                                        }
+                                        className="w-full capitalize"
+                                        isLoading={depositPending}
+                                    >
+                                        stake
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="primary"
+                                        disabled={approvalPending}
+                                        onClick={executeApproval}
+                                        className="w-full capitalize"
+                                        isLoading={approvalPending}
+                                    >
+                                        allow {poolSymbol}
+                                    </Button>
+                                )}
+                            </>
+                        ) : (
+                            <Button
+                                disabled={
+                                    createGaugePending ||
+                                    gaugeId !== zeroAddress
+                                }
+                                onClick={() => createGauge(params.poolId)}
+                                variant="primary"
+                                className="w-full capitalize"
+                                isLoading={createGaugePending}
+                            >
+                                create stake vault
+                            </Button>
+                        )}
+                    </>
+                ) : (
+                    <ConnectButton className="w-full" />
+                )}
             </div>
 
-            <IncentiveSelectModal
-                isOpen={showModal}
-                close={() => setShowModal(false)}
+            <TransactionInfoModal
+                isOpen={showTXInfoModal}
+                close={() => {
+                    setShowTXInfoModal(false);
+                    if (typeof createGaugeHash !== "undefined") {
+                        resetCreateGauge();
+                    }
+
+                    if (typeof depositHash !== "undefined") {
+                        resetDeposit();
+                    }
+                }}
+                type={
+                    createGaugeSuccess || depositSuccess
+                        ? "success"
+                        : createGaugeErrored || depositError
+                          ? "failure"
+                          : "failure"
+                }
+                txHash={createGaugeHash ?? depositHash}
             />
         </div>
     );

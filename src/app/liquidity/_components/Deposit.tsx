@@ -287,7 +287,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
                         <div className="flex flex-col items-end justify-start gap-2">
                             <span className="capitalize text-swapBox">
-                                your deposits
+                                your positions
                             </span>
                             <div className="flex flex-col items-end justify-start gap-1">
                                 <div>

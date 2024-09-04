@@ -6,12 +6,23 @@ import Image2 from "@/assets/images/image2.svg";
 import MoniIcon from "@/assets/images/logo.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { ChipBadge } from "@/components/ui/chipBadge";
-import { Divider } from "@nextui-org/react";
+import { usePoolPositions } from "@/hooks/graphql/core";
 import Image from "next/image";
 import { useState } from "react";
+import { useWatchBlocks } from "wagmi";
+import { LiquidityReward } from "./_components/LiquidityReward";
 
 export default function Page() {
     const [selectedTab, setSelectedTab] = useState("pools");
+    const usePositionsQuery = usePoolPositions();
+    const { data: positions = [], refetch: refetchAccountPositions } =
+        usePositionsQuery();
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchAccountPositions();
+        },
+    });
 
     return (
         <div className="relative space-y-10 overflow-hidden p-5 md:p-20">
@@ -48,69 +59,10 @@ export default function Page() {
 
             <div className="flex flex-col gap-5">
                 <p className="text-lg md:text-2xl">Liquidity Rewards</p>
-                <div>
-                    <div className="flex flex-col justify-between gap-5 bg-footer p-5 lg:flex-row lg:gap-0">
-                        <div className="flex items-start">
-                            <div className="flex items-center">
-                                <Image src={BearIcon} alt="icon" width={30} />
-                                <Image
-                                    src={MoniIcon}
-                                    alt="icon"
-                                    width={30}
-                                    className="-translate-x-3"
-                                />
-                            </div>
-
-                            <div>
-                                <p>vAMM-MONI/BERA</p>
-                                <p className="bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                    Basic Volatile · 1.0%
-                                </p>
-                            </div>
-                        </div>
-
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="lg:text-right">
-                            <p className="text-textgray">Emissions APR</p>
-                            <p>29.28%</p>
-                        </div>
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="flex flex-col justify-between gap-5 lg:items-end">
-                            <div className="lg:text-right">
-                                <p className="text-textgray">Emissions APR</p>
-                                <p>
-                                    0.00057{" "}
-                                    <span className="text-textgray">MONI</span>
-                                </p>
-                            </div>
-
-                            <p className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end">
-                                <Image alt="check icon" src={CheckIcon} />
-                                <span>CLAIM</span>
-                            </p>
-                        </div>
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="flex flex-col justify-between gap-5 lg:items-end">
-                            <div className="lg:text-right">
-                                <p className="text-textgray">Emissions APR</p>
-                                <p>
-                                    0.00057{" "}
-                                    <span className="text-textgray">MONI</span>
-                                </p>
-                                <p>
-                                    0.00057{" "}
-                                    <span className="text-textgray">BERA</span>
-                                </p>
-                            </div>
-                            <p className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end">
-                                <Image alt="check icon" src={CheckIcon} />
-                                <span>CLAIM</span>
-                            </p>
-                        </div>
-                    </div>
+                <div className="flex flex-col gap-3">
+                    {positions.map((position) => (
+                        <LiquidityReward data={position} key={position.id} />
+                    ))}
                 </div>
             </div>
 

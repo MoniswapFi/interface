@@ -74,7 +74,7 @@ export default function Page() {
     const timeInMotion = useTimeInMotion();
 
     const { data: fee0 } = usePoolFee(stablePoolAddress as any, true);
-    const { data: fee1 } = usePoolFee(volatilePoolAddress as any, true);
+    const { data: fee1 } = usePoolFee(volatilePoolAddress as any, false);
 
     const { data: stableFee } = useStableFee();
     const { data: volatileFee } = useVolatileFee();
