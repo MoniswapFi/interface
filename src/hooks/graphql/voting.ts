@@ -43,7 +43,7 @@ export function useVotePositions() {
                 queryKey: [
                     `${Date.now()}=${Math.random() * 7000}=votePositions`,
                 ],
-                fetcher: async (): Promise<VotePosition> => {
+                fetcher: async (): Promise<VotePosition[]> => {
                     const { data } = await execute(
                         IndexVotePositionDocument,
                         { account: address },

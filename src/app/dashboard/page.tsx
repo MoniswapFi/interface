@@ -1,26 +1,26 @@
 "use client";
 
-import BearIcon from "@/assets/images/Bera.png";
-import CheckIcon from "@/assets/images/check.svg";
 import Image2 from "@/assets/images/image2.svg";
-import MoniIcon from "@/assets/images/logo.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
-import { ChipBadge } from "@/components/ui/chipBadge";
 import { usePoolPositions } from "@/hooks/graphql/core";
+import { useVotePositions } from "@/hooks/graphql/voting";
 import Image from "next/image";
-import { useState } from "react";
 import { useWatchBlocks } from "wagmi";
 import { LiquidityReward } from "./_components/LiquidityReward";
+import { VotingReward } from "./_components/VotingReward";
 
 export default function Page() {
-    const [selectedTab, setSelectedTab] = useState("pools");
     const usePositionsQuery = usePoolPositions();
+    const useVotePositionQuery = useVotePositions();
     const { data: positions = [], refetch: refetchAccountPositions } =
         usePositionsQuery();
+    const { data: votes = [], refetch: refetchVotePositions } =
+        useVotePositionQuery();
 
     useWatchBlocks({
         onBlock: async () => {
             await refetchAccountPositions();
+            await refetchVotePositions();
         },
     });
 
@@ -68,137 +68,10 @@ export default function Page() {
 
             <div className="flex flex-col gap-5">
                 <p className="text-lg md:text-2xl">Voting Rewards</p>
-                <div>
-                    <div className="flex flex-col justify-between gap-3 bg-footer p-5 lg:flex-row lg:gap-0">
-                        <div className="flex items-start">
-                            <div className="flex items-center">
-                                <Image src={BearIcon} alt="icon" width={30} />
-                                <Image
-                                    src={MoniIcon}
-                                    alt="icon"
-                                    width={30}
-                                    className="-translate-x-3"
-                                />
-                            </div>
-
-                            <div>
-                                <p>vAMM-MONI/BERA</p>
-                                <p className="bg-darkgray px-2 py-1 text-xs text-lightblue">
-                                    Basic Volatile · 1.0%
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col justify-between gap-5 lg:items-end">
-                            <div className="lg:text-right">
-                                <p className="text-textgray">Lock #14854</p>
-                                <p>
-                                    783.057{" "}
-                                    <span className="text-textgray">
-                                        MONI locked
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex min-w-0 flex-col justify-between gap-5 lg:items-end">
-                            <div className="flex flex-col gap-3">
-                                <p className="text-textgray lg:text-right">
-                                    Rewards
-                                </p>
-                                <div className="flex items-center justify-between gap-3 lg:justify-end">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src={MoniIcon}
-                                            alt="icon"
-                                            width={30}
-                                        />
-                                        0.00057{" "}
-                                        <span className="text-textgray">
-                                            MONI
-                                        </span>
-                                    </div>
-                                    <ChipBadge>
-                                        <span>FEE</span>
-                                    </ChipBadge>
-                                </div>
-                                <div className="flex items-center justify-between gap-3 lg:justify-end">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src={BearIcon}
-                                            alt="icon"
-                                            width={30}
-                                        />
-                                        0.00057{" "}
-                                        <span className="text-textgray">
-                                            BERA
-                                        </span>
-                                    </div>
-                                    <ChipBadge>FEE</ChipBadge>
-                                </div>
-                                <div className="flex items-center justify-between gap-3 lg:justify-end">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src={BearIcon}
-                                            alt="icon"
-                                            width={30}
-                                        />
-                                        0.00057{" "}
-                                        <span className="text-textgray">
-                                            BERA
-                                        </span>
-                                    </div>
-                                    <ChipBadge>INCENTIVES</ChipBadge>
-                                </div>
-                                <div className="flex items-center justify-between gap-3 lg:justify-end">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src={BearIcon}
-                                            alt="icon"
-                                            width={30}
-                                        />
-                                        0.00057{" "}
-                                        <span className="text-textgray">
-                                            BERA
-                                        </span>
-                                    </div>
-                                    <ChipBadge>INCENTIVES</ChipBadge>
-                                </div>
-                                <div className="flex items-center justify-between gap-3 lg:justify-end">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src={BearIcon}
-                                            alt="icon"
-                                            width={30}
-                                        />
-                                        0.00057{" "}
-                                        <span className="text-textgray">
-                                            BERA
-                                        </span>
-                                    </div>
-                                    <ChipBadge>INCENTIVES</ChipBadge>
-                                </div>
-                                <div className="flex items-center justify-between gap-3 lg:justify-end">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src={BearIcon}
-                                            alt="icon"
-                                            width={30}
-                                        />
-                                        0.00057{" "}
-                                        <span className="text-textgray">
-                                            BERA
-                                        </span>
-                                    </div>
-                                    <ChipBadge>INCENTIVES</ChipBadge>
-                                </div>
-                            </div>
-                            <p className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end">
-                                <Image alt="check icon" src={CheckIcon} />
-                                <span>CLAIM</span>
-                            </p>
-                        </div>
-                    </div>
+                <div className="flex flex-col gap-3">
+                    {votes.map((vote) => (
+                        <VotingReward data={vote} key={vote.id} />
+                    ))}
                 </div>
             </div>
         </div>

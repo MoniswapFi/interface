@@ -1,19 +1,25 @@
 query IndexVotePosition($account: Bytes!) {
     votePositions(where: { account: $account }, first: 1000) {
-        id
-        lockId
         pair {
             id
             name
             symbol
             token0 {
+                decimals
                 id
                 name
+                symbol
             }
             token1 {
+                decimals
                 id
                 name
+                symbol
             }
         }
+        lockId
+        id
+        blockTimestamp
+        account
     }
 }
