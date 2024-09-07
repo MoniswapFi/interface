@@ -16,6 +16,22 @@ export function useVoterCore() {
             args: [poolId as `0x${string}`],
         });
 
+    const useGetGaugeFees = (gaugeId: string) =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "gaugeToFees",
+            args: [gaugeId as `0x${string}`],
+        });
+
+    const useGetGaugeBribe = (gaugeId: string) =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "gaugeToBribe",
+            args: [gaugeId as `0x${string}`],
+        });
+
     const useVotingExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
@@ -68,5 +84,10 @@ export function useVoterCore() {
         };
     };
 
-    return { useGetPoolGauge, useVotingExecutions };
+    return {
+        useGetPoolGauge,
+        useGetGaugeFees,
+        useGetGaugeBribe,
+        useVotingExecutions,
+    };
 }
