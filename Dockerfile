@@ -1,5 +1,5 @@
 FROM node:20-alpine
-WORKDIR /app
+WORKDIR /dapp
 COPY src /src/
 COPY public /public/
 COPY .env /.env
