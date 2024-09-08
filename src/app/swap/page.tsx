@@ -66,14 +66,24 @@ export default function Page() {
             selectedTokens[0]?.address === __ETHER__
                 ? etherBalance
                 : token0Balance,
-        [etherBalance, selectedTokens[0]?.address, token0Balance],
+        [
+            etherBalance,
+            selectedTokens[0]?.address,
+            token0Balance,
+            selectedTokens,
+        ],
     );
     const balance1 = useMemo(
         () =>
             selectedTokens[1]?.address === __ETHER__
                 ? etherBalance
                 : token1Balance,
-        [etherBalance, selectedTokens[1]?.address, token1Balance],
+        [
+            etherBalance,
+            selectedTokens[1]?.address,
+            token1Balance,
+            selectedTokens,
+        ],
     );
 
     const address0 = useMemo(
