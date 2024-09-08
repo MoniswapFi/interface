@@ -38,14 +38,14 @@ export default function Page() {
             selectedTokens[0]?.address === __ETHER__
                 ? wrappedEther
                 : selectedTokens[0]?.address,
-        [wrappedEther, selectedTokens[0]?.address],
+        [wrappedEther, selectedTokens[0]?.address, selectedTokens],
     );
     const secondAddress = useMemo(
         () =>
             selectedTokens[1]?.address === __ETHER__
                 ? wrappedEther
                 : selectedTokens[1]?.address,
-        [wrappedEther, selectedTokens[1]?.address],
+        [wrappedEther, selectedTokens[1]?.address, selectedTokens],
     );
     const { useGetPool, usePoolFee, useStableFee, useVolatileFee } =
         useProtocolCore();
@@ -100,7 +100,7 @@ export default function Page() {
 
             push(pathName + `?${clearableParams.toString()}`);
         }
-    }, [query, tokenLists, selectedTokens[1]]);
+    }, [query, tokenLists, selectedTokens[1], push]);
 
     useEffect(() => {
         if (!!query.get("token1") && tokenLists.length > 0) {
