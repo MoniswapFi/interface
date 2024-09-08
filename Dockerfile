@@ -9,5 +9,5 @@ COPY *.json /
 COPY *.mjs /
 RUN yarn
 RUN yarn graph-build && yarn build
-EXPOSE 3001
+EXPOSE 3000
 ENTRYPOINT yarn start

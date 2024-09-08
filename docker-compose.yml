@@ -6,4 +6,4 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - 13000:3001
+            - 13000:3000
