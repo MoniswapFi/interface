@@ -32,9 +32,9 @@ export const DisconnectModal: FC<ModalProps> = ({ isOpen, close }) => {
                             Disconnect Wallet
                         </ModalHeader>
                         <ModalBody>
-                            <div className="py-5">
+                            <div className="w-full py-5">
                                 <button
-                                    className="cursor-pointer bg-brightBlack py-5 text-center"
+                                    className="w-full cursor-pointer bg-brightBlack px-2 py-5 text-center"
                                     onClick={() => handleDisconnect()}
                                 >
                                     Disconnect wallet

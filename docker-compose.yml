@@ -1,0 +1,9 @@
+services:
+    app:
+        container_name: moniswap-app
+        hostname: app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 13000:3001

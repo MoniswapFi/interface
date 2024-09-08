@@ -207,6 +207,7 @@ export default function Page() {
                                             alt={selectedTokens[0].symbol}
                                             width={24}
                                             height={24}
+                                            className="rounded-full"
                                         />
                                         <span>{selectedTokens[0].symbol}</span>
                                     </div>
@@ -265,6 +266,7 @@ export default function Page() {
                                             alt={selectedTokens[1].symbol}
                                             width={24}
                                             height={24}
+                                            className="rounded-full"
                                         />
                                         <span>{selectedTokens[1].symbol}</span>
                                     </div>

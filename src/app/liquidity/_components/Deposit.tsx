@@ -56,13 +56,16 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
     const { useGetPool, useAddLiquidity, useQuoteAddLiquidity, usePoolFee } =
         useProtocolCore();
-    const { data: poolAddress = zeroAddress, refetch: refetchPool } =
-        useGetPool(firstAddress as any, secondAddress as any, stable);
+    const { data: poolAddress = zeroAddress } = useGetPool(
+        firstAddress as any,
+        secondAddress as any,
+        stable,
+    );
     const { data: fee } = usePoolFee(poolAddress as any, stable);
     const { usePoolSymbol, usePoolTotalSupply } = usePoolMetadata(
         poolAddress as any,
     );
-    const { data: poolSymbol, refetch: refetchPoolSymbol } = usePoolSymbol();
+    const { data: poolSymbol } = usePoolSymbol();
     const { data: poolTotalSupply, refetch: refetchPoolSupply } =
         usePoolTotalSupply();
     const useIndexedPool = useSinglePoolInfo(poolAddress?.toLowerCase());
@@ -180,8 +183,6 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
         onBlock: async () => {
             await refetchAllowance0();
             await refetchAllowance1();
-            await refetchPool();
-            await refetchPoolSymbol();
             await refetchPoolSupply();
             await refetchPair();
             await refetchQuote();

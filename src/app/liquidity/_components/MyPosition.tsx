@@ -245,7 +245,7 @@ export const MyPosition: FC<AccountPositionProps> = ({ data }) => {
                     {"Your Deposits"} <Popover content="Amounts Deposited." />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Staked"} <Popover content="Popover content here." />
+                    {"Staked"} <Popover content="Value staked." />
                 </div>
                 <div className="hidden w-[150px] text-right lg:block">
                     {"Action"}
