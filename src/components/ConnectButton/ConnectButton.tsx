@@ -3,6 +3,7 @@
 import Coinbase from "@/assets/images/coinbase.svg";
 import Metamask from "@/assets/images/metamask.svg";
 import WalletConnect from "@/assets/images/walletconnect.svg";
+import { useCreateWallet } from "@/hooks/api/wallet";
 import { truncateAddress } from "@/utils/format";
 import {
     Modal,
@@ -14,8 +15,8 @@ import {
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { Settings } from "lucide-react";
 import Image from "next/image";
-import { FC, useState } from "react";
-import { zeroAddress } from "viem";
+import { FC, useEffect, useState } from "react";
+import { Address, zeroAddress } from "viem";
 import { useAccount } from "wagmi";
 import { DisconnectModal } from "../DisconnectModal/DisconnectModal";
 import { SettingsModal } from "../Modal";
@@ -31,6 +32,16 @@ export const ConnectButton: FC<Props> = ({ className }) => {
     const { isConnected, address } = useAccount();
     const [showSettingModal, setShowSettingModal] = useState(false);
     const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+
+    const { mutateAsync: createWallet } = useCreateWallet();
+
+    useEffect(() => {
+        if (address) {
+            createWallet({
+                address: address as Address,
+            });
+        }
+    }, [address]);
 
     return (
         <>
