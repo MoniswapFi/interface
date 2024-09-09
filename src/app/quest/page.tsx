@@ -1,9 +1,17 @@
 "use client";
 
+import { beraPackABI } from "@/assets/abis";
 import AirdropImage from "@/assets/images/AirdropWeb.png";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import RingIcon from "@/assets/images/ring.svg";
 import StarIcon from "@/assets/images/star.svg";
+import { __BERA_PACK__, __CHAIN_IDS__ } from "@/config/constants";
+import { useCreateQuests, useGetUserQuestLists } from "@/hooks/api/quest";
+import {
+    useAddWalletPoints,
+    useGetWallet,
+    useGetWalletRank,
+} from "@/hooks/api/wallet";
 import {
     Accordion,
     AccordionItem,
@@ -17,6 +25,9 @@ import {
     TableRow,
 } from "@nextui-org/react";
 import Image from "next/image";
+import { useCallback, useEffect } from "react";
+import { Address, zeroAddress } from "viem";
+import { useAccount, useReadContract } from "wagmi";
 import { Button } from "../../components/ui/button";
 
 const pointsArray = [
@@ -28,6 +39,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Follow",
+        key: "moniswap_x",
+        href: "https://discord.com",
     },
     {
         title: "Follow Cappo on X (Twitter) and turn on notification",
@@ -37,6 +50,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Follow",
+        key: "cappo_x",
+        href: "https://discord.com",
     },
     {
         title: "Follow Beraland on X (Twitter) and turn on notification",
@@ -46,6 +61,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
         ],
         button: "Follow",
+        key: "beraland_x",
+        href: "https://discord.com",
     },
     {
         title: "Join Moniswap Discord",
@@ -55,6 +72,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
         ],
         button: "Join Discord",
+        key: "moniswap_discord",
+        href: "https://discord.com",
     },
     {
         title: "Join Beraland Discord",
@@ -64,6 +83,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
         ],
         button: "Join Discord",
+        key: "beraland_discord",
+        href: "https://discord.com",
     },
     {
         title: "Join Cappo Telegram group",
@@ -73,6 +94,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Join Telegram",
+        key: "cappo_telegram",
+        href: "https://discord.com",
     },
     {
         title: "Join Moniswap Telegram group",
@@ -82,6 +105,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Join Telegram",
+        key: "moniswap_telegram",
+        href: "https://discord.com",
     },
     {
         title: "Join Moniswap Telegram announcement",
@@ -91,6 +116,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Join Telegram",
+        key: "moniswap_announce_telegram",
+        href: "https://discord.com",
     },
     {
         title: "Trade on Moniswap",
@@ -100,6 +127,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Trade Now!",
+        key: "trade",
+        href: "https://discord.com",
     },
     {
         title: "Provide Liquidity on Moniswap",
@@ -109,6 +138,8 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Add Liquidity",
+        key: "liquidity",
+        href: "https://discord.com",
     },
     {
         title: "Hold Bera Pack NFT",
@@ -118,10 +149,87 @@ const pointsArray = [
             "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
         ],
         button: "Check",
+        key: "bera_pack",
+        href: "https://discord.com",
     },
 ];
 
 export default function Page() {
+    const { isConnected, address } = useAccount();
+
+    const { data: wallet, refetch: refetchWallet } = useGetWallet({
+        variables: {
+            address: address as Address,
+        },
+    });
+
+    const { data: questLists, refetch: refetchLists } = useGetUserQuestLists({
+        variables: {
+            address: address as Address,
+        },
+    });
+
+    const { data: walletRank } = useGetWalletRank({
+        variables: {
+            address: address as Address,
+        },
+    });
+
+    const { mutateAsync: createQuest } = useCreateQuests();
+    const { mutateAsync: addWalletPoints } = useAddWalletPoints();
+
+    const { data: beraPackBalance, isLoading } = useReadContract({
+        chainId: __CHAIN_IDS__.arbi_mainnet,
+        abi: beraPackABI,
+        address: __BERA_PACK__[__CHAIN_IDS__.arbi_mainnet] as Address,
+        functionName: "balanceOf",
+        args: [address ?? zeroAddress],
+    });
+
+    const claimPoints = async (key: string, points: number) => {
+        try {
+            await createQuest({
+                address: address as Address,
+                reason: key,
+                points: points,
+            });
+            await addWalletPoints({
+                address: address as Address,
+                points: points,
+            });
+            refetchWallet();
+            refetchLists();
+        } catch (error) {
+            console.debug(error);
+        }
+    };
+
+    const handleClick = async (href: string, key: string, points: number) => {
+        if (checkQuestStatus(key)) return false;
+        window.open(href, "_blank");
+        claimPoints(key, points);
+    };
+
+    const checkQuestStatus = useCallback(
+        (key: string) => {
+            if (!address) return false;
+            const hasQuest = questLists?.some((item) => item.reason === key);
+            return hasQuest;
+        },
+        [questLists, address],
+    );
+
+    const handleMint = () => {
+        if (beraPackBalance || !address) return false;
+        window.open("https://www.kingdomly.app/bera-packs-", "_blank");
+    };
+
+    useEffect(() => {
+        if (beraPackBalance && address) {
+            claimPoints("bera_pack", 20000);
+        }
+    }, [beraPackBalance, address]);
+
     return (
         <div className="relative space-y-5 overflow-hidden p-5 lg:px-20">
             <Image
@@ -152,13 +260,19 @@ export default function Page() {
                         <div className="flex gap-3">
                             <Image src={RingIcon} alt="RingIcon" />
                             <p>
-                                4,301 <span className="text-gray1">points</span>
+                                {isConnected ? <>{wallet?.points}</> : "N/A"}{" "}
+                                <span className="text-gray1">points</span>
                             </p>
                         </div>
                         <Divider className="bg-gray2" />
                         <div className="flex gap-3">
                             <Image src={StarIcon} alt="RingIcon" />
-                            Ranked # <span className="text-gray1">13963</span>
+                            <span className="text-gray1">
+                                Ranked #
+                                {walletRank && walletRank.rank
+                                    ? walletRank.rank
+                                    : "N/A"}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -174,6 +288,73 @@ export default function Page() {
             <div className="bg-brightBlack px-3 py-5">
                 <Accordion variant="splitted">
                     {pointsArray.map((item, index) => {
+                        if (item.key === "bera_pack") {
+                            return (
+                                <AccordionItem
+                                    key={index}
+                                    aria-label={item.title}
+                                    title={
+                                        <div className="flex items-center justify-between gap-2 text-xs lg:text-base">
+                                            <div className="flex items-center">
+                                                <Checkbox
+                                                    size="lg"
+                                                    radius="full"
+                                                    color="warning"
+                                                    classNames={{
+                                                        icon: "text-white",
+                                                        base: "data-[disabled=true]:opacity-100",
+                                                    }}
+                                                    isDisabled
+                                                    isSelected={checkQuestStatus(
+                                                        item.key,
+                                                    )}
+                                                />
+                                                Hold Bera Pack NFT
+                                            </div>
+                                            <div className="flex-shrink-0">
+                                                +20000 points
+                                            </div>
+                                        </div>
+                                    }
+                                    classNames={{
+                                        base: "!bg-darkBlack !rounded-none",
+                                        title: "text-white",
+                                    }}
+                                >
+                                    <div className="space-y-5">
+                                        <p>
+                                            To pass this challenge, you must
+                                            Hold Bera Pack NFT.
+                                        </p>
+                                        <p>
+                                            Please note, we sync this challenge
+                                            every hour so please be patient and
+                                            your progress will automatically
+                                            update.
+                                        </p>
+
+                                        <Button
+                                            variant="primary"
+                                            size="full"
+                                            classNames={{
+                                                base: "text-gray",
+                                            }}
+                                            disabled={
+                                                checkQuestStatus(item.key) ||
+                                                isLoading
+                                            }
+                                            onClick={handleMint}
+                                        >
+                                            {beraPackBalance ? (
+                                                <>Confirmed</>
+                                            ) : (
+                                                <>Mint now!</>
+                                            )}
+                                        </Button>
+                                    </div>
+                                </AccordionItem>
+                            );
+                        }
                         return (
                             <AccordionItem
                                 key={index}
@@ -187,7 +368,12 @@ export default function Page() {
                                                 color="warning"
                                                 classNames={{
                                                     icon: "text-white",
+                                                    base: "data-[disabled=true]:opacity-100",
                                                 }}
+                                                isDisabled
+                                                isSelected={checkQuestStatus(
+                                                    item.key,
+                                                )}
                                             />
                                             {item.title}
                                         </div>
@@ -213,8 +399,26 @@ export default function Page() {
                                         );
                                     })}
 
-                                    <Button variant="primary" size="full">
-                                        {item?.button}
+                                    <Button
+                                        variant="primary"
+                                        size="full"
+                                        onClick={() =>
+                                            handleClick(
+                                                item.href,
+                                                item.key,
+                                                item.points,
+                                            )
+                                        }
+                                        classNames={{
+                                            base: "text-gray",
+                                        }}
+                                        disabled={checkQuestStatus(item.key)}
+                                    >
+                                        {checkQuestStatus(item.key) ? (
+                                            "Confirmed"
+                                        ) : (
+                                            <>{item?.button}</>
+                                        )}
                                     </Button>
                                 </div>
                             </AccordionItem>
