@@ -56,7 +56,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
     const { useGetPool, useAddLiquidity, useQuoteAddLiquidity, usePoolFee } =
         useProtocolCore();
-    const { data: poolAddress, refetch: refetchPool } = useGetPool(
+    const { data: poolAddress = zeroAddress } = useGetPool(
         firstAddress as any,
         secondAddress as any,
         stable,
@@ -65,7 +65,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
     const { usePoolSymbol, usePoolTotalSupply } = usePoolMetadata(
         poolAddress as any,
     );
-    const { data: poolSymbol, refetch: refetchPoolSymbol } = usePoolSymbol();
+    const { data: poolSymbol } = usePoolSymbol();
     const { data: poolTotalSupply, refetch: refetchPoolSupply } =
         usePoolTotalSupply();
     const useIndexedPool = useSinglePoolInfo(poolAddress?.toLowerCase());
@@ -181,13 +181,11 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
     useWatchBlocks({
         onBlock: async () => {
-            await refetchPool();
-            await refetchPoolSymbol();
+            await refetchAllowance0();
+            await refetchAllowance1();
             await refetchPoolSupply();
             await refetchPair();
             await refetchQuote();
-            await refetchAllowance0();
-            await refetchAllowance1();
         },
     });
 
@@ -287,7 +285,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
                         <div className="flex flex-col items-end justify-start gap-2">
                             <span className="capitalize text-swapBox">
-                                your deposits
+                                your positions
                             </span>
                             <div className="flex flex-col items-end justify-start gap-1">
                                 <div>

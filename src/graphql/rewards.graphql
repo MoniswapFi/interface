@@ -1,5 +1,5 @@
-query IndexFees {
-    fees(first: 1000, skip: 0) {
+query IndexFees($account: Bytes!) {
+    fees(first: 1000, skip: 0, where: { account: $account }) {
         id
         pair {
             id

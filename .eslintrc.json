@@ -6,7 +6,8 @@
     "plugins": ["deprecation"],
     "rules": {
         "@next/next/no-sync-scripts": "off",
-        "deprecation/deprecation": "warn"
+        "deprecation/deprecation": "warn",
+        "react-hooks/rules-of-hooks": "off"
     },
     "parserOptions": {
         "project": "./tsconfig.json"

@@ -116,7 +116,7 @@ export function usePoolRewards() {
                     if (address) {
                         const { data } = await execute(
                             IndexFeesDocument,
-                            {},
+                            { account: address.toLowerCase() },
                             { url },
                         );
                         return data.fees || [];

@@ -57,16 +57,16 @@ export const Pools: FC<PoolsProps> = ({ data }) => {
                     </Select>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    TVL <Popover content="Popover con." />
+                    TVL <Popover content="Total volume locked." />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Fees <24H>"} <Popover content="Popover content here." />
+                    {"Fees <24H>"} <Popover content="Accrued fees." />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Volumn <24H>"} <Popover content="Popover content here." />
+                    {"Volume <24H>"} <Popover content="24-hour volume." />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"APR <24H>"} <Popover content="Popover content here." />
+                    {"APR <24H>"} <Popover content="Deposit rate." />
                 </div>
                 <div className="hidden text-right lg:block">{"Action"}</div>
             </div>

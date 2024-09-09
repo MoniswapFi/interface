@@ -1,4 +1,3 @@
-import BeraLogo from "@/assets/images/Bera.png";
 import { __ETHER__ } from "@/config/constants";
 import { useERC20Balance, useNativeBalance } from "@/hooks/onchain/wallet";
 import { TokenType } from "@/types";
@@ -13,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import clsx from "clsx";
 import Image from "next/image";
-import { FC, MouseEventHandler, useMemo } from "react";
+import { FC, MouseEventHandler, useMemo, useState } from "react";
 
 type ModalProps = {
     isOpen: boolean;
@@ -61,9 +60,10 @@ const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
             <div className="flex items-center gap-2">
                 <Image
                     src={item.logoURI}
-                    alt="token logo"
+                    alt={item.symbol}
                     width={30}
                     height={30}
+                    className="rounded-full"
                 />
                 <span className="text-xl">{item.name}</span>
             </div>
@@ -87,6 +87,23 @@ export const TokenSelectModal: FC<ModalProps> = ({
     onItemClick,
     selectedTokens,
 }) => {
+    const [searchValue, setSearchValue] = useState("");
+    const filteredList = useMemo(
+        () =>
+            tokenLists.filter(
+                (token) =>
+                    token.name
+                        .toLowerCase()
+                        .startsWith(searchValue.toLowerCase()) ||
+                    token.address
+                        .toLowerCase()
+                        .startsWith(searchValue.toLowerCase()) ||
+                    token.symbol
+                        .toLowerCase()
+                        .startsWith(searchValue.toLowerCase()),
+            ),
+        [tokenLists, searchValue],
+    );
     return (
         <Modal
             isOpen={isOpen}
@@ -105,43 +122,44 @@ export const TokenSelectModal: FC<ModalProps> = ({
                         </ModalHeader>
                         <ModalBody>
                             <div className="flex flex-col gap-5">
-                                <Input placeholder="Search by name, symbol or address" />
+                                <Input
+                                    placeholder="Search by name, symbol or address"
+                                    onChange={(ev) =>
+                                        setSearchValue(ev.target.value)
+                                    }
+                                />
 
                                 <div className="grid grid-cols-4 gap-3">
-                                    <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
-                                        <Image
-                                            src={BeraLogo}
-                                            alt="token logo"
-                                        />
-                                        <span className="text-xl">BERA</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
-                                        <Image
-                                            src={BeraLogo}
-                                            alt="token logo"
-                                        />
-                                        <span className="text-xl">BERA</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
-                                        <Image
-                                            src={BeraLogo}
-                                            alt="token logo"
-                                        />
-                                        <span className="text-xl">BERA</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 bg-brightBlack px-2 py-3">
-                                        <Image
-                                            src={BeraLogo}
-                                            alt="token logo"
-                                        />
-                                        <span className="text-xl">BERA</span>
-                                    </div>
+                                    {tokenLists
+                                        .sort(() => Math.random() - 0.5)
+                                        .slice(0, 5)
+                                        .map((token) => (
+                                            <div
+                                                key={token.address}
+                                                className="flex items-center gap-2 bg-brightBlack px-2 py-3"
+                                                onClick={() => {
+                                                    onItemClick(token);
+                                                    close();
+                                                }}
+                                            >
+                                                <Image
+                                                    src={token.logoURI}
+                                                    alt={token.symbol}
+                                                    height={20}
+                                                    width={20}
+                                                    className="rounded-full"
+                                                />
+                                                <span className="text-lg">
+                                                    {token.symbol}
+                                                </span>
+                                            </div>
+                                        ))}
                                 </div>
 
                                 <Divider className="bg-swapBox" />
 
                                 <div className="max-h-[300px] w-full overflow-y-auto">
-                                    {tokenLists.map((item, index) => {
+                                    {filteredList.map((item, index) => {
                                         return (
                                             <TokenSelectableItem
                                                 key={index}
