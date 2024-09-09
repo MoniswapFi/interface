@@ -47,6 +47,8 @@ const config: Config = {
                 brightBlack: "#1E1E1E",
                 darkBlack: "#000004",
                 darkgray: "#47473F",
+                nightRider: "#2B2B2B",
+                neroBlack: "#1B1A1A",
             },
             fontFamily: {
                 minecraft: "Minecraft",
