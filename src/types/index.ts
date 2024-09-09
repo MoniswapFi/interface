@@ -6,3 +6,15 @@ export type TokenType = {
     logoURI: string;
     chainId: number;
 };
+
+export type NFTMetadata = {
+    name: string;
+    background_color: string;
+    description: string;
+    image_data: string;
+    attributes: {
+        trait_type: string;
+        value: number | string;
+        display_type?: string;
+    }[];
+};

@@ -19,7 +19,15 @@ export function useEscrowCore() {
                 args: [BigInt(tokenId)],
             });
 
-        return { useLocked };
+        const useBalanceOfNFT = (tokenId: number) =>
+            useReadContract({
+                address: escrowAddress,
+                abi: escrowAbi,
+                functionName: "balanceOfNFT",
+                args: [BigInt(tokenId)],
+            });
+
+        return { useLocked, useBalanceOfNFT };
     };
     const useEscrowExecutions = () => {
         const {
