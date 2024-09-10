@@ -27,6 +27,7 @@ export const PoolTypes = [
 
 export const __CHAIN_IDS__ = {
     bera_testnet: 80084,
+    arbi_mainnet: 42161,
 };
 export const __POOL__GRAPH__URLs__ = {
     [__CHAIN_IDS__.bera_testnet]:
@@ -64,5 +65,8 @@ export const __WRAPPED_ETHER__ = {
 };
 export const __MONI__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
+};
+export const __BERA_PACK__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0x95a07C40eB0441ef0AD69443fA0766A6392c2861",
 };
 export const __IDEAL_GAS__ = BigInt(400000);
