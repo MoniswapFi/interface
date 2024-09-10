@@ -63,6 +63,9 @@ export const __VOTING_ESCROW__ = {
 export const __WRAPPED_ETHER__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
 };
+export const __MONI__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
+};
 export const __BERA_PACK__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x95a07C40eB0441ef0AD69443fA0766A6392c2861",
 };

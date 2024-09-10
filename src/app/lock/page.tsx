@@ -2,15 +2,26 @@
 
 import Bear4 from "@/assets/images/bear2.png";
 import Image2 from "@/assets/images/image2.svg";
-import LogoRect from "@/assets/images/logo-rect.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import Vector from "@/assets/images/Vector.svg";
 import { Button } from "@/components/ui/button";
+import { useLocks } from "@/hooks/graphql/escrow";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useWatchBlocks } from "wagmi";
+import { LockItem } from "./_components/Lock";
 
 export default function Page() {
+    const useLocksQuery = useLocks();
+    const { data: locks = [], refetch: refetchLocks } = useLocksQuery();
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchLocks();
+        },
+    });
+
     return (
         <div className="relative overflow-hidden p-5 md:p-20">
             <Image
@@ -64,86 +75,10 @@ export default function Page() {
                         </Link>
                     </div>
 
-                    <div className="flex flex-col justify-between gap-3 bg-footer p-5 text-sm lg:flex-row lg:gap-0">
-                        <div className="flex items-start gap-5 lg:w-[35%]">
-                            <Image src={LogoRect} alt="logo" />
-
-                            <div className="space-y-2">
-                                <p>Lock #14854</p>
-                                <div className="flex flex-wrap gap-3">
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Increase
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Extend
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Merge
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Transfer
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Poke
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Reset
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="text-sm text-btn-primary underline"
-                                    >
-                                        Withdraw
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
-                            <p className="text-textgray">Rebase APR</p>
-                            <p>9.33%</p>
-                        </div>
-
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
-                            <p className="text-textgray">Locked Amount</p>
-                            <p>0.1 MONI</p>
-                        </div>
-
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
-                            <p className="text-textgray">Voting Power</p>
-                            <p>0.09206 veMONI</p>
-                        </div>
-
-                        <Divider className="bg-swapBox lg:hidden" />
-
-                        <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
-                            <p className="text-textgray">Unlock Date</p>
-                            <p>locked for 4 years</p>
-                        </div>
+                    <div className="flex w-full flex-col items-center justify-start gap-3">
+                        {locks.map((lock) => (
+                            <LockItem data={lock} key={lock.id} />
+                        ))}
                     </div>
                 </div>
 

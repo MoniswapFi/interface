@@ -19,9 +19,17 @@ export function useEscrowCore() {
                 args: [BigInt(tokenId)],
             });
 
-        return { useLocked };
+        const useBalanceOfNFT = (tokenId: number) =>
+            useReadContract({
+                address: escrowAddress,
+                abi: escrowAbi,
+                functionName: "balanceOfNFT",
+                args: [BigInt(tokenId)],
+            });
+
+        return { useLocked, useBalanceOfNFT };
     };
-    const useEscrowExecutions = () => {
+    const useEscrowExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
             isError,
@@ -33,36 +41,48 @@ export function useEscrowCore() {
         } = useWriteContract();
 
         const createLock = (value: bigint, lockDuration: number) =>
-            writeContract({
-                address: escrowAddress,
-                abi: escrowAbi,
-                functionName: "createLock",
-                args: [value, BigInt(lockDuration)],
-            });
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "createLock",
+                    args: [value, BigInt(lockDuration)],
+                },
+                { onSettled },
+            );
 
         const withdraw = (tokenId: number) =>
-            writeContract({
-                address: escrowAddress,
-                abi: escrowAbi,
-                functionName: "withdraw",
-                args: [BigInt(tokenId)],
-            });
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "withdraw",
+                    args: [BigInt(tokenId)],
+                },
+                { onSettled },
+            );
 
         const merge = (token0Id: number, token1Id: number) =>
-            writeContract({
-                address: escrowAddress,
-                abi: escrowAbi,
-                functionName: "merge",
-                args: [BigInt(token0Id), BigInt(token1Id)],
-            });
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "merge",
+                    args: [BigInt(token0Id), BigInt(token1Id)],
+                },
+                { onSettled },
+            );
 
         const split = (tokenId: number, amount: bigint) =>
-            writeContract({
-                address: escrowAddress,
-                abi: escrowAbi,
-                functionName: "split",
-                args: [BigInt(tokenId), amount],
-            });
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "split",
+                    args: [BigInt(tokenId), amount],
+                },
+                { onSettled },
+            );
 
         return {
             createLock,
