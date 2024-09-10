@@ -1,15 +1,64 @@
 "use client";
 
 import BEAR1 from "@/assets/images/Bear1.png";
+import { TransactionInfoModal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
+import { useLocks } from "@/hooks/graphql/escrow";
+import { useEscrowCore } from "@/hooks/onchain/escrow";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Divider, Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
-import { useState } from "react";
+import { FC, useMemo, useState } from "react";
+import { formatUnits } from "viem";
+import { useWatchBlocks } from "wagmi";
 
-export default function Page() {
-    const [amount, setAmount] = useState(0.0);
+type PageProps = {
+    params: {
+        tokenId: string;
+    };
+};
+
+const Page: FC<PageProps> = ({ params }) => {
+    const [showTXInfoModal, setShowTXInfoModal] = useState(false);
+    const useLocksQuery = useLocks();
+    const { data: locks = [], refetch: refetchLocks } = useLocksQuery();
+    const [selectedLock, setSelectedLock] = useState<number | null>(null);
+
+    const { useEscrowExecutions, useEscrowReadables } = useEscrowCore();
+
+    const {
+        merge,
+        isError: mergeError,
+        isPending: mergePending,
+        isSuccess: mergeSuccess,
+        hash: mergeHash,
+        reset: resetMerge,
+    } = useEscrowExecutions(() => setShowTXInfoModal(true));
+    const { useLocked, useBalanceOfNFT } = useEscrowReadables();
+    const {
+        data: locked = {
+            amount: BigInt(0),
+            end: BigInt(0),
+            isPermanent: false,
+        },
+        refetch: refetchLocked,
+    } = useLocked(Number(params.tokenId));
+    const { data: weight = BigInt(0), refetch: refetchNFTBalance } =
+        useBalanceOfNFT(Number(params.tokenId));
+
+    const yearsLocked = useMemo(
+        () => (Number(locked.end) - Math.floor(Date.now() / 1000)) / 31536000,
+        [locked.end],
+    );
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchLocks();
+            await refetchLocked();
+            await refetchNFTBalance();
+        },
+    });
 
     return (
         <div className="p-5 pb-20">
@@ -25,7 +74,7 @@ export default function Page() {
                     <div className="flex flex-col gap-7 text-sm sm:text-base">
                         <div className="flex flex-col gap-5">
                             <div className="space-y-1">
-                                <p>Select the Lock you want to merge</p>
+                                <p>Select the lock you want to merge</p>
                             </div>
                         </div>
 
@@ -45,13 +94,18 @@ export default function Page() {
                             radius="none"
                             labelPlacement="outside"
                         >
-                            {Array.from({ length: 10 }).map((item, index) => {
+                            {locks.map((item, index) => {
                                 return (
                                     <SelectItem
+                                        onSelect={() =>
+                                            setSelectedLock(
+                                                Number(item.tokenId),
+                                            )
+                                        }
                                         key={index}
                                         className="data-[hover=true]:border data-[hover=true]:border-swapBox data-[hover=true]:bg-transparent data-[hover=true]:text-white"
                                     >
-                                        Lock {index}
+                                        Lock {item.tokenId}
                                     </SelectItem>
                                 );
                             })}
@@ -69,22 +123,66 @@ export default function Page() {
 
                         <Divider className="bg-swapBox" />
 
-                        <p className="text-lg">Merging into Lock 12337</p>
-                        <p className="text-navDefault">
-                            <span className="text-white">35.41</span> MONI
-                            locked for 12 hours
+                        <p className="text-lg">
+                            Merging into lock #{selectedLock}
                         </p>
                         <p className="text-navDefault">
-                            <span className="text-white">0.01238</span> veMONI
-                            voting power granted
+                            <span className="text-white">
+                                {Number(
+                                    formatUnits(locked.amount, 18),
+                                ).toLocaleString("en-US", {
+                                    maximumFractionDigits: 4,
+                                    useGrouping: true,
+                                })}
+                            </span>{" "}
+                            MONI locked for {yearsLocked.toFixed(5)} years
+                        </p>
+                        <p className="text-navDefault">
+                            <span className="text-white">
+                                {Number(formatUnits(weight, 18)).toLocaleString(
+                                    "en-US",
+                                    {
+                                        maximumFractionDigits: 4,
+                                        useGrouping: true,
+                                    },
+                                )}
+                            </span>{" "}
+                            veMONI voting power granted
                         </p>
                     </div>
                 </div>
 
-                <Button variant="primary" className="w-full">
+                <Button
+                    onClick={() =>
+                        merge(Number(params.tokenId), Number(selectedLock))
+                    }
+                    disabled={mergePending || selectedLock === null}
+                    isLoading={mergePending}
+                    variant="primary"
+                    className="w-full"
+                >
                     Merge
                 </Button>
             </div>
+
+            <TransactionInfoModal
+                isOpen={showTXInfoModal}
+                close={() => {
+                    setShowTXInfoModal(false);
+                    resetMerge();
+                    setSelectedLock(null);
+                }}
+                type={
+                    mergeSuccess
+                        ? "success"
+                        : mergeError
+                          ? "failure"
+                          : "failure"
+                }
+                txHash={mergeHash}
+            />
         </div>
     );
-}
+};
+
+export default Page;

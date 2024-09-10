@@ -72,9 +72,18 @@ export function useVoterCore() {
                 { onSettled },
             );
 
+        const resetLock = (lockId: number) =>
+            writeContract({
+                abi: voterAbi,
+                address: voterAddress as `0x${string}`,
+                functionName: "reset",
+                args: [BigInt(lockId)],
+            });
+
         return {
             createGauge,
             vote,
+            resetLock,
             isError,
             isSuccess,
             isPending,

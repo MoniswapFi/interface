@@ -1,10 +1,16 @@
 import { escrowAbi } from "@/assets/abis";
 import { __VOTING_ESCROW__ } from "@/config/constants";
 import { useMemo } from "react";
-import { useChainId, useReadContract, useWriteContract } from "wagmi";
+import {
+    useAccount,
+    useChainId,
+    useReadContract,
+    useWriteContract,
+} from "wagmi";
 
 export function useEscrowCore() {
     const chainId = useChainId();
+    const { address } = useAccount();
     const escrowAddress = useMemo(
         () => __VOTING_ESCROW__[chainId] as `0x${string}`,
         [chainId],
@@ -73,6 +79,28 @@ export function useEscrowCore() {
                 { onSettled },
             );
 
+        const increaseAmount = (tokenId: number, value: bigint) =>
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "increaseAmount",
+                    args: [BigInt(tokenId), value],
+                },
+                { onSettled },
+            );
+
+        const increaseUnlockTime = (tokenId: number, lockDuration: number) =>
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "increaseUnlockTime",
+                    args: [BigInt(tokenId), BigInt(lockDuration)],
+                },
+                { onSettled },
+            );
+
         const split = (tokenId: number, amount: bigint) =>
             writeContract(
                 {
@@ -84,11 +112,26 @@ export function useEscrowCore() {
                 { onSettled },
             );
 
+        const transferNFT = (to: string, tokenId: number) =>
+            writeContract({
+                address: escrowAddress,
+                abi: escrowAbi,
+                functionName: "transferFrom",
+                args: [
+                    address as `0x${string}`,
+                    to as `0x${string}`,
+                    BigInt(tokenId),
+                ],
+            });
+
         return {
             createLock,
             withdraw,
             merge,
             split,
+            increaseAmount,
+            increaseUnlockTime,
+            transferNFT,
             isError,
             isSuccess,
             isPending,
