@@ -2,13 +2,58 @@
 
 import BEAR1 from "@/assets/images/Bear1.png";
 import MoniIcon from "@/assets/images/logo.svg";
+import { TransactionInfoModal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
+import { useEscrowCore } from "@/hooks/onchain/escrow";
 import { Divider, Input } from "@nextui-org/react";
 import Image from "next/image";
-import { useState } from "react";
+import { FC, useMemo, useState } from "react";
+import { formatUnits, isAddress } from "viem";
+import { useWatchBlocks } from "wagmi";
 
-export default function Page() {
-    const [amount, setAmount] = useState(0.0);
+type PageProps = {
+    params: {
+        tokenId: string;
+    };
+};
+
+const Page: FC<PageProps> = ({ params }) => {
+    const [showTXInfoModal, setShowTXInfoModal] = useState(false);
+    const [recipient, setRecipient] = useState("");
+
+    const { useEscrowExecutions, useEscrowReadables } = useEscrowCore();
+
+    const {
+        transferNFT,
+        isError: transferError,
+        isPending: transferPending,
+        isSuccess: transferSuccess,
+        hash: transferHash,
+        reset: resetTransfer,
+    } = useEscrowExecutions(() => setShowTXInfoModal(true));
+    const { useLocked, useBalanceOfNFT } = useEscrowReadables();
+    const {
+        data: locked = {
+            amount: BigInt(0),
+            end: BigInt(0),
+            isPermanent: false,
+        },
+        refetch: refetchLocked,
+    } = useLocked(Number(params.tokenId));
+    const { data: weight = BigInt(0), refetch: refetchNFTBalance } =
+        useBalanceOfNFT(Number(params.tokenId));
+
+    const yearsLocked = useMemo(
+        () => (Number(locked.end) - Math.floor(Date.now() / 1000)) / 31536000,
+        [locked.end],
+    );
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchLocked();
+            await refetchNFTBalance();
+        },
+    });
 
     return (
         <div className="p-5 pb-20">
@@ -39,20 +84,29 @@ export default function Page() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <p>Lock ID 12337</p>
+                                <p>Lock ID {params.tokenId}</p>
                                 <p className="text-navDefault">
-                                    <span className="text-white">35.41</span>{" "}
-                                    MONI locked for 12 hours
+                                    <span className="text-white">
+                                        {Number(
+                                            formatUnits(locked.amount, 18),
+                                        ).toLocaleString("en-US", {
+                                            maximumFractionDigits: 4,
+                                            useGrouping: true,
+                                        })}
+                                    </span>{" "}
+                                    MONI locked for {yearsLocked.toFixed(5)}{" "}
+                                    years
                                 </p>
                             </div>
                         </div>
 
                         <Divider className="bg-swapBox" />
 
-                        <p>To wallet Address</p>
+                        <p>To wallet address</p>
 
                         <div>
                             <Input
+                                onChange={(ev) => setRecipient(ev.target.value)}
                                 radius="none"
                                 placeholder="0x"
                                 classNames={{
@@ -66,10 +120,34 @@ export default function Page() {
                     </div>
                 </div>
 
-                <Button variant="primary" className="w-full">
+                <Button
+                    onClick={() =>
+                        transferNFT(recipient, Number(params.tokenId))
+                    }
+                    isLoading={transferPending}
+                    disabled={transferPending || !isAddress(recipient)}
+                    variant="primary"
+                    className="w-full"
+                >
                     Transfer
                 </Button>
             </div>
+
+            <TransactionInfoModal
+                isOpen={showTXInfoModal}
+                close={() => {
+                    setShowTXInfoModal(false);
+                    resetTransfer();
+                }}
+                type={
+                    transferSuccess
+                        ? "success"
+                        : transferError
+                          ? "failure"
+                          : "failure"
+                }
+                txHash={transferHash}
+            />
         </div>
     );
-}
+};

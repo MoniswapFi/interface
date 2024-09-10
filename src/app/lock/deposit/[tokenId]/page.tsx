@@ -2,13 +2,78 @@
 
 import BEAR1 from "@/assets/images/Bear1.png";
 import MoniIcon from "@/assets/images/logo.svg";
+import { TransactionInfoModal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
+import { __MONI__, __VOTING_ESCROW__ } from "@/config/constants";
+import { useEscrowCore } from "@/hooks/onchain/escrow";
+import { useERC20Allowance, useERC20Balance } from "@/hooks/onchain/wallet";
 import { Divider, Input } from "@nextui-org/react";
 import Image from "next/image";
-import { useState } from "react";
+import { FC, useMemo, useState } from "react";
+import { formatUnits, parseUnits } from "viem";
+import { useChainId, useWatchBlocks } from "wagmi";
 
-export default function Page() {
+type PageProps = {
+    params: {
+        tokenId: string;
+    };
+};
+
+const Page: FC<PageProps> = ({ params }) => {
     const [amount, setAmount] = useState(0.0);
+    const [showTXInfoModal, setShowTXInfoModal] = useState(false);
+
+    const chainId = useChainId();
+    const moni = useMemo(() => __MONI__[chainId], [chainId]);
+    const escrow = useMemo(() => __VOTING_ESCROW__[chainId], [chainId]);
+
+    const { useEscrowExecutions, useEscrowReadables } = useEscrowCore();
+
+    const {
+        increaseAmount,
+        isError: increaseAmountError,
+        isPending: increaseAmountPending,
+        isSuccess: increaseAmountSuccess,
+        hash: increaseAmountHash,
+        reset: resetIncreaseAmount,
+    } = useEscrowExecutions(() => setShowTXInfoModal(true));
+    const { useLocked, useBalanceOfNFT } = useEscrowReadables();
+    const {
+        data: locked = {
+            amount: BigInt(0),
+            end: BigInt(0),
+            isPermanent: false,
+        },
+        refetch: refetchLocked,
+    } = useLocked(Number(params.tokenId));
+    const { data: weight = BigInt(0), refetch: refetchNFTBalance } =
+        useBalanceOfNFT(Number(params.tokenId));
+
+    const { balance } = useERC20Balance(moni as any);
+    const { useAllowance, useApproval } = useERC20Allowance(moni as any);
+    const { data: allowance = BigInt(0), refetch: refetchAllowance } =
+        useAllowance(escrow as any);
+    const { executeApproval, isPending: approvalPending } = useApproval(
+        escrow as any,
+        Number(parseUnits(amount.toString(), 18)),
+    );
+    const allowedToSpend = useMemo(
+        () => Number(formatUnits(allowance, 18)),
+        [allowance],
+    );
+
+    const yearsLocked = useMemo(
+        () => (Number(locked.end) - Math.floor(Date.now() / 1000)) / 31536000,
+        [locked.end],
+    );
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchAllowance();
+            await refetchNFTBalance();
+            await refetchLocked();
+        },
+    });
 
     return (
         <div className="p-5 pb-20">
@@ -24,13 +89,28 @@ export default function Page() {
                     <div className="flex flex-col gap-7 text-sm sm:text-base">
                         <div className="flex flex-col gap-5">
                             <div className="space-y-1">
-                                <p>Depositing into Lock 12337</p>
+                                <p>Depositing into lock #{params.tokenId}</p>
                                 <p className="text-navDefault">
-                                    <span className="text-white">35.41</span>{" "}
-                                    MONI locked for 12 hours
+                                    <span className="text-white">
+                                        {Number(
+                                            formatUnits(locked.amount, 18),
+                                        ).toLocaleString("en-US", {
+                                            maximumFractionDigits: 4,
+                                            useGrouping: true,
+                                        })}
+                                    </span>{" "}
+                                    MONI locked for {yearsLocked.toFixed(5)}{" "}
+                                    years
                                 </p>
                                 <p className="text-navDefault">
-                                    <span className="text-white">0.01238</span>{" "}
+                                    <span className="text-white">
+                                        {Number(
+                                            formatUnits(weight, 18),
+                                        ).toLocaleString("en-US", {
+                                            maximumFractionDigits: 4,
+                                            useGrouping: true,
+                                        })}
+                                    </span>{" "}
                                     veMONI voting power granted
                                 </p>
                             </div>
@@ -40,7 +120,7 @@ export default function Page() {
 
                         <div className="flex justify-between">
                             <span>Add to lock</span>
-                            <span>Available 0.00 MONI</span>
+                            <span>Available {balance.toFixed(4)} MONI</span>
                         </div>
 
                         <div className="flex items-center justify-between">
@@ -73,10 +153,51 @@ export default function Page() {
                     </div>
                 </div>
 
-                <Button variant="primary" className="w-full">
-                    Deposit
-                </Button>
+                {allowedToSpend >= amount ? (
+                    <Button
+                        variant="primary"
+                        onClick={() =>
+                            increaseAmount(
+                                Number(params.tokenId),
+                                parseUnits(amount.toString(), 18),
+                            )
+                        }
+                        disabled={increaseAmountPending || amount <= 0}
+                        isLoading={increaseAmountPending}
+                        className="w-full"
+                    >
+                        Deposit MONI
+                    </Button>
+                ) : (
+                    <Button
+                        variant="primary"
+                        onClick={executeApproval}
+                        disabled={approvalPending || amount <= 0}
+                        isLoading={approvalPending}
+                        className="w-full"
+                    >
+                        Allow MONI
+                    </Button>
+                )}
             </div>
+
+            <TransactionInfoModal
+                isOpen={showTXInfoModal}
+                close={() => {
+                    setShowTXInfoModal(false);
+                    resetIncreaseAmount();
+                }}
+                type={
+                    increaseAmountSuccess
+                        ? "success"
+                        : increaseAmountError
+                          ? "failure"
+                          : "failure"
+                }
+                txHash={increaseAmountHash}
+            />
         </div>
     );
-}
+};
+
+export default Page;

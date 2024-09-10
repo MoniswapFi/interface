@@ -1,10 +1,12 @@
+import { TransactionInfoModal } from "@/components/Modal";
 import type { Lock } from "@/graphclient";
 import { useGetLockMetadata } from "@/hooks/api/tokens";
 import { useEscrowCore } from "@/hooks/onchain/escrow";
+import { useVoterCore } from "@/hooks/onchain/voting";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useState } from "react";
 import Moment from "react-moment";
 import { formatUnits } from "viem";
 import { useWatchBlocks } from "wagmi";
@@ -14,12 +16,30 @@ type LockProps = {
 };
 
 export const LockItem: FC<LockProps> = ({ data }) => {
+    const [showTXInfoModal, setShowTXInfoModal] = useState(false);
     const { data: metadata } = useGetLockMetadata({
         variables: { uri: data.tokenURI },
     });
 
-    const { useEscrowReadables } = useEscrowCore();
+    const { useEscrowReadables, useEscrowExecutions } = useEscrowCore();
+    const { useVotingExecutions } = useVoterCore();
     const { useLocked, useBalanceOfNFT } = useEscrowReadables();
+    const {
+        withdraw,
+        isError: withdrawError,
+        isSuccess: withdrawSuccess,
+        isPending: withdrawPending,
+        hash: withdrawHash,
+        reset: resetWithdraw,
+    } = useEscrowExecutions(() => setShowTXInfoModal(true));
+    const {
+        resetLock,
+        isError: resetLockError,
+        isSuccess: resetLockSuccess,
+        isPending: resetLockPending,
+        hash: resetLockHash,
+        reset: resetResetLock,
+    } = useVotingExecutions(() => setShowTXInfoModal(true));
     const {
         data: locked = {
             amount: BigInt(0),
@@ -55,7 +75,7 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                             href={`/lock/deposit/${Number(data.tokenId)}`}
                             className="text-sm text-btn-primary underline"
                         >
-                            Deposit
+                            Increase
                         </Link>
                         <Link
                             href={`/lock/extend/${Number(data.tokenId)}`}
@@ -81,18 +101,20 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                         >
                             Poke
                         </a> */}
-                        <a
-                            href="#"
-                            className="text-sm text-btn-primary underline"
+                        <button
+                            onClick={() => resetLock(Number(data.tokenId))}
+                            disabled={resetLockPending}
+                            className="cursor-pointer text-sm text-btn-primary underline"
                         >
                             Reset
-                        </a>
-                        <a
-                            href="#"
-                            className="text-sm text-btn-primary underline"
+                        </button>
+                        <button
+                            disabled={withdrawPending}
+                            onClick={() => withdraw(Number(data.tokenId))}
+                            className="cursor-pointer text-sm text-btn-primary underline"
                         >
                             Withdraw
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -145,6 +167,28 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                     years
                 </p>
             </div>
+
+            <TransactionInfoModal
+                isOpen={showTXInfoModal}
+                close={() => {
+                    setShowTXInfoModal(false);
+                    if (typeof withdrawHash !== "undefined") {
+                        resetWithdraw();
+                    }
+
+                    if (typeof resetLockHash !== "undefined") {
+                        resetResetLock();
+                    }
+                }}
+                type={
+                    withdrawSuccess || resetLockSuccess
+                        ? "success"
+                        : withdrawError || resetLockError
+                          ? "failure"
+                          : "failure"
+                }
+                txHash={withdrawHash ?? resetLockHash}
+            />
         </div>
     );
 };
