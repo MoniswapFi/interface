@@ -3,7 +3,9 @@ import { useGetLockMetadata } from "@/hooks/api/tokens";
 import { useEscrowCore } from "@/hooks/onchain/escrow";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
+import Link from "next/link";
 import { FC } from "react";
+import Moment from "react-moment";
 import { formatUnits } from "viem";
 import { useWatchBlocks } from "wagmi";
 
@@ -49,36 +51,36 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                 <div className="space-y-2">
                     <p>Lock #{data.tokenId}</p>
                     <div className="flex flex-wrap gap-3">
-                        <a
-                            href="#"
+                        <Link
+                            href={`/lock/deposit/${Number(data.tokenId)}`}
                             className="text-sm text-btn-primary underline"
                         >
-                            Increase
-                        </a>
-                        <a
-                            href="#"
+                            Deposit
+                        </Link>
+                        <Link
+                            href={`/lock/extend/${Number(data.tokenId)}`}
                             className="text-sm text-btn-primary underline"
                         >
                             Extend
-                        </a>
-                        <a
-                            href="#"
+                        </Link>
+                        <Link
+                            href={`/lock/merge/${Number(data.tokenId)}`}
                             className="text-sm text-btn-primary underline"
                         >
                             Merge
-                        </a>
-                        <a
-                            href="#"
+                        </Link>
+                        <Link
+                            href={`/lock/transfer/${Number(data.tokenId)}`}
                             className="text-sm text-btn-primary underline"
                         >
                             Transfer
-                        </a>
-                        <a
+                        </Link>
+                        {/* <a
                             href="#"
                             className="text-sm text-btn-primary underline"
                         >
                             Poke
-                        </a>
+                        </a> */}
                         <a
                             href="#"
                             className="text-sm text-btn-primary underline"
@@ -95,12 +97,12 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                 </div>
             </div>
 
-            <Divider className="bg-swapBox lg:hidden" />
+            {/* <Divider className="bg-swapBox lg:hidden" />
 
             <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
                 <p className="text-textgray">Rebase APR</p>
                 <p>9.33%</p>
-            </div>
+            </div> */}
 
             <Divider className="bg-swapBox lg:hidden" />
 
@@ -132,7 +134,16 @@ export const LockItem: FC<LockProps> = ({ data }) => {
 
             <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
                 <p className="text-textgray">Unlock Date</p>
-                <p>locked for 4 years</p>
+                <p>
+                    locked for{" "}
+                    <Moment
+                        diff={Date.now()}
+                        date={Number(data.lockTime) * 1000}
+                        unit="years"
+                        decimal
+                    />{" "}
+                    years
+                </p>
             </div>
         </div>
     );

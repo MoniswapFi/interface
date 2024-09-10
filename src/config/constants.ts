@@ -62,4 +62,7 @@ export const __VOTING_ESCROW__ = {
 export const __WRAPPED_ETHER__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
 };
+export const __MONI__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
+};
 export const __IDEAL_GAS__ = BigInt(400000);
