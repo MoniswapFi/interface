@@ -25,25 +25,25 @@ export const PoolTypes = [
     },
 ];
 
-export const defaultTokens = [
-    {
-        address: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
-        chainId: 80084,
-        decimals: 18,
-        logoURI:
-            "https://avatars.githubusercontent.com/u/164018330?s=400&u=e64d7b4d2fec89ee15300ac0c6ca2b003e6a4482&v=4",
-        name: "Moniswap",
-        symbol: "MONI",
-    },
-    {
-        address: "0xd6D83aF58a19Cd14eF3CF6fe848C9A4d21e5727c",
-        chainId: 80084,
-        decimals: 6,
-        logoURI: "https://tokens.pancakeswap.finance/images/symbol/usdc.png",
-        name: "USD Coin",
-        symbol: "USDC",
-    },
-];
+// export const defaultTokens = [
+//     {
+//         address: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
+//         chainId: 80084,
+//         decimals: 18,
+//         logoURI:
+//             "https://avatars.githubusercontent.com/u/164018330?s=400&u=e64d7b4d2fec89ee15300ac0c6ca2b003e6a4482&v=4",
+//         name: "Moniswap",
+//         symbol: "MONI",
+//     },
+//     {
+//         address: "0xd6D83aF58a19Cd14eF3CF6fe848C9A4d21e5727c",
+//         chainId: 80084,
+//         decimals: 6,
+//         logoURI: "https://tokens.pancakeswap.finance/images/symbol/usdc.png",
+//         name: "USD Coin",
+//         symbol: "USDC",
+//     },
+// ];
 
 export const __CHAIN_IDS__ = {
     bera_testnet: 80084,

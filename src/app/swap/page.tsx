@@ -13,7 +13,6 @@ import {
     __AGGREGATOR_ROUTERS__,
     __ETHER__,
     __WRAPPED_ETHER__,
-    defaultTokens,
 } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { useAggregatorRouter } from "@/hooks/onchain/swap";
@@ -45,7 +44,7 @@ export default function Page() {
     const { data: tokenLists = [] } = useGetTokenLists({});
     const [selectedTokens, setSelectedTokens] = useState<
         [TokenType | null, TokenType | null]
-    >([defaultTokens[0], defaultTokens[1]]);
+    >([null, null]);
 
     const switchTokens = useCallback(() => {
         const selectedToken0 = selectedTokens[0];
