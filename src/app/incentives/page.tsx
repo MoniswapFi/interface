@@ -3,9 +3,13 @@
 import BEAR1 from "@/assets/images/Bear1.png";
 import BearIcon from "@/assets/images/Bera.png";
 import MoniIcon from "@/assets/images/logo.svg";
+import { TokenSelectModal } from "@/components/Modal";
 import { IncentiveSelectModal } from "@/components/Modal/IncentiveSelectModal";
 import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
+import { defaultTokens } from "@/config/constants";
+import { useGetTokenLists } from "@/hooks/api/tokens";
+import { TokenType } from "@/types";
 import { Divider, Input } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -14,6 +18,15 @@ import { useState } from "react";
 export default function Page() {
     const [amount, setAmount] = useState(0.0);
     const [showModal, setShowModal] = useState(false);
+    const [showTokenSelectionModal, setShowTokenSelectionModal] =
+        useState(false);
+    const [selectedToken, setSelectedToken] = useState<TokenType>(
+        defaultTokens[0],
+    );
+
+    const selectedTokens = [selectedToken, null];
+
+    const { data: tokenLists = [] } = useGetTokenLists({});
 
     return (
         <div className="p-5 pb-20">
@@ -44,7 +57,10 @@ export default function Page() {
                             </div>
                         </div>
 
-                        <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-darkgray">
+                        <div
+                            className="flex h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-full bg-darkgray"
+                            onClick={() => setShowModal(true)}
+                        >
                             <ChevronDown size={20} />
                         </div>
                     </div>
@@ -103,16 +119,17 @@ export default function Page() {
                     <div className="flex items-center justify-between">
                         <button
                             className="flex h-[50px] flex-[2_2_0%] cursor-pointer items-center justify-between border-b border-l border-t border-swapBox bg-btn-black px-3"
-                            onClick={() => setShowModal(true)}
+                            onClick={() => setShowTokenSelectionModal(true)}
                         >
                             <div className="flex items-center gap-3">
                                 <Image
-                                    src={MoniIcon}
-                                    alt={"MONI"}
+                                    src={selectedToken?.logoURI}
+                                    alt={selectedToken?.name}
                                     width={24}
                                     height={24}
+                                    className="rounded-full"
                                 />
-                                <span>MONI</span>
+                                <span>{selectedToken?.symbol}</span>
                             </div>
 
                             <ChevronDown />
@@ -144,6 +161,14 @@ export default function Page() {
             <IncentiveSelectModal
                 isOpen={showModal}
                 close={() => setShowModal(false)}
+            />
+
+            <TokenSelectModal
+                isOpen={showTokenSelectionModal}
+                selectedTokens={selectedTokens as [TokenType, TokenType]}
+                close={() => setShowTokenSelectionModal(false)}
+                tokenLists={tokenLists}
+                onItemClick={(t) => setSelectedToken(t)}
             />
         </div>
     );
