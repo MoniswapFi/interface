@@ -83,7 +83,7 @@ export default function Page() {
                 </div>
 
                 <div className="flex flex-col gap-7 md:flex-row">
-                    <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[50%] lg:w-[300px]">
+                    <div className="flex items-center justify-between bg-gradient-to-r from-footer to-darkGold px-5 py-2 md:w-[50%] lg:w-[300px]">
                         <div>
                             <p className="text-xl">
                                 $
@@ -102,7 +102,7 @@ export default function Page() {
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-around bg-gradient-to-r from-footer to-darkGold py-2 md:w-[50%] lg:w-[300px]">
+                    <div className="flex items-center justify-between bg-gradient-to-r from-footer to-darkGold px-5 py-2 md:w-[50%] lg:w-[300px]">
                         <div>
                             <p className="text-xl">
                                 $
@@ -124,7 +124,7 @@ export default function Page() {
             </div>
 
             <div className="mt-10 space-y-5 bg-footer p-5">
-                <div className="flex flex-col-reverse items-center justify-between border-b border-swapBox md:flex-row">
+                <div className="flex flex-col-reverse items-center justify-between border-b border-swapBox sm:flex-row">
                     <Tabs
                         variant={"underlined"}
                         aria-label="Options"
@@ -133,9 +133,9 @@ export default function Page() {
                             setSelectedTab(key as string)
                         }
                         classNames={{
-                            base: "w-fit",
-                            tabList: "w-full border-none p-0 ",
-                            tab: "p-0 py-7 w-[130px]",
+                            base: "w-full sm:w-fit",
+                            tabList: "w-full border-none p-0",
+                            tab: "p-0 py-7 w-[50%] sm:w-[130px]",
                             tabContent:
                                 "text-white group-data-[selected=true]:text-white text-lg",
                             cursor: "border-b-3 border-btn-primary w-full",
@@ -159,7 +159,7 @@ export default function Page() {
                         />
                         <Tab key="position" title="My Position" />
                     </Tabs>
-                    <div className="flex items-center gap-2">
+                    <div className="flex w-full items-center justify-between gap-2 sm:w-fit">
                         <div className="flex gap-5">
                             <Button
                                 onClick={() => push("/liquidity/deposit")}
