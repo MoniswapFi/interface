@@ -7,7 +7,6 @@ import { TokenSelectModal } from "@/components/Modal";
 import { IncentiveSelectModal } from "@/components/Modal/IncentiveSelectModal";
 import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
-import { defaultTokens } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { TokenType } from "@/types";
 import { Divider, Input } from "@nextui-org/react";
@@ -20,9 +19,7 @@ export default function Page() {
     const [showModal, setShowModal] = useState(false);
     const [showTokenSelectionModal, setShowTokenSelectionModal] =
         useState(false);
-    const [selectedToken, setSelectedToken] = useState<TokenType>(
-        defaultTokens[0],
-    );
+    const [selectedToken, setSelectedToken] = useState<TokenType | null>(null);
 
     const selectedTokens = [selectedToken, null];
 
@@ -121,16 +118,18 @@ export default function Page() {
                             className="flex h-[50px] flex-[2_2_0%] cursor-pointer items-center justify-between border-b border-l border-t border-swapBox bg-btn-black px-3"
                             onClick={() => setShowTokenSelectionModal(true)}
                         >
-                            <div className="flex items-center gap-3">
-                                <Image
-                                    src={selectedToken?.logoURI}
-                                    alt={selectedToken?.name}
-                                    width={24}
-                                    height={24}
-                                    className="rounded-full"
-                                />
-                                <span>{selectedToken?.symbol}</span>
-                            </div>
+                            {selectedToken && (
+                                <div className="flex items-center gap-3">
+                                    <Image
+                                        src={selectedToken.logoURI}
+                                        alt={selectedToken.name}
+                                        width={24}
+                                        height={24}
+                                        className="rounded-full"
+                                    />
+                                    <span>{selectedToken.symbol}</span>
+                                </div>
+                            )}
 
                             <ChevronDown />
                         </button>
