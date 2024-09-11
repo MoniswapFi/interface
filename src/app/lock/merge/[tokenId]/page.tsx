@@ -94,21 +94,25 @@ const Page: FC<PageProps> = ({ params }) => {
                             radius="none"
                             labelPlacement="outside"
                         >
-                            {locks.map((item, index) => {
-                                return (
-                                    <SelectItem
-                                        onSelect={() =>
-                                            setSelectedLock(
-                                                Number(item.tokenId),
-                                            )
-                                        }
-                                        key={index}
-                                        className="data-[hover=true]:border data-[hover=true]:border-swapBox data-[hover=true]:bg-transparent data-[hover=true]:text-white"
-                                    >
-                                        Lock {item.tokenId}
-                                    </SelectItem>
-                                );
-                            })}
+                            {locks
+                                .filter(
+                                    (lock) => lock.tokenId !== params.tokenId,
+                                )
+                                .map((item, index) => {
+                                    return (
+                                        <SelectItem
+                                            onPress={() =>
+                                                setSelectedLock(
+                                                    Number(item.tokenId),
+                                                )
+                                            }
+                                            key={index}
+                                            className="data-[hover=true]:border data-[hover=true]:border-swapBox data-[hover=true]:bg-transparent data-[hover=true]:text-white"
+                                        >
+                                            Lock {item.tokenId}
+                                        </SelectItem>
+                                    );
+                                })}
                         </Select>
 
                         <div className="flex items-center gap-2 text-navDefault">
