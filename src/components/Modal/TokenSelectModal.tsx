@@ -73,7 +73,7 @@ const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
             ) : (
                 <div className="flex flex-col items-end">
                     <span className="text-xl">{balance.toFixed(4)}</span>
-                    <span className="text-textlightgray">$254.89</span>
+                    <span className="text-textlightgray">$0</span>
                 </div>
             )}
         </button>

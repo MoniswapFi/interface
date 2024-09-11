@@ -13,6 +13,7 @@ import {
     __AGGREGATOR_ROUTERS__,
     __ETHER__,
     __WRAPPED_ETHER__,
+    defaultTokens,
 } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { useAggregatorRouter } from "@/hooks/onchain/swap";
@@ -23,6 +24,7 @@ import {
 } from "@/hooks/onchain/wallet";
 import { RootState } from "@/store";
 import { TokenType } from "@/types";
+import { formatNumber } from "@/utils/format";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ArrowRightLeft, ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -43,7 +45,7 @@ export default function Page() {
     const { data: tokenLists = [] } = useGetTokenLists({});
     const [selectedTokens, setSelectedTokens] = useState<
         [TokenType | null, TokenType | null]
-    >([null, null]);
+    >([defaultTokens[0], defaultTokens[1]]);
 
     const switchTokens = useCallback(() => {
         const selectedToken0 = selectedTokens[0];
@@ -199,7 +201,10 @@ export default function Page() {
                     <div className="flex flex-col gap-3 text-sm sm:text-base">
                         <p className="flex justify-between">
                             <span>Swap</span>
-                            <span className="text-swapBox">
+                            <span
+                                className="cursor-pointer text-swapBox"
+                                onClick={() => setAmount(token0Balance)}
+                            >
                                 Available {balance0.toFixed(4)}{" "}
                                 {selectedTokens[0]?.symbol}
                             </span>
@@ -242,7 +247,9 @@ export default function Page() {
                                 />
                             </div>
                         </div>
-                        <p className="text-right text-swapBox">$23.45</p>
+                        <p className="text-right text-swapBox">
+                            ${formatNumber(amount)}
+                        </p>
                     </div>
 
                     <div className="relative">
@@ -298,7 +305,9 @@ export default function Page() {
                                 />
                             </div>
                         </div>
-                        <p className="text-right text-swapBox">$23.45</p>
+                        <p className="text-right text-swapBox">
+                            ${formatNumber(amountOutFormatted)}
+                        </p>
                     </div>
                 </div>
 
@@ -348,7 +357,7 @@ export default function Page() {
                     amount > 0 && (
                         <div className="flex flex-col gap-5 bg-footer p-8 text-xs sm:text-base">
                             <div className="flex items-center justify-between">
-                                <p className="text-swapBox">
+                                <div className="text-swapBox">
                                     Exchange rate found...{" "}
                                     <a
                                         onClick={async () =>
@@ -361,7 +370,7 @@ export default function Page() {
                                     {bestQueryFetching && (
                                         <Spinner size="sm" color="default" />
                                     )}
-                                </p>
+                                </div>
                                 <p className="flex flex-col gap-2 text-textgray sm:flex-row">
                                     <span className="flex gap-2">
                                         1 {selectedTokens[0].symbol}{" "}
