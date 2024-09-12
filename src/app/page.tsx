@@ -12,7 +12,7 @@ import {
     faDiscord,
     faGithub,
     faMedium,
-    faTelegram,
+    faTelegramPlane,
     faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,9 +51,10 @@ export default function Home() {
                     className="absolute -left-[100px] bottom-[100px] w-[200px] lg:bottom-[-50px] lg:left-[-30px] lg:w-[250px] xl:left-0 xl:w-[400px]"
                 />
                 <div className="max-w-[640px]">
-                    <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.08] max-md:text-center md:text-9xl">
+                    <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.08] transition-opacity duration-300 ease-in-out hover:opacity-[0.24] max-md:text-center md:text-9xl">
                         moniswap
                     </h1>
+
                     <p className="text-base md:text-xl">
                         Moniswap is a next-generation AMM that combines the best
                         of Curve, Convex and Uniswap, designed to serve as the
@@ -84,21 +85,34 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center justify-center gap-5 pt-32 lg:pt-10">
-                    <span className="">
-                        <FontAwesomeIcon icon={faTelegram} width={50} />
-                    </span>
-                    <span className="flex size-[50px] items-center justify-center rounded-full bg-white text-black">
-                        <FontAwesomeIcon icon={faXTwitter} width={30} />
-                    </span>
-                    <span className="flex size-[50px] items-center justify-center rounded-full bg-white text-black">
-                        <FontAwesomeIcon icon={faDiscord} width={30} />
-                    </span>
-                    <span className="flex size-[50px] items-center justify-center rounded-full bg-white text-black">
-                        <FontAwesomeIcon icon={faGithub} width={30} />
-                    </span>
-                    <span className="flex size-[50px] items-center justify-center rounded-full bg-white text-black">
-                        <FontAwesomeIcon icon={faMedium} width={30} />
-                    </span>
+                    <Link href="https://x.com/Moniswap_">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
+                            <FontAwesomeIcon icon={faXTwitter} width={30} />
+                        </span>
+                    </Link>
+                    <Link href="https://t.me/Moniswap_Xyz">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-black">
+                            <FontAwesomeIcon
+                                icon={faTelegramPlane}
+                                width={50}
+                            />
+                        </span>
+                    </Link>
+                    <Link href="https://discord.gg/PZbHqBKvfu">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
+                            <FontAwesomeIcon icon={faDiscord} width={30} />
+                        </span>
+                    </Link>
+                    <Link href="https://github.com/MoniSwapFi">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
+                            <FontAwesomeIcon icon={faGithub} width={30} />
+                        </span>
+                    </Link>
+                    <Link href="https://moniswap.medium.com">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
+                            <FontAwesomeIcon icon={faMedium} width={30} />
+                        </span>
+                    </Link>
                 </div>
             </div>
 
@@ -120,90 +134,115 @@ export default function Home() {
                 </h2>
 
                 <div className="mt-28 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-                    <div className="flex flex-col justify-between bg-footer">
-                        <div className="space-y-4 px-4 pb-10 pt-4">
-                            <div className="flex items-start justify-between">
-                                <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
-                                    01
-                                </p>
-                                <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
-                                    <MoveUpRight size={18} />
+                    <Link href="/swap">
+                        <div className="hover:bg-hover-color flex h-full cursor-pointer flex-col justify-between bg-footer">
+                            <div className="space-y-4 px-4 pb-10 pt-4">
+                                <div className="flex items-start justify-between">
+                                    <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
+                                        01
+                                    </p>
+                                    <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
+                                        <MoveUpRight size={18} />
+                                    </div>
                                 </div>
+                                <p className="text-[15px] leading-6">
+                                    Traders swap tokens with minimal slippage
+                                    and pay some of the lowest fees to MONI
+                                    lockers.
+                                </p>
                             </div>
-                            <p className="text-[15px] leading-6">
-                                Traders swap tokens with minimal slippage and
-                                pay some of the lowest fees to MONI lockers.
-                            </p>
+                            <div className="bg-btn-primary pt-8">
+                                <Image
+                                    src={BEAR5}
+                                    alt="bear"
+                                    className="m-auto"
+                                />
+                            </div>
                         </div>
-                        <div className="bg-btn-primary pt-8">
-                            <Image src={BEAR5} alt="bear" className="m-auto" />
-                        </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex flex-col justify-between bg-footer">
-                        <div className="space-y-4 px-4 pb-10 pt-4">
-                            <div className="flex items-start justify-between">
-                                <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
-                                    02
-                                </p>
-                                <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
-                                    <MoveUpRight size={18} />
+                    <Link href="/liquidity">
+                        <div className="hover:bg-hover-color flex h-full cursor-pointer flex-col justify-between bg-footer">
+                            <div className="space-y-4 px-4 pb-10 pt-4">
+                                <div className="flex items-start justify-between">
+                                    <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
+                                        02
+                                    </p>
+                                    <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
+                                        <MoveUpRight size={18} />
+                                    </div>
                                 </div>
+                                <p className="text-[15px] leading-6">
+                                    Liquidity providers deposit the tokens used
+                                    for trading on Moniswap and receive MONI
+                                    emissions as rewards.
+                                </p>
                             </div>
-                            <p className="text-[15px] leading-6">
-                                Liquidity providers deposit the tokens used for
-                                trading on Moniswap and receive MONI emissions
-                                as rewards.
-                            </p>
+                            <div className="bg-btn-primary pt-8">
+                                <Image
+                                    src={BEAR2}
+                                    alt="bear"
+                                    className="m-auto"
+                                />
+                            </div>
                         </div>
-                        <div className="bg-btn-primary pt-8">
-                            <Image src={BEAR2} alt="bear" className="m-auto" />
-                        </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex flex-col justify-between bg-footer">
-                        <div className="space-y-4 px-4 pb-10 pt-4">
-                            <div className="flex items-start justify-between">
-                                <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
-                                    03
-                                </p>
-                                <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
-                                    <MoveUpRight size={18} />
+                    <Link href="/incentives">
+                        <div className="hover:bg-hover-color flex h-full cursor-pointer flex-col justify-between bg-footer">
+                            <div className="space-y-4 px-4 pb-10 pt-4">
+                                <div className="flex items-start justify-between">
+                                    <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
+                                        03
+                                    </p>
+                                    <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
+                                        <MoveUpRight size={18} />
+                                    </div>
                                 </div>
+                                <p className="text-[15px] leading-6">
+                                    Protocols incentivize veMONI voters to
+                                    attract votes and MONI emissions to their
+                                    pools, enabling them to build liquidity
+                                    cost-effectively.
+                                </p>
                             </div>
-                            <p className="text-[15px] leading-6">
-                                Protocols incentivize veMONI voters to attract
-                                votes and MONI emissions to their pools,
-                                enabling them to build liquidity
-                                cost-effectively.
-                            </p>
+                            <div className="bg-btn-primary pt-8">
+                                <Image
+                                    src={BEAR3}
+                                    alt="bear"
+                                    className="m-auto"
+                                />
+                            </div>
                         </div>
-                        <div className="bg-btn-primary pt-8">
-                            <Image src={BEAR3} alt="bear" className="m-auto" />
-                        </div>
-                    </div>
+                    </Link>
 
-                    <div className="flex flex-col justify-between bg-footer">
-                        <div className="space-y-4 px-4 pb-10 pt-4">
-                            <div className="flex items-start justify-between">
-                                <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
-                                    04
-                                </p>
-                                <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
-                                    <MoveUpRight size={18} />
+                    <Link href="/vote">
+                        <div className="hover:bg-hover-color flex h-full cursor-pointer flex-col justify-between bg-footer">
+                            <div className="space-y-4 px-4 pb-10 pt-4">
+                                <div className="flex items-start justify-between">
+                                    <p className="font-barlow text-6xl text-content-gray opacity-[0.18]">
+                                        04
+                                    </p>
+                                    <div className="rounded-full bg-black1 p-3 text-arrow-yellow">
+                                        <MoveUpRight size={18} />
+                                    </div>
                                 </div>
+                                <p className="text-[15px] leading-6">
+                                    veMONI voters vote on which pools will earn
+                                    MONI emissions and receive all incentives
+                                    and fees. Any MONI holder can lock their
+                                    tokens to convert to veMONI.
+                                </p>
                             </div>
-                            <p className="text-[15px] leading-6">
-                                veMONI voters vote on which pools will earn MONI
-                                emissions and receive all incentives and fees.
-                                Any MONI holder can lock their tokens to convert
-                                to veMONI.
-                            </p>
+                            <div className="bg-btn-primary pt-8">
+                                <Image
+                                    src={BEAR4}
+                                    alt="bear"
+                                    className="m-auto"
+                                />
+                            </div>
                         </div>
-                        <div className="bg-btn-primary pt-8">
-                            <Image src={BEAR4} alt="bear" className="m-auto" />
-                        </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="mt-20 space-y-10 pb-20 text-center">
@@ -216,15 +255,19 @@ export default function Home() {
                         Looking to get started with Moniswap?
                     </p>
 
-                    <Button variant="primary">Onboarding Guide</Button>
+                    <Link href="https://docs.moniswap.xyz/tokenomics-and-governance/usdmoni-utility-token">
+                        <Button variant="primary" className="md:mt-6">
+                            Onboarding Guide
+                        </Button>
+                    </Link>
                     <Image
                         src={Image3}
                         alt="image"
                         className="bottom-[400px] right-[70px] ml-auto mr-[10%] w-[150px] md:absolute md:bottom-[350px] lg:right-[15%] lg:w-[200px] xl:w-[250px]"
                     />
-                    <p className="font-luckiestGuy text-6xl uppercase opacity-[0.08] md:text-9xl">
+                    <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.15] transition-opacity duration-300 ease-in-out hover:opacity-[0.24] max-md:text-center md:text-9xl">
                         moniswap
-                    </p>
+                    </h1>
                 </div>
             </div>
         </div>

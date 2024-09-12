@@ -81,14 +81,14 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                     </div>
                 </div>
             )}
-            <div className="flex items-center justify-center gap-2 bg-secondary py-4">
-                <Image src={CongratesIcon} alt="icon" />
-                <Link href={"/swap"}>
+            <Link href={"/swap"}>
+                <div className="flex items-center justify-center gap-2 bg-secondary py-4">
+                    <Image src={CongratesIcon} alt="icon" />
                     <p className="text-xs md:text-base">
                         Moniswap V1 Live on Bartio Testnet. Swap Now!
                     </p>
-                </Link>
-            </div>
+                </div>
+            </Link>
 
             <div className="bg-header py-3 md:py-4">
                 <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
@@ -97,9 +97,18 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                     </Link>
                     <div className="hidden justify-center gap-7 md:flex">
                         {NavItems.map((item, index) => {
+                            const isActive = pathname === item.href;
                             return (
                                 <Link key={index} href={item.href}>
-                                    {item.name}
+                                    <div
+                                        className={`${
+                                            isActive
+                                                ? "bg-active text-[#F59855]"
+                                                : "hover:border-[#F59855]/80 hover:bg-btn-black/20"
+                                        } rounded border border-transparent px-4 py-2 hover:border-[#F59855]/80`}
+                                    >
+                                        {item.name}
+                                    </div>
                                 </Link>
                             );
                         })}
