@@ -20,9 +20,18 @@ export function useGaugeCore() {
                 args: [address as `0x${string}`],
             });
 
+        const useBalanceOf = () =>
+            useReadContract({
+                address: gaugeId as `0x${string}`,
+                abi: gaugeAbi,
+                functionName: "balanceOf",
+                args: [address as `0x${string}`],
+            });
+
         return {
             useRewardRate,
             useEarned,
+            useBalanceOf,
         };
     };
 

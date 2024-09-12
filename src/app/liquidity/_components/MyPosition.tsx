@@ -6,13 +6,16 @@ import { PoolTypes } from "@/config/constants";
 import { type AccountPosition } from "@/graphclient";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
+import { useGaugeCore } from "@/hooks/onchain/gauge";
+import { useVoterCore } from "@/hooks/onchain/voting";
 import { useERC20Balance } from "@/hooks/onchain/wallet";
+import { toSF } from "@/utils/format";
 import { div } from "@/utils/math";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FC, useMemo } from "react";
-import { formatUnits } from "viem";
+import { formatUnits, zeroAddress } from "viem";
 import { useWatchBlocks } from "wagmi";
 
 type AccountPositionProps = {
@@ -52,9 +55,38 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
         [data.pair.reserve1, positionRatio],
     );
 
+    const { useGetPoolGauge } = useVoterCore();
+
+    const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
+        useGetPoolGauge(data.pair.id);
+    const { useGaugeReadables } = useGaugeCore();
+    const { useBalanceOf, useRewardRate } = useGaugeReadables(gaugeId);
+    const { data: rate = BigInt(0), refetch: refetchRate } = useRewardRate();
+    const { data: balanceInGauge = BigInt(0), refetch: refetchBalanceOf } =
+        useBalanceOf();
+    const formattedBalanceInGauge = useMemo(
+        () => Number(formatUnits(balanceInGauge, 18)),
+        [balanceInGauge],
+    );
+    const gaugePositionRatio = useMemo(
+        () => div(formattedBalanceInGauge, formattedTS),
+        [formattedTS, formattedBalanceInGauge],
+    );
+    const token0AmountInGauge = useMemo(
+        () => gaugePositionRatio * Number(data.pair.reserve0 ?? "0"),
+        [data.pair.reserve0, gaugePositionRatio],
+    );
+    const token1AmountInGauge = useMemo(
+        () => gaugePositionRatio * Number(data.pair.reserve1 ?? "0"),
+        [data.pair.reserve1, gaugePositionRatio],
+    );
+
     useWatchBlocks({
         onBlock: async () => {
             await refetchPoolSupply();
+            await refetchGaugeId();
+            await refetchBalanceOf();
+            await refetchRate();
         },
     });
 
@@ -109,34 +141,20 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
                     TVL <Popover content="Total volume locked." />
                 </span>
                 <div className="flex flex-col gap-3 text-right">
-                    <span>
-                        $
-                        {Number(data.pair.reserveUSD).toLocaleString("en-US", {
-                            maximumFractionDigits: 3,
-                            useGrouping: true,
-                        })}
+                    <span>${toSF(data.pair.reserveUSD)}</span>
+                    <span className="text-textgray">
+                        {toSF(data.pair.reserve0)} {data.pair.token0.symbol}
                     </span>
                     <span className="text-textgray">
-                        {Number(data.pair.reserve0).toLocaleString("en-US", {
-                            maximumFractionDigits: 3,
-                            useGrouping: true,
-                        })}{" "}
-                        {data.pair.token0.symbol}
-                    </span>
-                    <span className="text-textgray">
-                        {Number(data.pair.reserve1).toLocaleString("en-US", {
-                            maximumFractionDigits: 3,
-                            useGrouping: true,
-                        })}{" "}
-                        {data.pair.token1.symbol}
+                        {toSF(data.pair.reserve1)} {data.pair.token1.symbol}
                     </span>
                 </div>
             </div>
             <div className="flex justify-between pb-5 lg:block lg:w-[80px] lg:pb-0 lg:text-right">
                 <span className="text-textgray lg:hidden">
-                    {"APR"} <Popover content="Popover content here." />
+                    {"APR"} <Popover content="Deposit rate." />
                 </span>
-                0.00%
+                {Number(rate)}%
             </div>
             <div className="flex justify-between border-b border-swapBox pb-5 lg:block lg:w-[130px] lg:border-none lg:pb-0 lg:text-right">
                 <span className="text-textgray lg:hidden">
@@ -145,41 +163,42 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
                 <div className="flex flex-col gap-3 text-right">
                     <span>
                         $
-                        {(
+                        {toSF(
                             Number(data.pair.token0.derivedUSD) *
                                 token0Deposited +
-                            Number(data.pair.token1.derivedUSD) *
-                                token1Deposited
-                        ).toLocaleString("en-US", {
-                            maximumFractionDigits: 3,
-                            useGrouping: true,
-                        })}
+                                Number(data.pair.token1.derivedUSD) *
+                                    token1Deposited,
+                        )}
                     </span>
                     <span className="text-textgray">
                         {" "}
-                        {Number(token0Deposited).toLocaleString("en-US", {
-                            maximumFractionDigits: 3,
-                            useGrouping: true,
-                        })}{" "}
-                        {data.pair.token0.symbol}
+                        {toSF(token0Deposited)} {data.pair.token0.symbol}
                     </span>
                     <span className="text-textgray">
-                        {Number(token1Deposited).toLocaleString("en-US", {
-                            maximumFractionDigits: 3,
-                            useGrouping: true,
-                        })}{" "}
-                        {data.pair.token1.symbol}
+                        {toSF(token1Deposited)} {data.pair.token1.symbol}
                     </span>
                 </div>
             </div>
             <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
                 <span className="text-textgray lg:hidden">
-                    {"Staked"} <Popover content="Popover content here." />
+                    {"Staked"} <Popover content="Tokens deposited." />
                 </span>
                 <div className="flex flex-col gap-3 text-right">
-                    <span>$2,352.53</span>
-                    <span className="text-textgray">0.00 BERA</span>
-                    <span className="text-textgray">0.00 MONI</span>
+                    <span>
+                        $
+                        {toSF(
+                            Number(data.pair.token0.derivedUSD) *
+                                token0AmountInGauge +
+                                Number(data.pair.token1.derivedUSD) *
+                                    token1AmountInGauge,
+                        )}
+                    </span>
+                    <span className="text-textgray">
+                        {toSF(token0AmountInGauge)} {data.pair.token0.symbol}
+                    </span>
+                    <span className="text-textgray">
+                        {toSF(token1AmountInGauge)} {data.pair.token1.symbol}
+                    </span>
                 </div>
             </div>
             <div className="flex w-full flex-col gap-2 lg:w-[150px]">

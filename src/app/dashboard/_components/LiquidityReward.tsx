@@ -123,7 +123,7 @@ export const LiquidityReward: FC<LPRewardProps> = ({ data }) => {
                 <Divider className="bg-swapBox lg:hidden" />
 
                 <div className="lg:text-right">
-                    <p className="text-textgray">Emissions APR</p>
+                    <p className="text-textgray">Emissions Rate</p>
                     <p>{Number(rewardRate)}%</p>
                 </div>
                 <Divider className="bg-swapBox lg:hidden" />

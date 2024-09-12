@@ -11,6 +11,7 @@ import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
 import { useGaugeCore } from "@/hooks/onchain/gauge";
 import { useVoterCore } from "@/hooks/onchain/voting";
 import { useERC20Allowance, useERC20Balance } from "@/hooks/onchain/wallet";
+import { toSF } from "@/utils/format";
 import { div } from "@/utils/math";
 import { Divider, Slider } from "@nextui-org/react";
 import Image from "next/image";
@@ -26,7 +27,6 @@ type PageProps = {
 
 const Page: FC<PageProps> = ({ params }) => {
     const [percentage, setPercentage] = useState(0.0);
-    // const [showSettingsModal, setShowSettingsModal] = useState(false);
     const [showTXInfoModal, setShowTXInfoModal] = useState(false);
 
     const { isConnected } = useAccount();
@@ -98,7 +98,10 @@ const Page: FC<PageProps> = ({ params }) => {
         [percentage, position],
     );
 
-    const { useGaugeExecutions } = useGaugeCore();
+    const { useGaugeExecutions, useGaugeReadables } = useGaugeCore();
+    const { useRewardRate } = useGaugeReadables(gaugeId);
+    const { data: rewardRate = BigInt(0), refetch: refetchRewardRate } =
+        useRewardRate();
     const {
         deposit,
         isPending: depositPending,
@@ -130,6 +133,7 @@ const Page: FC<PageProps> = ({ params }) => {
             await refetchPoolSupply();
             await refetchPair();
             await refetchAllowance();
+            await refetchRewardRate();
         },
     });
 
@@ -174,7 +178,7 @@ const Page: FC<PageProps> = ({ params }) => {
 
                         <div className="text-right text-navDefault">
                             <p>APR</p>
-                            <p>0.00%</p>
+                            <p>{Number(rewardRate)}%</p>
                         </div>
                     </div>
 
@@ -188,28 +192,14 @@ const Page: FC<PageProps> = ({ params }) => {
                             <div className="flex flex-col items-start justify-start gap-1">
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  pair.reserve0,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(pair.reserve0) : 0.0}
                                     </span>{" "}
                                     <span>{pair?.token0.symbol}</span>
                                 </div>
 
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  pair.reserve1,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(pair.reserve1) : 0.0}
                                     </span>{" "}
                                     <span>{pair?.token1.symbol}</span>
                                 </div>
@@ -223,28 +213,14 @@ const Page: FC<PageProps> = ({ params }) => {
                             <div className="flex flex-col items-end justify-start gap-1">
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  token0Deposited,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(token0Deposited) : 0.0}
                                     </span>{" "}
                                     <span>{pair?.token0.symbol}</span>
                                 </div>
 
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  token1Deposited,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(token1Deposited) : 0.0}
                                     </span>{" "}
                                     <span>{pair?.token1.symbol}</span>
                                 </div>

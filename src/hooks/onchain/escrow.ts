@@ -113,16 +113,19 @@ export function useEscrowCore() {
             );
 
         const transferNFT = (to: string, tokenId: number) =>
-            writeContract({
-                address: escrowAddress,
-                abi: escrowAbi,
-                functionName: "transferFrom",
-                args: [
-                    address as `0x${string}`,
-                    to as `0x${string}`,
-                    BigInt(tokenId),
-                ],
-            });
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "transferFrom",
+                    args: [
+                        address as `0x${string}`,
+                        to as `0x${string}`,
+                        BigInt(tokenId),
+                    ],
+                },
+                { onSettled },
+            );
 
         return {
             createLock,
