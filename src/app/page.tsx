@@ -51,9 +51,10 @@ export default function Home() {
                     className="absolute -left-[100px] bottom-[100px] w-[200px] lg:bottom-[-50px] lg:left-[-30px] lg:w-[250px] xl:left-0 xl:w-[400px]"
                 />
                 <div className="max-w-[640px]">
-                    <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.08] max-md:text-center md:text-9xl">
+                    <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.08] transition-opacity duration-300 ease-in-out hover:opacity-[0.24] max-md:text-center md:text-9xl">
                         moniswap
                     </h1>
+
                     <p className="text-base md:text-xl">
                         Moniswap is a next-generation AMM that combines the best
                         of Curve, Convex and Uniswap, designed to serve as the
@@ -226,15 +227,19 @@ export default function Home() {
                         Looking to get started with Moniswap?
                     </p>
 
-                    <Button variant="primary">Onboarding Guide</Button>
+                    <Link href="https://docs.moniswap.xyz/tokenomics-and-governance/usdmoni-utility-token">
+                        <Button variant="primary" className="md:mt-6">
+                            Onboarding Guide
+                        </Button>
+                    </Link>
                     <Image
                         src={Image3}
                         alt="image"
                         className="bottom-[400px] right-[70px] ml-auto mr-[10%] w-[150px] md:absolute md:bottom-[350px] lg:right-[15%] lg:w-[200px] xl:w-[250px]"
                     />
-                    <p className="font-luckiestGuy text-6xl uppercase opacity-[0.08] md:text-9xl">
+                    <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.15] transition-opacity duration-300 ease-in-out hover:opacity-[0.24] max-md:text-center md:text-9xl">
                         moniswap
-                    </p>
+                    </h1>
                 </div>
             </div>
         </div>
