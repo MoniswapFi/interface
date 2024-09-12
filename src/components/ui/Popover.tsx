@@ -21,7 +21,7 @@ export const Popover: FC<Props> = ({ content }) => {
                 />
             </PopoverTrigger>
             <PopoverContent>
-                <div className="px-1 py-2">{content}</div>
+                                <div className="max-w-[250px] break-words border border-[#F59855] p-4 backdrop-blur-xl">{content}</div>
             </PopoverContent>
         </NextPopover>
     );
