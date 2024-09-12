@@ -7,7 +7,7 @@ import MoniIcon from "@/assets/images/logo.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { Button } from "@/components/ui/button";
 import { Popover } from "@/components/ui/Popover";
-import { PoolTypes } from "@/config/constants";
+import { FAQ_INCENTIVES, FAQ_TVL, PoolTypes } from "@/config/constants";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Divider, Select, SelectItem } from "@nextui-org/react";
@@ -139,18 +139,19 @@ export default function Page() {
                         </Select>
                     </div>
                     <div className="hidden w-[150px] text-right text-textlightgray lg:block">
-                        TVL <Popover content="Popover content here." />
+                        {FAQ_TVL.title}{" "}
+                        <Popover content={`${FAQ_TVL.description}`} />
                     </div>
                     <div className="hidden w-[150px] text-right text-textlightgray lg:block">
                         {"Fees"}
                     </div>
                     <div className="hidden w-[150px] text-right text-textlightgray lg:block">
-                        {"Incentives"}{" "}
-                        <Popover content="Popover content here." />
+                        {FAQ_INCENTIVES.title}
+                        <Popover content={`${FAQ_INCENTIVES.description}`} />
                     </div>
                     <div className="hidden w-[150px] text-right text-textlightgray lg:block">
-                        {"Total Rewarda"}{" "}
-                        <Popover content="Popover content here." />
+                        {FAQ_TOTAL_REWARD.title}
+                        <Popover content={`${FAQ_TOTAL_REWARD.description}`} />
                     </div>
                     <div className="hidden w-[70px] text-right text-textlightgray lg:block">
                         {"vAPR"}
