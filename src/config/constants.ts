@@ -114,3 +114,21 @@ export const FAQ_EMISSION_RATE = {
     description:
         "Deposit rate. This indicates the rate of rewards emitted to stakers over the last 24 hours. Higher emission rates typically encourage staking.",
 };
+
+export const FAQ_STAKED = {
+    title: "Staked",
+    description:
+        "The total amount of tokens you have currently staked in this pool. Staking allows you to earn rewards based on the pool's emission rate.",
+};
+
+export const FAQ_YOUR_DEPOSIT = {
+    title: "Your Deposit",
+    description:
+        "The amount of tokens you have deposited into this pool. Your deposit is what determines your share of the rewards generated in the staking pool.",
+};
+
+export const FAQ_APR = {
+    title: "APR",
+    description:
+        "Annual Percentage Rate (APR). This represents the yearly interest rate for staking, accrued daily based on the pool's rewards structure.",
+};
