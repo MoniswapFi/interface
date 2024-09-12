@@ -18,12 +18,6 @@ import {
     AccordionItem,
     Checkbox,
     Divider,
-    Table,
-    TableBody,
-    TableCell,
-    TableColumn,
-    TableHeader,
-    TableRow,
     Tooltip,
 } from "@nextui-org/react";
 import Image from "next/image";
@@ -31,6 +25,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Address, zeroAddress } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import { Button } from "../../components/ui/button";
+import { LeaderBoardTable } from "./_components/LeaderBoardTable";
 
 const pointsArray = [
     {
@@ -42,7 +37,7 @@ const pointsArray = [
         ],
         button: "Follow",
         key: "moniswap_x",
-        href: "https://discord.com",
+        href: "https://x.com/Moniswap_",
     },
     {
         title: "Follow Cappo on X (Twitter) and turn on notification",
@@ -53,7 +48,7 @@ const pointsArray = [
         ],
         button: "Follow",
         key: "cappo_x",
-        href: "https://discord.com",
+        href: "https://x.com/Cappo_bera",
     },
     {
         title: "Follow Beraland on X (Twitter) and turn on notification",
@@ -64,7 +59,7 @@ const pointsArray = [
         ],
         button: "Follow",
         key: "beraland_x",
-        href: "https://discord.com",
+        href: "https://x.com/Bera_Land",
     },
     {
         title: "Join Moniswap Discord",
@@ -75,7 +70,7 @@ const pointsArray = [
         ],
         button: "Join Discord",
         key: "moniswap_discord",
-        href: "https://discord.com",
+        href: "https://discord.com/invite/enfBWYpNqw",
     },
     {
         title: "Join Beraland Discord",
@@ -86,7 +81,7 @@ const pointsArray = [
         ],
         button: "Join Discord",
         key: "beraland_discord",
-        href: "https://discord.com",
+        href: "https://discord.gg/beraland",
     },
     {
         title: "Join Cappo Telegram group",
@@ -97,7 +92,7 @@ const pointsArray = [
         ],
         button: "Join Telegram",
         key: "cappo_telegram",
-        href: "https://discord.com",
+        href: "https://t.me/Cappo_bera",
     },
     {
         title: "Join Moniswap Telegram group",
@@ -108,7 +103,7 @@ const pointsArray = [
         ],
         button: "Join Telegram",
         key: "moniswap_telegram",
-        href: "https://discord.com",
+        href: "https://t.me/Moniswap_Xyz",
     },
     {
         title: "Join Moniswap Telegram announcement",
@@ -119,7 +114,7 @@ const pointsArray = [
         ],
         button: "Join Telegram",
         key: "moniswap_announce_telegram",
-        href: "https://discord.com",
+        href: "https://t.me/Moniswap_News",
     },
     {
         title: "Trade on Moniswap",
@@ -130,7 +125,7 @@ const pointsArray = [
         ],
         button: "Trade Now!",
         key: "trade",
-        href: "https://discord.com",
+        href: "/swap",
     },
     {
         title: "Provide Liquidity on Moniswap",
@@ -141,7 +136,7 @@ const pointsArray = [
         ],
         button: "Add Liquidity",
         key: "liquidity",
-        href: "https://discord.com",
+        href: "/liquidity",
     },
     {
         title: "Hold Bera Pack NFT",
@@ -516,72 +511,7 @@ export default function Page() {
                 </div>
             </div>
 
-            <div className="space-y-3 bg-brightBlack p-5">
-                <div className="flex flex-col items-start justify-between gap-2 lg:flex-row">
-                    <div>
-                        <p className="text-lg lg:text-2xl">The Leaderboard</p>
-                        <p className="text-xs text-gray1 lg:text-sm">
-                            Compete to get the highest score, you can do it!
-                        </p>
-                    </div>
-                    <p className="text-base lg:text-xl">
-                        You are ranked 13,959 of 290,250 participants
-                    </p>
-                </div>
-
-                <div>
-                    <Table
-                        aria-label="ranking table"
-                        removeWrapper
-                        classNames={{
-                            th: "bg-darkBlack text-white text-balance",
-                            tbody: "text-gray1",
-                            td: "break-words",
-                        }}
-                    >
-                        <TableHeader>
-                            <TableColumn>#</TableColumn>
-                            <TableColumn>NAME</TableColumn>
-                            <TableColumn>
-                                Verified Referral Multiplier
-                            </TableColumn>
-                            <TableColumn>Total Score</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow key="1">
-                                <TableCell>1</TableCell>
-                                <TableCell>0x6FE...e6d11</TableCell>
-                                <TableCell>350x</TableCell>
-                                <TableCell>4,095,000 points</TableCell>
-                            </TableRow>
-                            <TableRow key="2">
-                                <TableCell>2</TableCell>
-                                <TableCell>0xF27...18F7c</TableCell>
-                                <TableCell>346x</TableCell>
-                                <TableCell>2,906,400 points</TableCell>
-                            </TableRow>
-                            <TableRow key="3">
-                                <TableCell>3</TableCell>
-                                <TableCell>0x537...461d4</TableCell>
-                                <TableCell>698x</TableCell>
-                                <TableCell>1,884,600 points</TableCell>
-                            </TableRow>
-                            <TableRow key="4">
-                                <TableCell>4</TableCell>
-                                <TableCell>0x207...D673E</TableCell>
-                                <TableCell>697x</TableCell>
-                                <TableCell>1,184,900 points</TableCell>
-                            </TableRow>
-                            <TableRow key="5">
-                                <TableCell>5</TableCell>
-                                <TableCell>0x35c...DD2D2</TableCell>
-                                <TableCell>108x</TableCell>
-                                <TableCell>723,600 points</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
+            <LeaderBoardTable />
         </div>
     );
 }
