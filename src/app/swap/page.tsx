@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import {
     __AGGREGATOR_ROUTERS__,
     __ETHER__,
+    __MONI__,
     __WRAPPED_ETHER__,
 } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
@@ -27,7 +28,7 @@ import { formatNumber } from "@/utils/format";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ArrowRightLeft, ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatUnits, parseUnits } from "viem";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
@@ -46,6 +47,8 @@ export default function Page() {
         [TokenType | null, TokenType | null]
     >([null, null]);
 
+    const [hasLoadedDefaultTokens, setHasLoadedDefaultTokens] = useState(false);
+
     const switchTokens = useCallback(() => {
         const selectedToken0 = selectedTokens[0];
         const selectedToken1 = selectedTokens[1];
@@ -55,6 +58,7 @@ export default function Page() {
 
     const router = useMemo(() => __AGGREGATOR_ROUTERS__[chainId], [chainId]);
     const wrappedEther = useMemo(() => __WRAPPED_ETHER__[chainId], [chainId]);
+    const moni = useMemo(() => __MONI__[chainId], [chainId]);
     const { balance: etherBalance } = useNativeBalance();
     const { balance: token0Balance } = useERC20Balance(
         selectedTokens[0]?.address as any,
@@ -176,6 +180,32 @@ export default function Page() {
             parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
         ),
     );
+
+    useEffect(() => {
+        if (!hasLoadedDefaultTokens) {
+            if (tokenLists.length) {
+                const token0 = tokenLists.find(
+                    (token) =>
+                        token.address.toLowerCase() === moni.toLowerCase(),
+                );
+                const token1 = tokenLists.find(
+                    (token) =>
+                        token.address.toLowerCase() === __ETHER__.toLowerCase(),
+                );
+
+                if (selectedTokens[0] === null && selectedTokens[1] === null) {
+                    setSelectedTokens([token0 as any, token1 as any]);
+                }
+                setHasLoadedDefaultTokens(true);
+            }
+        }
+    }, [
+        hasLoadedDefaultTokens,
+        tokenLists,
+        moni,
+        selectedTokens[0],
+        selectedTokens[1],
+    ]);
 
     useWatchBlocks({
         onBlock: async () => {

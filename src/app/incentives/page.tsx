@@ -7,12 +7,14 @@ import { TokenSelectModal } from "@/components/Modal";
 import { IncentiveSelectModal } from "@/components/Modal/IncentiveSelectModal";
 import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
+import { __MONI__ } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { TokenType } from "@/types";
 import { Divider, Input } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useChainId } from "wagmi";
 
 export default function Page() {
     const [amount, setAmount] = useState(0.0);
@@ -20,10 +22,28 @@ export default function Page() {
     const [showTokenSelectionModal, setShowTokenSelectionModal] =
         useState(false);
     const [selectedToken, setSelectedToken] = useState<TokenType | null>(null);
+    const [hasLoadedDefaultTokens, setHasLoadedDefaultTokens] = useState(false);
+    const chainId = useChainId();
 
     const selectedTokens = [selectedToken, null];
 
     const { data: tokenLists = [] } = useGetTokenLists({});
+    const moni = useMemo(() => __MONI__[chainId], [chainId]);
+
+    useEffect(() => {
+        if (!hasLoadedDefaultTokens) {
+            if (tokenLists.length) {
+                const MONI = tokenLists.find(
+                    (token) =>
+                        token.address.toLowerCase() === moni.toLowerCase(),
+                );
+                if (selectedToken === null) {
+                    setSelectedToken(MONI as any);
+                }
+                setHasLoadedDefaultTokens(true);
+            }
+        }
+    }, [moni, hasLoadedDefaultTokens, tokenLists, selectedToken]);
 
     return (
         <div className="p-5 pb-20">
