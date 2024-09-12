@@ -32,6 +32,14 @@ export function useVoterCore() {
             args: [gaugeId as `0x${string}`],
         });
 
+    const useGetPoolWeight = (poolId: string) =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "weights",
+            args: [poolId as `0x${string}`],
+        });
+
     const useVotingExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
@@ -83,10 +91,22 @@ export function useVoterCore() {
                 { onSettled },
             );
 
+        const poke = (lockId: number) =>
+            writeContract(
+                {
+                    abi: voterAbi,
+                    address: voterAddress as `0x${string}`,
+                    functionName: "poke",
+                    args: [BigInt(lockId)],
+                },
+                { onSettled },
+            );
+
         return {
             createGauge,
             vote,
             resetLock,
+            poke,
             isError,
             isSuccess,
             isPending,
@@ -101,5 +121,6 @@ export function useVoterCore() {
         useGetGaugeFees,
         useGetGaugeBribe,
         useVotingExecutions,
+        useGetPoolWeight,
     };
 }

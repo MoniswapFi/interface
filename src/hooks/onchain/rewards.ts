@@ -29,7 +29,10 @@ export function useRewardsCore() {
         return { useRewardsListLength, useRewardToken, useEarned };
     };
 
-    const useRewardsExecutions = (rewardContract: string) => {
+    const useRewardsExecutions = (
+        rewardContract: string,
+        onSettled?: () => any,
+    ) => {
         const {
             writeContract,
             isError,
@@ -40,12 +43,15 @@ export function useRewardsCore() {
             error,
         } = useWriteContract();
         const notifyRewardAmount = (token: string, amount: bigint) =>
-            writeContract({
-                address: rewardContract as `0x${string}`,
-                abi: rewardsAbi,
-                functionName: "notifyRewardAmount",
-                args: [token as `0x${string}`, amount],
-            });
+            writeContract(
+                {
+                    address: rewardContract as `0x${string}`,
+                    abi: rewardsAbi,
+                    functionName: "notifyRewardAmount",
+                    args: [token as `0x${string}`, amount],
+                },
+                { onSettled, onError: (error) => console.error(error) },
+            );
 
         return {
             notifyRewardAmount,

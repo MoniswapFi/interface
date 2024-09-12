@@ -34,11 +34,12 @@ export const LockItem: FC<LockProps> = ({ data }) => {
     } = useEscrowExecutions(() => setShowTXInfoModal(true));
     const {
         resetLock,
-        isError: resetLockError,
-        isSuccess: resetLockSuccess,
-        isPending: resetLockPending,
-        hash: resetLockHash,
-        reset: resetResetLock,
+        poke,
+        isError: veTxError,
+        isSuccess: veTxSuccess,
+        isPending: veTxPending,
+        hash: veTxHash,
+        reset: resetveTx,
     } = useVotingExecutions(() => setShowTXInfoModal(true));
     const {
         data: locked = {
@@ -95,15 +96,16 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                         >
                             Transfer
                         </Link>
-                        {/* <a
-                            href="#"
-                            className="text-sm text-btn-primary underline"
+                        <button
+                            onClick={() => poke(Number(data.tokenId))}
+                            disabled={veTxPending}
+                            className="cursor-pointer text-sm text-btn-primary underline"
                         >
                             Poke
-                        </a> */}
+                        </button>
                         <button
                             onClick={() => resetLock(Number(data.tokenId))}
-                            disabled={resetLockPending}
+                            disabled={veTxPending}
                             className="cursor-pointer text-sm text-btn-primary underline"
                         >
                             Reset
@@ -176,18 +178,18 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                         resetWithdraw();
                     }
 
-                    if (typeof resetLockHash !== "undefined") {
-                        resetResetLock();
+                    if (typeof veTxHash !== "undefined") {
+                        resetveTx();
                     }
                 }}
                 type={
-                    withdrawSuccess || resetLockSuccess
+                    withdrawSuccess || veTxSuccess
                         ? "success"
-                        : withdrawError || resetLockError
+                        : withdrawError || veTxError
                           ? "failure"
                           : "failure"
                 }
-                txHash={withdrawHash ?? resetLockHash}
+                txHash={withdrawHash ?? veTxHash}
             />
         </div>
     );

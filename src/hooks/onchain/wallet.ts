@@ -75,6 +75,50 @@ export function useERC20Balance(tokenAddress: `0x${string}`) {
     };
 }
 
+export function useERC20BalanceOfOther(
+    tokenAddress: `0x${string}`,
+    address: string,
+) {
+    const { data: decimals } = useReadContract({
+        abi: erc20Abi,
+        functionName: "decimals",
+        address: tokenAddress,
+    });
+    const {
+        data: balance,
+        refetch,
+        isLoading,
+        isError,
+    } = useReadContract({
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [address as `0x${string}`],
+        address: tokenAddress,
+    });
+
+    useWatchBlocks({
+        onBlock: () => {
+            refetch()
+                .then(() =>
+                    console.info(
+                        "Refetched account balance for %s",
+                        tokenAddress,
+                    ),
+                )
+                .catch(console.debug);
+        },
+    });
+
+    return {
+        balance:
+            !!balance && !!decimals
+                ? Number(balance) / Math.pow(10, decimals)
+                : 0,
+        isLoading,
+        isError,
+    };
+}
+
 export function useERC20Allowance(tokenAddress: `0x${string}`) {
     const { address } = useAccount();
 
