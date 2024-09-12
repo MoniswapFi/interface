@@ -2,7 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Popover } from "@/components/ui/Popover";
-import { PoolTypes } from "@/config/constants";
+import {
+    FAQ_APR,
+    FAQ_STAKED,
+    FAQ_TVL,
+    FAQ_YOUR_DEPOSIT,
+    PoolTypes,
+} from "@/config/constants";
 import { type AccountPosition } from "@/graphclient";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
@@ -140,7 +146,8 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
 
             <div className="flex justify-between border-b border-swapBox pb-5 lg:block lg:w-[150px] lg:border-none lg:pb-0 lg:text-right">
                 <span className="text-textgray lg:hidden">
-                    TVL <Popover content="Total volume locked." />
+                    {FAQ_TVL.title}{" "}
+                    <Popover content={`${FAQ_TVL.description}`} />
                 </span>
                 <div className="flex flex-col gap-3 text-right">
                     <span>${toSF(data.pair.reserveUSD)}</span>
@@ -257,16 +264,20 @@ export const MyPosition: FC<AccountPositionProps> = ({ data }) => {
                     </Select>
                 </div>
                 <div className="hidden w-[150px] text-right lg:block">
-                    TVL <Popover content="Total volume locked." />
+                    {FAQ_TVL.title}
+                    <Popover content={`${FAQ_TVL.description}`} />
                 </div>
                 <div className="hidden w-[80px] text-right lg:block">
-                    {"APR"}
+                    {FAQ_APR.title}
+                    <Popover content={`${FAQ_APR.description}`} />
                 </div>
                 <div className="hidden w-[150px] text-right lg:block">
-                    {"Your Deposits"} <Popover content="Amounts Deposited." />
+                    {FAQ_YOUR_DEPOSIT.title}{" "}
+                    <Popover content={`${FAQ_YOUR_DEPOSIT.description}`} />
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Staked"} <Popover content="Value staked." />
+                    {FAQ_STAKED.title}{" "}
+                    <Popover content={`${FAQ_STAKED.description}`} />{" "}
                 </div>
                 <div className="hidden w-[150px] text-right lg:block">
                     {"Action"}
