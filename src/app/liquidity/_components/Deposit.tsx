@@ -12,6 +12,8 @@ import {
 } from "@/config/constants";
 import { useSinglePoolInfo } from "@/hooks/graphql/core";
 import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
+import { useGaugeCore } from "@/hooks/onchain/gauge";
+import { useVoterCore } from "@/hooks/onchain/voting";
 import {
     useERC20Allowance,
     useERC20Balance,
@@ -179,6 +181,14 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
         (state: RootState) => state.wallet.slippageTolerance,
     );
 
+    const { useGetPoolGauge } = useVoterCore();
+
+    const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
+        useGetPoolGauge(poolAddress);
+    const { useGaugeReadables } = useGaugeCore();
+    const { useRewardRate } = useGaugeReadables(gaugeId);
+    const { data: rewardRate, refetch: refetchRewardRate } = useRewardRate();
+
     useWatchBlocks({
         onBlock: async () => {
             await refetchAllowance0();
@@ -186,6 +196,8 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
             await refetchPoolSupply();
             await refetchPair();
             await refetchQuote();
+            await refetchGaugeId();
+            await refetchRewardRate();
         },
     });
 
@@ -238,7 +250,9 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
                         <div className="flex flex-col items-end justify-end gap-2">
                             <span className="uppercase text-swapBox">apr</span>
-                            <span className="text-swapBox">0.00%</span>
+                            <span className="text-swapBox">
+                                {Number(rewardRate)}%
+                            </span>
                         </div>
                     </div>
                     <Divider className="my-4 w-full bg-[#494646]" />

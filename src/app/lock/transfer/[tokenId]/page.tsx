@@ -31,7 +31,7 @@ const Page: FC<PageProps> = ({ params }) => {
         hash: transferHash,
         reset: resetTransfer,
     } = useEscrowExecutions(() => setShowTXInfoModal(true));
-    const { useLocked, useBalanceOfNFT } = useEscrowReadables();
+    const { useLocked } = useEscrowReadables();
     const {
         data: locked = {
             amount: BigInt(0),
@@ -40,8 +40,6 @@ const Page: FC<PageProps> = ({ params }) => {
         },
         refetch: refetchLocked,
     } = useLocked(Number(params.tokenId));
-    const { data: weight = BigInt(0), refetch: refetchNFTBalance } =
-        useBalanceOfNFT(Number(params.tokenId));
 
     const yearsLocked = useMemo(
         () => (Number(locked.end) - Math.floor(Date.now() / 1000)) / 31536000,
@@ -51,7 +49,6 @@ const Page: FC<PageProps> = ({ params }) => {
     useWatchBlocks({
         onBlock: async () => {
             await refetchLocked();
-            await refetchNFTBalance();
         },
     });
 

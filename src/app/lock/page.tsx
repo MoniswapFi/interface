@@ -3,10 +3,10 @@
 import Bear4 from "@/assets/images/bear2.png";
 import Image2 from "@/assets/images/image2.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
-import Vector from "@/assets/images/Vector.svg";
 import { Button } from "@/components/ui/button";
 import { useLocks } from "@/hooks/graphql/escrow";
-import { Divider } from "@nextui-org/react";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { useWatchBlocks } from "wagmi";
@@ -75,17 +75,34 @@ export default function Page() {
                         </Link>
                     </div>
 
-                    <div className="flex w-full flex-col items-center justify-start gap-3">
-                        {locks.map((lock) => (
-                            <LockItem data={lock} key={lock.id} />
-                        ))}
-                    </div>
+                    {locks.length > 0 ? (
+                        <div className="flex w-full flex-col items-center justify-start gap-3">
+                            {locks.map((lock) => (
+                                <LockItem data={lock} key={lock.id} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                            <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                                <FontAwesomeIcon icon={faInfo} size="xs" />
+                            </span>
+                            To receive incentives, and fees, create a lock and
+                            vote with it.
+                        </div>
+                    )}
                 </div>
 
                 <div className="space-y-7">
                     <div>Relay</div>
 
-                    <div className="space-y-5 text-sm">
+                    <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                        <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                            <FontAwesomeIcon icon={faInfo} size="xs" />
+                        </span>
+                        Relays are coming soon. Stay surfing.
+                    </div>
+
+                    {/* <div className="space-y-5 text-sm">
                         {Array.from({ length: 3 }).map((item, index) => {
                             return (
                                 <div key={index}>
@@ -181,7 +198,7 @@ export default function Page() {
                                 </div>
                             );
                         })}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
