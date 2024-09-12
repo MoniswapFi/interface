@@ -97,9 +97,18 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                     </Link>
                     <div className="hidden justify-center gap-7 md:flex">
                         {NavItems.map((item, index) => {
+                            const isActive = pathname === item.href;
                             return (
                                 <Link key={index} href={item.href}>
-                                    {item.name}
+                                    <div
+                                        className={`${
+                                            isActive
+                                                ? "bg-active text-[#F59855]"
+                                                : "hover:border-[#F59855]/80 hover:bg-btn-black/20"
+                                        } rounded border border-transparent px-4 py-2 hover:border-[#F59855]/80`}
+                                    >
+                                        {item.name}
+                                    </div>
                                 </Link>
                             );
                         })}
