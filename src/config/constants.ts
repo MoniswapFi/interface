@@ -132,3 +132,9 @@ export const FAQ_APR = {
     description:
         "Annual Percentage Rate (APR). This represents the yearly interest rate for staking, accrued daily based on the pool's rewards structure.",
 };
+
+export const FAQ_TOTAL_REWARD = {
+    title: "Total Reward",
+    description:
+        "Incentives refer to the total profitable market available in its corresponding token. These rewards are offered to encourage participation in the staking pool or liquidity provision.",
+};
