@@ -7,6 +7,10 @@ import RingIcon from "@/assets/images/ring.svg";
 import StarIcon from "@/assets/images/star.svg";
 import { __BERA_PACK__, __CHAIN_IDS__ } from "@/config/constants";
 import { APP_URL } from "@/config/env";
+import {
+    useGetUserReferredCount,
+    useGetUserVerifiedCount,
+} from "@/hooks/api/leaderboard";
 import { useCreateQuests, useGetUserQuestLists } from "@/hooks/api/quest";
 import {
     useAddWalletPoints,
@@ -161,7 +165,7 @@ export default function Page() {
         },
     });
 
-    const referralLink = `${APP_URL}/?referral=${wallet?.refCode}`;
+    const referralLink = `${APP_URL}/?referral=${wallet?.refCode || ""}`;
 
     const { data: questLists, refetch: refetchLists } = useGetUserQuestLists({
         variables: {
@@ -170,6 +174,18 @@ export default function Page() {
     });
 
     const { data: walletRank } = useGetWalletRank({
+        variables: {
+            address: address as Address,
+        },
+    });
+
+    const { data: referredCount = 0 } = useGetUserReferredCount({
+        variables: {
+            address: address as Address,
+        },
+    });
+
+    const { data: verifiedCount = 0 } = useGetUserVerifiedCount({
         variables: {
             address: address as Address,
         },
@@ -212,7 +228,8 @@ export default function Page() {
 
     const checkQuestStatus = useCallback(
         (key: string) => {
-            if (!address) return false;
+            if (!address || !questLists || questLists.length === 0)
+                return false;
             const hasQuest = questLists?.some((item) => item.reason === key);
             return hasQuest;
         },
@@ -225,6 +242,7 @@ export default function Page() {
     };
 
     const handleCopyLink = async () => {
+        if (!isConnected) return;
         await navigator.clipboard.writeText(referralLink);
         setShowToolTip(true);
 
@@ -234,11 +252,13 @@ export default function Page() {
     };
 
     const handleSendEmail = () => {
+        if (!isConnected) return;
         const mailtoLink = `mailto:?&body=${referralLink}`;
         window.open(mailtoLink, "_blank");
     };
 
     const handlePostOnTwitter = () => {
+        if (!isConnected) return;
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(referralLink)}`;
         window.open(twitterUrl, "_blank");
     };
@@ -457,10 +477,11 @@ export default function Page() {
                 </p>
 
                 <p className="text-sm text-gray1">
-                    You&apos;ve already referred 0 new users, of these 0 new
-                    users are counted to your referral multiple. After your next
-                    referral, your new score multiplier will be 2x and your
-                    total points will increase to 400!
+                    You&apos;ve already referred {referredCount} new users, of
+                    these {verifiedCount} new users are counted to your referral
+                    multiple. After your next referral, your new score
+                    multiplier will be 2x and your total points will increase to
+                    400!
                 </p>
 
                 <div className="border border-lightGray p-3 text-sm">

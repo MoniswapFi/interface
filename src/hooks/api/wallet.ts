@@ -14,10 +14,15 @@ export type Wallet = {
 
 export const useGetWallet = createQuery({
     queryKey: ["getWallet"],
-    fetcher: async (variables: GetWalletVariables): Promise<Wallet> => {
-        const url = new APIURL(`/wallet/${variables.address}`);
-        const response = await fetch(url);
-        return response.json();
+    fetcher: async (variables: GetWalletVariables): Promise<Wallet | null> => {
+        try {
+            if (!variables.address) return null;
+            const url = new APIURL(`/wallet/${variables.address}`);
+            const response = await fetch(url);
+            return response.json();
+        } catch (error) {
+            return null;
+        }
     },
 });
 
@@ -27,24 +32,21 @@ type Rank = {
 
 export const useGetWalletRank = createQuery({
     queryKey: ["getWalletRank"],
-    fetcher: async (variables: GetWalletVariables): Promise<Rank> => {
-        const url = new APIURL(`/wallet/rank/${variables.address}`);
-        const response = await fetch(url);
-        return response.json();
-    },
-});
-
-export const useGetAllWallet = createQuery({
-    queryKey: ["getAllWallets"],
-    fetcher: async (): Promise<Wallet[]> => {
-        const url = new APIURL(`/wallet/getAll`);
-        const response = await fetch(url);
-        return response.json();
+    fetcher: async (variables: GetWalletVariables): Promise<Rank | null> => {
+        try {
+            if (!variables.address) return null;
+            const url = new APIURL(`/wallet/rank/${variables.address}`);
+            const response = await fetch(url);
+            return response.json();
+        } catch (error) {
+            return null;
+        }
     },
 });
 
 type CreateWalletVariables = {
     address: Address;
+    referral?: string;
 };
 
 export const useCreateWallet = createMutation({
@@ -58,6 +60,7 @@ export const useCreateWallet = createMutation({
             },
             body: JSON.stringify({
                 address: variables.address,
+                referral: variables.referral,
             }),
         });
 
