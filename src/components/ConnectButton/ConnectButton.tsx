@@ -46,7 +46,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
     return (
         <>
             {isConnected ? (
-                <div className="flex cursor-pointer items-center gap-2 bg-btn-black px-3 py-3">
+                <div className="flex cursor-pointer items-center gap-2 border border-[#F59855] bg-btn-black px-3 py-3 transition hover:bg-[#F59855]/50 hover:ease-in-out md:pl-12 md:pr-12">
                     <span onClick={() => setShowDisconnectModal(true)}>
                         {truncateAddress(address ?? zeroAddress)}
                     </span>
@@ -58,9 +58,9 @@ export const ConnectButton: FC<Props> = ({ className }) => {
                 <Button
                     variant="primary"
                     onPress={openConnectModal}
-                    className={className}
+                    className="border border-[#F59855]/70 bg-btn-black transition hover:border-[#F59855] hover:bg-[#F59855]/50 hover:ease-in-out md:pl-12 md:pr-12"
                 >
-                    Connect
+                    CONNECT
                 </Button>
             )}
 
