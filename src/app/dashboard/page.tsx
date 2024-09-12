@@ -4,6 +4,8 @@ import Image2 from "@/assets/images/image2.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { usePoolPositions } from "@/hooks/graphql/core";
 import { useVotePositions } from "@/hooks/graphql/voting";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useWatchBlocks } from "wagmi";
 import { LiquidityReward } from "./_components/LiquidityReward";
@@ -59,20 +61,41 @@ export default function Page() {
 
             <div className="flex flex-col gap-5">
                 <p className="text-lg md:text-2xl">Liquidity Rewards</p>
-                <div className="flex flex-col gap-3">
-                    {positions.map((position) => (
-                        <LiquidityReward data={position} key={position.id} />
-                    ))}
-                </div>
+                {positions.length ? (
+                    <div className="flex flex-col gap-3">
+                        {positions.map((position) => (
+                            <LiquidityReward
+                                data={position}
+                                key={position.id}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                        <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                            <FontAwesomeIcon icon={faInfo} size="xs" />
+                        </span>
+                        Your LP rewards will appear here.
+                    </div>
+                )}
             </div>
 
             <div className="flex flex-col gap-5">
                 <p className="text-lg md:text-2xl">Voting Rewards</p>
-                <div className="flex flex-col gap-3">
-                    {votes.map((vote) => (
-                        <VotingReward data={vote} key={vote.id} />
-                    ))}
-                </div>
+                {votes.length ? (
+                    <div className="flex flex-col gap-3">
+                        {votes.map((vote) => (
+                            <VotingReward data={vote} key={vote.id} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                        <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                            <FontAwesomeIcon icon={faInfo} size="xs" />
+                        </span>
+                        Your voting rewards will appear here.
+                    </div>
+                )}
             </div>
         </div>
     );

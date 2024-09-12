@@ -5,7 +5,7 @@ import { useGaugeCore } from "@/hooks/onchain/gauge";
 import { useVoterCore } from "@/hooks/onchain/voting";
 import { TokenType } from "@/types";
 import { toSF } from "@/utils/format";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
@@ -186,17 +186,26 @@ export const Pools: FC<PoolsProps> = ({ data }) => {
                 <div className="hidden text-right lg:block">{"Action"}</div>
             </div>
 
-            {data.map((item, index) => {
-                return (
-                    <Pool
-                        stableFee={stableFee}
-                        volatileFee={volatileFee}
-                        data={item}
-                        tokenlist={tokenlist}
-                        key={index}
-                    />
-                );
-            })}
+            {data.length ? (
+                data.map((item, index) => {
+                    return (
+                        <Pool
+                            stableFee={stableFee}
+                            volatileFee={volatileFee}
+                            data={item}
+                            tokenlist={tokenlist}
+                            key={index}
+                        />
+                    );
+                })
+            ) : (
+                <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                    <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                        <FontAwesomeIcon icon={faInfo} size="xs" />
+                    </span>
+                    All LPs will appear here.
+                </div>
+            )}
         </>
     );
 };

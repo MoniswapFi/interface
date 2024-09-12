@@ -11,6 +11,8 @@ import { useVoterCore } from "@/hooks/onchain/voting";
 import { useERC20Balance } from "@/hooks/onchain/wallet";
 import { toSF } from "@/utils/format";
 import { div } from "@/utils/math";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -271,9 +273,18 @@ export const MyPosition: FC<AccountPositionProps> = ({ data }) => {
                 </div>
             </div>
 
-            {data.map((item, index) => {
-                return <Position data={item} key={index} />;
-            })}
+            {data.length ? (
+                data.map((item, index) => {
+                    return <Position data={item} key={index} />;
+                })
+            ) : (
+                <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+                    <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                        <FontAwesomeIcon icon={faInfo} size="xs" />
+                    </span>
+                    Your LP positions will appear here.
+                </div>
+            )}
         </>
     );
 };

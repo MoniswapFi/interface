@@ -14,7 +14,7 @@ import { Chip, Tab, Tabs } from "@nextui-org/react";
 import { RotateCw } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useWatchBlocks } from "wagmi";
 import { Button } from "../../components/ui/button";
 import { MyPosition } from "./_components/MyPosition";
@@ -32,6 +32,27 @@ export default function Page() {
     const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
     const { data: positions = [], refetch: refetchPositions } =
         useAccountPositionsQuery();
+
+    const [pairsPage, setPairsPage] = useState(1);
+    const [positionsPage, setPositionsPage] = useState(1);
+
+    const pairsSlice = useMemo(
+        () => pairs.slice(0, pairsPage * 20),
+        [pairs, pairsPage],
+    );
+    const positionsSlice = useMemo(
+        () => positions.slice(0, positionsPage * 20),
+        [positions, positionsPage],
+    );
+
+    const maximumPairPages = useMemo(
+        () => Math.ceil(pairs.length / 20),
+        [pairs],
+    );
+    const maximumPositionsPages = useMemo(
+        () => Math.ceil(positions.length / 20),
+        [positions],
+    );
 
     useWatchBlocks({
         onBlock: async () => {
@@ -182,14 +203,27 @@ export default function Page() {
                 </div>
 
                 {selectedTab === "pools" ? (
-                    <Pools data={pairs} />
+                    <Pools data={pairsSlice} />
                 ) : (
-                    <MyPosition data={positions} />
+                    <MyPosition data={positionsSlice} />
                 )}
             </div>
 
             <div className="mt-10 text-center">
-                <Button>View More</Button>
+                <Button
+                    onClick={() =>
+                        selectedTab === "pools"
+                            ? setPairsPage((page) => page + 1)
+                            : setPositionsPage((page) => page + 1)
+                    }
+                    disabled={
+                        selectedTab === "pools"
+                            ? pairsPage >= maximumPairPages
+                            : positionsPage >= maximumPositionsPages
+                    }
+                >
+                    View More
+                </Button>
             </div>
         </div>
     );

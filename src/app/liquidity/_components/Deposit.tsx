@@ -21,6 +21,7 @@ import {
 } from "@/hooks/onchain/wallet";
 import { RootState } from "@/store";
 import { TokenType } from "@/types";
+import { toSF } from "@/utils/format";
 import { div } from "@/utils/math";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ChevronDown, Plus, Scale } from "lucide-react";
@@ -265,14 +266,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
                             <div className="flex flex-col items-start justify-start gap-1">
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  pair.reserve0,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(pair.reserve0) : 0.0}
                                     </span>{" "}
                                     <span>
                                         {pair?.token0.symbol ?? token0.symbol}
@@ -281,14 +275,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  pair.reserve1,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(pair.reserve1) : 0.0}
                                     </span>{" "}
                                     <span>
                                         {pair?.token1.symbol ?? token1.symbol}
@@ -304,14 +291,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
                             <div className="flex flex-col items-end justify-start gap-1">
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  token0Deposited,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(token0Deposited) : 0.0}
                                     </span>{" "}
                                     <span>
                                         {pair?.token0.symbol ?? token0.symbol}
@@ -320,14 +300,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
                                 <div>
                                     <span className="text-swapBox">
-                                        {!!pair
-                                            ? Number(
-                                                  token1Deposited,
-                                              ).toLocaleString("en-US", {
-                                                  maximumFractionDigits: 3,
-                                                  useGrouping: true,
-                                              })
-                                            : 0.0}
+                                        {!!pair ? toSF(token1Deposited) : 0.0}
                                     </span>{" "}
                                     <span>
                                         {pair?.token1.symbol ?? token1.symbol}

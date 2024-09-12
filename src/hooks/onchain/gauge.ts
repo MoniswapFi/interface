@@ -28,10 +28,19 @@ export function useGaugeCore() {
                 args: [address as `0x${string}`],
             });
 
+        const useTotalSupply = () =>
+            useReadContract({
+                address: gaugeId as `0x${string}`,
+                abi: gaugeAbi,
+                functionName: "totalSupply",
+                args: [],
+            });
+
         return {
             useRewardRate,
             useEarned,
             useBalanceOf,
+            useTotalSupply,
         };
     };
 
