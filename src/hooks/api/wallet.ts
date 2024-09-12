@@ -6,7 +6,7 @@ type GetWalletVariables = {
     address: Address;
 };
 
-type Wallet = {
+export type Wallet = {
     address: Address;
     points: number;
     refCode?: string;
@@ -29,6 +29,15 @@ export const useGetWalletRank = createQuery({
     queryKey: ["getWalletRank"],
     fetcher: async (variables: GetWalletVariables): Promise<Rank> => {
         const url = new APIURL(`/wallet/rank/${variables.address}`);
+        const response = await fetch(url);
+        return response.json();
+    },
+});
+
+export const useGetAllWallet = createQuery({
+    queryKey: ["getAllWallets"],
+    fetcher: async (): Promise<Wallet[]> => {
+        const url = new APIURL(`/wallet/getAll`);
         const response = await fetch(url);
         return response.json();
     },
