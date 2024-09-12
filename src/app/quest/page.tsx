@@ -6,6 +6,7 @@ import Rectangle from "@/assets/images/Rectangle_t.svg";
 import RingIcon from "@/assets/images/ring.svg";
 import StarIcon from "@/assets/images/star.svg";
 import { __BERA_PACK__, __CHAIN_IDS__ } from "@/config/constants";
+import { APP_URL } from "@/config/env";
 import { useCreateQuests, useGetUserQuestLists } from "@/hooks/api/quest";
 import {
     useAddWalletPoints,
@@ -23,9 +24,10 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
+    Tooltip,
 } from "@nextui-org/react";
 import Image from "next/image";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Address, zeroAddress } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import { Button } from "../../components/ui/button";
@@ -156,12 +158,15 @@ const pointsArray = [
 
 export default function Page() {
     const { isConnected, address } = useAccount();
+    const [showToolTip, setShowToolTip] = useState(false);
 
     const { data: wallet, refetch: refetchWallet } = useGetWallet({
         variables: {
             address: address as Address,
         },
     });
+
+    const referralLink = `${APP_URL}/?referral=${wallet?.refCode}`;
 
     const { data: questLists, refetch: refetchLists } = useGetUserQuestLists({
         variables: {
@@ -222,6 +227,25 @@ export default function Page() {
     const handleMint = () => {
         if (beraPackBalance || !address) return false;
         window.open("https://www.kingdomly.app/bera-packs-", "_blank");
+    };
+
+    const handleCopyLink = async () => {
+        await navigator.clipboard.writeText(referralLink);
+        setShowToolTip(true);
+
+        setTimeout(() => {
+            setShowToolTip(false);
+        }, 2000);
+    };
+
+    const handleSendEmail = () => {
+        const mailtoLink = `mailto:?&body=${referralLink}`;
+        window.open(mailtoLink, "_blank");
+    };
+
+    const handlePostOnTwitter = () => {
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(referralLink)}`;
+        window.open(twitterUrl, "_blank");
     };
 
     useEffect(() => {
@@ -445,23 +469,38 @@ export default function Page() {
                 </p>
 
                 <div className="border border-lightGray p-3 text-sm">
-                    https://moniswap.finance/seekers/?referral=840oa4yi
+                    {referralLink}
                 </div>
 
                 <div className="w-full gap-3 space-y-3 lg:flex lg:space-y-0">
-                    <Button
+                    <Tooltip
+                        content="Link copied!"
+                        showArrow={true}
+                        isOpen={showToolTip}
+                        shadow="md"
                         classNames={{
-                            wrapper: "w-full",
-                            base: "w-full text-sm text-gray1",
+                            base: "before:bg-black",
+                            content: "bg-black rounded-none",
+                            arrow: "bg-black",
                         }}
                     >
-                        Copy referral link
-                    </Button>
+                        <Button
+                            classNames={{
+                                wrapper: "w-full",
+                                base: "w-full text-sm text-gray1",
+                            }}
+                            onClick={handleCopyLink}
+                        >
+                            Copy referral link
+                        </Button>
+                    </Tooltip>
+
                     <Button
                         classNames={{
                             wrapper: "w-full",
                             base: "w-full text-sm text-gray1",
                         }}
+                        onClick={handleSendEmail}
                     >
                         Send as email
                     </Button>
@@ -470,6 +509,7 @@ export default function Page() {
                             wrapper: "w-full",
                             base: "w-full text-sm text-gray1",
                         }}
+                        onClick={handlePostOnTwitter}
                     >
                         Post on X (Twitter)
                     </Button>

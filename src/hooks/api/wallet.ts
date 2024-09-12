@@ -9,6 +9,7 @@ type GetWalletVariables = {
 type Wallet = {
     address: Address;
     points: number;
+    refCode?: string;
 };
 
 export const useGetWallet = createQuery({

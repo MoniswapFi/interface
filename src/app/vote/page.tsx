@@ -91,6 +91,16 @@ export default function Page() {
                         <p className="text-textgray">New Emissions</p>
                         <p>10,747,755.11</p>
                     </div>
+
+                    <Divider
+                        orientation="vertical"
+                        className="h-[1px] bg-textlightgray max-md:w-full md:h-auto"
+                    />
+
+                    <div className="flex flex-col gap-3 md:text-right">
+                        <p className="text-textgray">Epoch 1 Ends In</p>
+                        <p>6d 16h 16m</p>
+                    </div>
                 </div>
             </div>
 
