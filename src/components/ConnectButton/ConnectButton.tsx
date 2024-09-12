@@ -15,6 +15,7 @@ import {
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { Settings } from "lucide-react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { Address, zeroAddress } from "viem";
 import { useAccount } from "wagmi";
@@ -27,6 +28,8 @@ type Props = {
 };
 
 export const ConnectButton: FC<Props> = ({ className }) => {
+    const searchParams = useSearchParams();
+
     const { isOpen, onOpenChange } = useDisclosure();
     const { openConnectModal } = useConnectModal();
     const { isConnected, address } = useAccount();
@@ -35,12 +38,18 @@ export const ConnectButton: FC<Props> = ({ className }) => {
 
     const { mutateAsync: createWallet } = useCreateWallet();
 
-    useEffect(() => {
+    const creatWallet = async () => {
         if (address) {
+            const referral = await searchParams.get("referral");
             createWallet({
                 address: address as Address,
+                referral: referral ?? "",
             });
         }
+    };
+
+    useEffect(() => {
+        creatWallet();
     }, [address]);
 
     return (

@@ -42,8 +42,13 @@ type Quest = {
 export const useGetUserQuestLists = createQuery({
     queryKey: ["questLists"],
     fetcher: async (variables: GetQuestListsVariables): Promise<Quest[]> => {
-        const url = new APIURL(`/quest/${variables.address}`);
-        const response = await fetch(url);
-        return response.json();
+        try {
+            if (!variables.address) return [];
+            const url = new APIURL(`/quest/${variables.address}`);
+            const response = await fetch(url);
+            return response.json();
+        } catch (error) {
+            return [];
+        }
     },
 });

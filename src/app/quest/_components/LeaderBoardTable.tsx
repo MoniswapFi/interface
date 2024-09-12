@@ -1,6 +1,10 @@
 "use client";
 
-import { useGetAllWallet, useGetWalletRank, Wallet } from "@/hooks/api/wallet";
+import {
+    LeaderboardList,
+    useGetAllLeaderboardLists,
+} from "@/hooks/api/leaderboard";
+import { useGetWalletRank } from "@/hooks/api/wallet";
 import { truncateAddress } from "@/utils/format";
 import {
     cn,
@@ -17,33 +21,31 @@ import { useAccount } from "wagmi";
 
 export const LeaderBoardTable = () => {
     const { address } = useAccount();
-    const [firstLists, setFirstLists] = useState<Wallet[]>([]);
-    const [secondLists, setSecondLists] = useState<Wallet[]>([]);
+    const [firstLists, setFirstLists] = useState<LeaderboardList[]>([]);
+    const [secondLists, setSecondLists] = useState<LeaderboardList[]>([]);
     const { data: walletRank } = useGetWalletRank({
         variables: {
             address: address as Address,
         },
     });
 
-    const { data: allWallets = [] } = useGetAllWallet();
+    const { data: allLists = [] } = useGetAllLeaderboardLists();
 
     useEffect(() => {
         if (walletRank?.rank) {
-            if (allWallets.length > 11 && walletRank.rank > 8) {
-                setFirstLists(allWallets.slice(0, 5));
+            if (allLists.length > 11 && walletRank.rank > 8) {
+                setFirstLists(allLists.slice(0, 5));
                 setSecondLists(
-                    allWallets.slice(
+                    allLists.slice(
                         walletRank.rank - 3,
                         walletRank.rank - 3 + 5,
                     ),
                 );
             } else {
-                setFirstLists(allWallets.slice(0, 10));
+                setFirstLists(allLists.slice(0, 10));
             }
         }
-    }, [allWallets.length, walletRank?.rank]);
-
-    console.log(secondLists);
+    }, [allLists.length, walletRank?.rank]);
 
     return (
         <div className="space-y-3 bg-brightBlack p-5">
@@ -57,7 +59,7 @@ export const LeaderBoardTable = () => {
                 <p className="text-base lg:text-xl">
                     You are ranked{" "}
                     {walletRank && walletRank.rank ? walletRank.rank : "N/A"} of{" "}
-                    {allWallets?.length} participants
+                    {allLists?.length} participants
                 </p>
             </div>
 
@@ -79,24 +81,33 @@ export const LeaderBoardTable = () => {
                         <TableColumn>Total Score</TableColumn>
                     </TableHeader>
                     <TableBody>
-                        {firstLists.map((wallet, index) => {
+                        {firstLists.map((item, index) => {
                             return (
                                 <TableRow
                                     key={index}
                                     className={cn("", {
                                         "bg-btn-primary":
-                                            wallet.address === address,
+                                            item.address === address,
                                     })}
                                 >
                                     <TableCell className="w-[60px] text-center max-md:px-1 md:w-[100px]">
                                         {index + 1}
                                     </TableCell>
                                     <TableCell className="w-[120px] md:w-[200px]">
-                                        {truncateAddress(wallet.address)}
+                                        {truncateAddress(item.address)}
                                     </TableCell>
-                                    <TableCell>346x</TableCell>
+                                    <TableCell>
+                                        {item.leaderboardCount}x
+                                    </TableCell>
                                     <TableCell className="w-[80px] md:w-[200px]">
-                                        {wallet.points} points
+                                        {item.leaderboardCount === 0
+                                            ? 0
+                                            : item.leaderboardCount === 1
+                                              ? 200
+                                              : 400 *
+                                                (item.leaderboardCount -
+                                                    1)}{" "}
+                                        points
                                     </TableCell>
                                 </TableRow>
                             );
@@ -104,65 +115,68 @@ export const LeaderBoardTable = () => {
                     </TableBody>
                 </Table>
 
-                {allWallets.length > 11 &&
-                    walletRank &&
-                    walletRank.rank > 8 && (
-                        <>
-                            <div className="text-center">
-                                {walletRank.rank - 8} other participants
-                            </div>
+                {allLists.length > 11 && walletRank && walletRank.rank > 8 && (
+                    <>
+                        <div className="text-center">
+                            {walletRank.rank - 8} other participants
+                        </div>
 
-                            <Table
-                                aria-label="ranking table"
-                                removeWrapper
-                                hideHeader
-                                classNames={{
-                                    th: "bg-darkBlack text-white text-balance",
-                                    tr: "h-[50px]",
-                                    tbody: "text-gray1",
-                                    td: "break-words",
-                                }}
-                            >
-                                <TableHeader>
-                                    <TableColumn>#</TableColumn>
-                                    <TableColumn>NAME</TableColumn>
-                                    <TableColumn>
-                                        Verified Referral Multiplier
-                                    </TableColumn>
-                                    <TableColumn>Total Score</TableColumn>
-                                </TableHeader>
-                                <TableBody>
-                                    {secondLists.map((wallet, index) => {
-                                        return (
-                                            <TableRow
-                                                key={index}
-                                                className={cn("", {
-                                                    "bg-btn-primary":
-                                                        wallet.address ===
-                                                        address,
-                                                })}
-                                            >
-                                                <TableCell className="w-[60px] text-center max-md:px-1 md:w-[100px]">
-                                                    {index +
-                                                        walletRank?.rank -
-                                                        2}
-                                                </TableCell>
-                                                <TableCell className="w-[120px] md:w-[200px]">
-                                                    {truncateAddress(
-                                                        wallet.address,
-                                                    )}
-                                                </TableCell>
-                                                <TableCell>346x</TableCell>
-                                                <TableCell className="w-[80px] md:w-[200px]">
-                                                    {wallet.points} points
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </>
-                    )}
+                        <Table
+                            aria-label="ranking table"
+                            removeWrapper
+                            hideHeader
+                            classNames={{
+                                th: "bg-darkBlack text-white text-balance",
+                                tr: "h-[50px]",
+                                tbody: "text-gray1",
+                                td: "break-words",
+                            }}
+                        >
+                            <TableHeader>
+                                <TableColumn>#</TableColumn>
+                                <TableColumn>NAME</TableColumn>
+                                <TableColumn>
+                                    Verified Referral Multiplier
+                                </TableColumn>
+                                <TableColumn>Total Score</TableColumn>
+                            </TableHeader>
+                            <TableBody>
+                                {secondLists.map((item, index) => {
+                                    return (
+                                        <TableRow
+                                            key={index}
+                                            className={cn("", {
+                                                "bg-btn-primary":
+                                                    item.address === address,
+                                            })}
+                                        >
+                                            <TableCell className="w-[60px] text-center max-md:px-1 md:w-[100px]">
+                                                {index + walletRank?.rank - 2}
+                                            </TableCell>
+                                            <TableCell className="w-[120px] md:w-[200px]">
+                                                {truncateAddress(item.address)}
+                                            </TableCell>
+                                            <TableCell>
+                                                {item.leaderboardCount}x
+                                            </TableCell>
+                                            <TableCell className="w-[80px] md:w-[200px]">
+                                                {item.leaderboardCount === 0
+                                                    ? 0
+                                                    : item.leaderboardCount ===
+                                                        1
+                                                      ? 200
+                                                      : 400 *
+                                                        (item.leaderboardCount -
+                                                            1)}{" "}
+                                                points
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </>
+                )}
             </div>
         </div>
     );
