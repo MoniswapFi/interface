@@ -15,7 +15,13 @@ import { zeroAddress } from "viem";
 import { useWatchBlocks } from "wagmi";
 import { Button } from "../../../components/ui/button";
 import { Popover } from "../../../components/ui/Popover";
-import { PoolTypes } from "../../../config/constants";
+import {
+    FAQ_EMISSION_RATE,
+    FAQ_FEES,
+    FAQ_TVL,
+    FAQ_VOLUME,
+    PoolTypes,
+} from "../../../config/constants";
 
 type PoolsProps = {
     data: Pair[];
@@ -172,17 +178,24 @@ export const Pools: FC<PoolsProps> = ({ data }) => {
                     </Select>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    TVL <Popover content="Total volume locked." />
+                    {FAQ_TVL.title}
+                    <Popover content={`${FAQ_TVL.description}`}></Popover>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Fees <24H>"} <Popover content="Accrued fees." />
+                    {FAQ_FEES.title}
+                    <Popover content={`${FAQ_FEES.description}`}></Popover>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Volume <24H>"} <Popover content="24-hour volume." />
+                    {FAQ_VOLUME.title}
+                    <Popover content={`${FAQ_VOLUME.description}`}></Popover>
                 </div>
                 <div className="hidden w-[130px] text-right lg:block">
-                    {"Emission rate <24H>"} <Popover content="Deposit rate." />
+                    {FAQ_EMISSION_RATE.title}
+                    <Popover
+                        content={`${FAQ_EMISSION_RATE.description}`}
+                    ></Popover>
                 </div>
+
                 <div className="hidden text-right lg:block">{"Action"}</div>
             </div>
 
