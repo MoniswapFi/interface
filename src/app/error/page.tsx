@@ -46,7 +46,7 @@ export default function Page() {
                         Page undiscovered!
                     </h1>
                     <p className="text-lg text-[#F59855] md:text-xl">
-                        Or are we secretly building it?
+                        Are we secretly building it?
                     </p>
                 </div>
 
