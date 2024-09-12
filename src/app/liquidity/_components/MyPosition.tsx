@@ -7,6 +7,7 @@ import {
     FAQ_STAKED,
     FAQ_TVL,
     FAQ_YOUR_DEPOSIT,
+    FAQ_TOTAL_REWARD,
     PoolTypes,
 } from "@/config/constants";
 import { type AccountPosition } from "@/graphclient";
