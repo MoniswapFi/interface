@@ -81,14 +81,14 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                     </div>
                 </div>
             )}
-            <div className="flex items-center justify-center gap-2 bg-secondary py-4">
-                <Image src={CongratesIcon} alt="icon" />
-                <Link href={"/swap"}>
+            <Link href={"/swap"}>
+                <div className="flex items-center justify-center gap-2 bg-secondary py-4">
+                    <Image src={CongratesIcon} alt="icon" />
                     <p className="text-xs md:text-base">
                         Moniswap V1 Live on Bartio Testnet. Swap Now!
                     </p>
-                </Link>
-            </div>
+                </div>
+            </Link>
 
             <div className="bg-header py-3 md:py-4">
                 <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
