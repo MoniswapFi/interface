@@ -12,7 +12,7 @@ import {
     faDiscord,
     faGithub,
     faMedium,
-    faTelegram,
+    faTelegramPlane,
     faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -86,27 +86,30 @@ export default function Home() {
 
                 <div className="flex items-center justify-center gap-5 pt-32 lg:pt-10">
                     <Link href="https://x.com/Moniswap_">
-                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-white hover:bg-black hover:text-white">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faXTwitter} width={30} />
                         </span>
                     </Link>
-                    <Link href="https://x.com/Moniswap_">
-                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-white hover:bg-black hover:text-white">
-                            <FontAwesomeIcon icon={faTelegram} width={40} />
+                    <Link href="https://t.me/Moniswap_Xyz">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-black">
+                            <FontAwesomeIcon
+                                icon={faTelegramPlane}
+                                width={50}
+                            />
                         </span>
                     </Link>
                     <Link href="https://discord.gg/PZbHqBKvfu">
-                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-white hover:bg-black hover:text-white">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faDiscord} width={30} />
                         </span>
                     </Link>
                     <Link href="https://github.com/MoniSwapFi">
-                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-white hover:bg-black hover:text-white">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faGithub} width={30} />
                         </span>
                     </Link>
                     <Link href="https://moniswap.medium.com">
-                        <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-white hover:bg-black hover:text-white">
+                        <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faMedium} width={30} />
                         </span>
                     </Link>
