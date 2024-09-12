@@ -90,3 +90,27 @@ export const __BERA_PACK__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x95a07C40eB0441ef0AD69443fA0766A6392c2861",
 };
 export const __IDEAL_GAS__ = BigInt(400000);
+
+export const FAQ_TVL = {
+    title: "TVL",
+    description:
+        "Total volume locked. This is the total value of assets currently staked in the pool. A higher TVL indicates greater liquidity.",
+};
+
+export const FAQ_FEES = {
+    title: "Fees <24H>",
+    description:
+        "Accrued fees. These are the fees generated over the past 24 hours from trading activity. The higher the activity, the higher the fees.",
+};
+
+export const FAQ_VOLUME = {
+    title: "Volume <24H>",
+    description:
+        "24-hour volume. This represents the total trading volume over the past 24 hours. It reflects how much liquidity has been traded in this period.",
+};
+
+export const FAQ_EMISSION_RATE = {
+    title: "Emission rate <24H>",
+    description:
+        "Deposit rate. This indicates the rate of rewards emitted to stakers over the last 24 hours. Higher emission rates typically encourage staking.",
+};
