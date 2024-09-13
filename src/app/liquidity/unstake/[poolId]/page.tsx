@@ -5,20 +5,19 @@ import { ConnectButton } from "@/components/ConnectButton";
 import { TransactionInfoModal } from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import { ChipBadge } from "@/components/ui/chipBadge";
-import { __PROTOCOL_ROUTERS__ } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { useSinglePoolInfo } from "@/hooks/graphql/core";
 import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
 import { useGaugeCore } from "@/hooks/onchain/gauge";
 import { useVoterCore } from "@/hooks/onchain/voting";
-import { useERC20Allowance, useERC20Balance } from "@/hooks/onchain/wallet";
+import { useERC20Balance } from "@/hooks/onchain/wallet";
 import { toSF } from "@/utils/format";
 import { div } from "@/utils/math";
 import { Divider, Slider } from "@nextui-org/react";
 import Image from "next/image";
 import { FC, useMemo, useState } from "react";
 import { formatUnits, parseUnits, zeroAddress } from "viem";
-import { useAccount, useChainId, useWatchBlocks } from "wagmi";
+import { useAccount, useWatchBlocks } from "wagmi";
 
 type PageProps = {
     params: {
@@ -40,7 +39,8 @@ const Page: FC<PageProps> = ({ params }) => {
     const { data: stable = false } = usePoolStability();
     const { data: fee } = usePoolFee(params.poolId as any, stable);
     const { data: poolSymbol } = usePoolSymbol();
-    const { data: poolTotalSupply } = usePoolTotalSupply();
+    const { data: poolTotalSupply, refetch: refetchPoolSupply } =
+        usePoolTotalSupply();
     const useIndexedPool = useSinglePoolInfo(params.poolId.toLowerCase());
     const { data: pair, refetch: refetchPair } = useIndexedPool();
 
@@ -84,58 +84,33 @@ const Page: FC<PageProps> = ({ params }) => {
     const { useGetPoolGauge } = useVoterCore();
     const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
         useGetPoolGauge(params.poolId);
-    const chainId = useChainId();
-    const router = useMemo(() => __PROTOCOL_ROUTERS__[chainId], [chainId]);
-    const { useRemoveLiquidity } = useProtocolCore();
 
-    const { useAllowance, useApproval } = useERC20Allowance(
-        params.poolId as any,
-    );
-
-    const { data: allowance, refetch: refetchAllowance } = useAllowance(
-        router as any,
-    );
-
-    const allowedToSpend = useMemo(
-        () => Number(formatUnits(allowance ?? BigInt(0), 18)),
-        [allowance],
-    );
-
-    const removable = useMemo(
-        () => percentage * position,
-        [percentage, position],
-    );
-
-    const { executeApproval, isPending: approvalPending } = useApproval(
-        router as any,
-        Number(parseUnits(removable.toString(), 18)),
-    );
-
-    const { useGaugeReadables } = useGaugeCore();
+    const { useGaugeExecutions, useGaugeReadables } = useGaugeCore();
     const {
-        executeRemoveLiquidity,
+        withdraw,
         isError: withdrawError,
         isSuccess: withdrawSuccess,
         isPending: withdrawPending,
         hash: withdrawHash,
         reset: resetWithdraw,
-    } = useRemoveLiquidity(
-        (token0?.address ?? "") as any,
-        (token1?.address ?? "") as any,
-        stable,
-        Number(parseUnits(removable.toString(), 18)),
-        () => setShowTXInfoModal(true),
-    );
-    const { useRewardRate } = useGaugeReadables(gaugeId);
+    } = useGaugeExecutions(gaugeId, () => setShowTXInfoModal(true));
+    const { useRewardRate, useBalanceOf } = useGaugeReadables(gaugeId);
     const { data: rewardRate = BigInt(0), refetch: refetchRewardRate } =
         useRewardRate();
+    const { data: staked = BigInt(0), refetch: refetchStaked } = useBalanceOf();
+
+    const unstakable = useMemo(
+        () => percentage * Number(formatUnits(staked, 18)),
+        [percentage, staked],
+    );
 
     useWatchBlocks({
         onBlock: async () => {
+            await refetchPoolSupply();
             await refetchGaugeId();
             await refetchPair();
             await refetchRewardRate();
-            await refetchAllowance();
+            await refetchStaked();
         },
     });
 
@@ -234,7 +209,7 @@ const Page: FC<PageProps> = ({ params }) => {
 
                     <div>
                         <div className="flex justify-between">
-                            <p>Withdraw {percentage * 100}%</p>
+                            <p>Unstake {percentage * 100}%</p>
                         </div>
                     </div>
 
@@ -281,29 +256,17 @@ const Page: FC<PageProps> = ({ params }) => {
                 </div>
 
                 {isConnected ? (
-                    <>
-                        {allowedToSpend >= removable ? (
-                            <Button
-                                onClick={executeRemoveLiquidity}
-                                isLoading={withdrawPending}
-                                disabled={withdrawPending || removable <= 0}
-                                variant="primary"
-                                className="w-full capitalize"
-                            >
-                                withdraw
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={executeApproval}
-                                isLoading={approvalPending}
-                                disabled={approvalPending}
-                                variant="primary"
-                                className="w-full capitalize"
-                            >
-                                allow {poolSymbol}
-                            </Button>
-                        )}
-                    </>
+                    <Button
+                        onClick={() =>
+                            withdraw(parseUnits(unstakable.toString(), 18))
+                        }
+                        isLoading={withdrawPending}
+                        disabled={withdrawPending || unstakable <= 0}
+                        variant="primary"
+                        className="w-full capitalize"
+                    >
+                        unstake
+                    </Button>
                 ) : (
                     <ConnectButton className="w-full" />
                 )}

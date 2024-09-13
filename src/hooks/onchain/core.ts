@@ -214,6 +214,7 @@ export function useProtocolCore() {
         token1: `0x${string}`,
         stable: boolean,
         liquidity: number,
+        onSettled?: () => any,
     ) => {
         const {
             writeContract,
@@ -244,33 +245,42 @@ export function useProtocolCore() {
         );
 
         const executeRemoveLiquidity = () =>
-            writeContract({
-                abi: protocolRouterAbi,
-                address: routerAddress as `0x${string}`,
-                functionName: isETH
-                    ? "removeLiquidityETHSupportingFeeOnTransferTokens"
-                    : "removeLiquidity",
-                args: isETH
-                    ? [
-                          nonETHToken as `0x${string}`,
-                          stable,
-                          BigInt(liquidity),
-                          BigInt(0),
-                          BigInt(0),
-                          address as `0x${string}`,
-                          BigInt(mul(deadline, 60000)),
-                      ]
-                    : [
-                          token0,
-                          token1,
-                          stable,
-                          BigInt(liquidity),
-                          BigInt(0),
-                          BigInt(0),
-                          address as `0x${string}`,
-                          BigInt(mul(deadline, 60000)),
-                      ],
-            });
+            writeContract(
+                {
+                    abi: protocolRouterAbi,
+                    address: routerAddress as `0x${string}`,
+                    functionName: isETH
+                        ? "removeLiquidityETHSupportingFeeOnTransferTokens"
+                        : "removeLiquidity",
+                    args: isETH
+                        ? [
+                              nonETHToken as `0x${string}`,
+                              stable,
+                              BigInt(liquidity),
+                              BigInt(0),
+                              BigInt(0),
+                              address as `0x${string}`,
+                              BigInt(
+                                  Math.floor(Date.now() / 1000) +
+                                      mul(deadline, 60000),
+                              ),
+                          ]
+                        : [
+                              token0,
+                              token1,
+                              stable,
+                              BigInt(liquidity),
+                              BigInt(0),
+                              BigInt(0),
+                              address as `0x${string}`,
+                              BigInt(
+                                  Math.floor(Date.now() / 1000) +
+                                      mul(deadline, 60000),
+                              ),
+                          ],
+                },
+                { onSettled, onError: (error) => console.error(error) },
+            );
 
         return {
             executeRemoveLiquidity,
