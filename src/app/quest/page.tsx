@@ -217,10 +217,12 @@ export default function Page() {
                 reason: key,
                 points: points,
             });
-            await addWalletPoints({
-                address: address as Address,
-                points: points,
-            });
+            if (!checkQuestStatus("bera_pack")) {
+                await addWalletPoints({
+                    address: address as Address,
+                    points: points,
+                });
+            }
             refetchWallet();
             refetchLists();
         } catch (error) {
@@ -272,10 +274,10 @@ export default function Page() {
     };
 
     useEffect(() => {
-        if (beraPackBalance && address) {
+        if (beraPackBalance && address && questLists) {
             claimPoints("bera_pack", 20000);
         }
-    }, [beraPackBalance, address]);
+    }, [beraPackBalance, address, questLists]);
 
     return (
         <div className="relative space-y-5 overflow-hidden p-5 lg:px-20">
