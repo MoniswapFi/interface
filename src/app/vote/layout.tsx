@@ -3,7 +3,7 @@ import {
     TITLE_BREAKER,
     VOTE_DESCRIPTION,
     VOTE_TITLE,
-} from "@/components/configuration/seo";
+} from "@/config/seo";
 import * as React from "react";
 
 export const metadata = {
