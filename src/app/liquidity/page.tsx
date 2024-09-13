@@ -186,7 +186,6 @@ export default function Page() {
                                 onClick={() => push("/liquidity/deposit")}
                                 size="md"
                                 className="p-3 transition hover:bg-[#F59855]/30 hover:transition"
-
                             >
                                 Add Liquidity
                             </Button>

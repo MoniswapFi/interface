@@ -3,7 +3,7 @@ import {
     DASHBOARD_TITLE,
     DEFAULT_TITLE,
     TITLE_BREAKER,
-} from "@/components/configuration/seo";
+} from "@/config/seo";
 import * as React from "react";
 
 export const metadata = {

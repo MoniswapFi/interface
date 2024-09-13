@@ -3,7 +3,7 @@ import {
     QUEST_DESCRIPTION,
     QUEST_TITLE,
     TITLE_BREAKER,
-} from "@/components/configuration/seo";
+} from "@/config/seo";
 import * as React from "react";
 
 export const metadata = {
