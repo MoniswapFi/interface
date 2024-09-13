@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { __MONI__, __VOTING_ESCROW__ } from "@/config/constants";
 import { useEscrowCore } from "@/hooks/onchain/escrow";
 import { useERC20Allowance, useERC20Balance } from "@/hooks/onchain/wallet";
+import { toSF } from "@/utils/format";
 import { Divider, Input, Slider } from "@nextui-org/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
@@ -101,8 +102,9 @@ export default function Page() {
                         <Divider className="bg-swapBox" />
 
                         <p>
-                            Locking for {duration / 31536000} years for voting
-                            power.
+                            Locking for {duration / 31536000} years for{" "}
+                            {toSF((duration / 31536000 / 4) * amount)} veMONI
+                            voting power.
                         </p>
 
                         <Slider
