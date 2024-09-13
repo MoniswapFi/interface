@@ -138,3 +138,8 @@ export const FAQ_TOTAL_REWARD = {
     description:
         "Incentives refer to the total profitable market available in its corresponding token. These rewards are offered to encourage participation in the staking pool or liquidity provision.",
 };
+
+export const FAQ_INCENTIVES = {
+    title: "Incentives",
+    description: "How much incentives were distributed to this pool.",
+};
