@@ -67,9 +67,9 @@ export const ConnectButton: FC<Props> = ({ className }) => {
                 <Button
                     variant="primary"
                     onPress={openConnectModal}
-                    className="border border-[#F59855]/70 bg-btn-black transition hover:border-[#F59855] hover:bg-[#F59855]/50 hover:ease-in-out md:pl-12 md:pr-12"
+                    className={className}
                 >
-                    CONNECT
+                    Connect
                 </Button>
             )}
 
