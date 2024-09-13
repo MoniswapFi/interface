@@ -26,6 +26,7 @@
         "clsx": "^2.1.1",
         "cpx": "^1.5.0",
         "encoding": "^0.1.13",
+        "ethers": "^6.13.2",
         "framer-motion": "^11.2.12",
         "graphql": "^16.9.0",
         "jsonrepair": "^3.8.0",

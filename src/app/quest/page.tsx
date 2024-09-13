@@ -24,10 +24,11 @@ import {
     Divider,
     Tooltip,
 } from "@nextui-org/react";
+import { ethers } from "ethers";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { Address, zeroAddress } from "viem";
-import { useAccount, useReadContract } from "wagmi";
+import { Address } from "viem";
+import { useAccount } from "wagmi";
 import { Button } from "../../components/ui/button";
 import { LeaderBoardTable } from "./_components/LeaderBoardTable";
 
@@ -158,6 +159,7 @@ const pointsArray = [
 export default function Page() {
     const { isConnected, address } = useAccount();
     const [showToolTip, setShowToolTip] = useState(false);
+    const [beraPackBalance, setBeraPackBalance] = useState(0);
 
     const { data: wallet, refetch: refetchWallet } = useGetWallet({
         variables: {
@@ -194,13 +196,19 @@ export default function Page() {
     const { mutateAsync: createQuest } = useCreateQuests();
     const { mutateAsync: addWalletPoints } = useAddWalletPoints();
 
-    const { data: beraPackBalance, isLoading } = useReadContract({
-        chainId: __CHAIN_IDS__.arbi_mainnet,
-        abi: beraPackABI,
-        address: __BERA_PACK__[__CHAIN_IDS__.arbi_mainnet] as Address,
-        functionName: "balanceOf",
-        args: [address ?? zeroAddress],
-    });
+    const provider = new ethers.JsonRpcProvider("https://arb1.arbitrum.io/rpc");
+    const tokenContract = new ethers.Contract(
+        __BERA_PACK__[__CHAIN_IDS__.arbi_mainnet],
+        beraPackABI,
+        provider,
+    );
+    const getBerapackBalance = async () => {
+        if (address) {
+            const balance = await tokenContract.balanceOf(address);
+            setBeraPackBalance(balance);
+        }
+    };
+    getBerapackBalance();
 
     const claimPoints = async (key: string, points: number) => {
         try {
@@ -378,10 +386,9 @@ export default function Page() {
                                             classNames={{
                                                 base: "text-gray",
                                             }}
-                                            disabled={
-                                                checkQuestStatus(item.key) ||
-                                                isLoading
-                                            }
+                                            disabled={checkQuestStatus(
+                                                item.key,
+                                            )}
                                             onClick={handleMint}
                                         >
                                             {beraPackBalance ? (
