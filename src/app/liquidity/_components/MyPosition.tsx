@@ -212,18 +212,31 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
                 </div>
             </div>
             <div className="flex w-full flex-col gap-2 lg:w-[150px]">
-                <Button
-                    onClick={() => push(`/liquidity/stake/${data.pair.id}`)}
-                    className="w-full text-sm lg:min-w-0"
-                    variant="primary"
-                >
-                    <span>Stake Deposit</span>
-                </Button>
+                <div className="flex w-full justify-center gap-0 lg:justify-start">
+                    <Button
+                        onClick={() => push(`/liquidity/stake/${data.pair.id}`)}
+                        className="min-w-full text-sm"
+                        variant="primary"
+                        classNames={{ wrapper: "w-1/2 flex justify-center" }}
+                    >
+                        <span>Stake</span>
+                    </Button>
+                    <Button
+                        onClick={() =>
+                            push(`/liquidity/unstake/${data.pair.id}`)
+                        }
+                        className="min-w-full bg-btn-accent text-sm"
+                        variant="solid"
+                        classNames={{ wrapper: "w-1/2 flex justify-center" }}
+                    >
+                        <span>Unstake</span>
+                    </Button>
+                </div>
                 <Button
                     onClick={() => push(`/liquidity/withdraw/${data.pair.id}`)}
-                    className="w-full text-sm text-btn-primary lg:min-w-0"
+                    className="w-full text-sm text-btn-primary"
                 >
-                    <span>Withdraw Deposit</span>
+                    <span>Withdraw Liquidity</span>
                 </Button>
             </div>
         </div>
