@@ -7,7 +7,12 @@ import MoniIcon from "@/assets/images/logo.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { Button } from "@/components/ui/button";
 import { Popover } from "@/components/ui/Popover";
-import { FAQ_INCENTIVES, FAQ_TVL, PoolTypes } from "@/config/constants";
+import {
+    FAQ_INCENTIVES,
+    FAQ_TOTAL_REWARD,
+    FAQ_TVL,
+    PoolTypes,
+} from "@/config/constants";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Divider, Select, SelectItem } from "@nextui-org/react";
