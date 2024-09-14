@@ -44,7 +44,7 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
     const pathname = usePathname();
 
     return (
-        <div className="sticky bottom-0 mt-auto">
+        <div className="sticky bottom-0 z-10 mt-auto">
             {/* TODO: need to use redux store to sync with vote page */}
             {pathname === "/vote" && (
                 <div className="md:px-10">
