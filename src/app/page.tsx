@@ -3,9 +3,11 @@ import BEAR2 from "@/assets/images/bear2.png";
 import BEAR3 from "@/assets/images/bear3.png";
 import BEAR4 from "@/assets/images/bear4.png";
 import BEAR5 from "@/assets/images/bear5.png";
+import CongratesIcon from "@/assets/images/congrates.svg";
 import Image1 from "@/assets/images/image1.svg";
 import Image2 from "@/assets/images/image2.svg";
 import Image3 from "@/assets/images/image3.svg";
+
 import RectangleBottom from "@/assets/images/Rectangle_b.svg";
 import RectangleTop from "@/assets/images/Rectangle_t.svg";
 import {
@@ -24,7 +26,15 @@ import { Button } from "../components/ui/button";
 export default function Home() {
     return (
         <div className="">
-            <div className="relative space-y-10 overflow-hidden px-5 pb-28 md:px-20 md:pt-5">
+            <Link href={"/swap"}>
+                <div className="z-100 enchant-effect flex items-center justify-center gap-2 bg-secondary py-4">
+                    <Image src={CongratesIcon} alt="icon" />
+                    <p className="minecraft-enchant-text text-xs md:text-base">
+                        Moniswap V1 Live on Bartio Testnet. Swap Now!
+                    </p>
+                </div>
+            </Link>
+            <div className="relative space-y-10 overflow-hidden px-5 md:px-20 md:pt-5">
                 <Image
                     src={RectangleTop}
                     alt="image"
@@ -85,12 +95,12 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center justify-center gap-5 pt-32 lg:pt-10">
-                    <Link href="https://x.com/Moniswap_">
+                    <Link href="https://x.com/Moniswap_" target="_blank">
                         <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faXTwitter} width={30} />
                         </span>
                     </Link>
-                    <Link href="https://t.me/Moniswap_Xyz">
+                    <Link href="https://t.me/Moniswap_Xyz" target="_blank">
                         <span className="flex size-[50px] items-center justify-center rounded-full border border-transparent bg-white text-black transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-black">
                             <FontAwesomeIcon
                                 icon={faTelegramPlane}
@@ -98,17 +108,17 @@ export default function Home() {
                             />
                         </span>
                     </Link>
-                    <Link href="https://discord.gg/PZbHqBKvfu">
+                    <Link href="https://discord.gg/PZbHqBKvfu" target="_blank">
                         <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faDiscord} width={30} />
                         </span>
                     </Link>
-                    <Link href="https://github.com/MoniSwapFi">
+                    <Link href="https://github.com/MoniSwapFi" target="_blank">
                         <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faGithub} width={30} />
                         </span>
                     </Link>
-                    <Link href="https://moniswap.medium.com">
+                    <Link href="https://moniswap.medium.com" target="_blank">
                         <span className="flex size-[50px] items-center justify-center rounded-full border border-white bg-black text-white transition-all duration-300 ease-in-out hover:border-[#F59855] hover:text-white">
                             <FontAwesomeIcon icon={faMedium} width={30} />
                         </span>
@@ -116,7 +126,7 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className="relative overflow-hidden px-5 py-40 md:px-20 md:py-10 lg:py-40">
+            <div className="relative overflow-hidden px-5 pt-40 md:px-20 md:pt-10 lg:pt-40">
                 <Image
                     src={RectangleBottom}
                     alt="image"
