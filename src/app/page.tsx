@@ -71,7 +71,7 @@ export default function Home() {
                         liquidity hub for the Berachain. Moniswap&apos;s
                         flywheel allows protocols to build deep liquidity in a
                         capital-efficient manner by directing $MONI emissions to
-                        their pools. Docs!
+                        their pools.
                     </p>
                 </div>
 
