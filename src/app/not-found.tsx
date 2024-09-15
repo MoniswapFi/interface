@@ -8,7 +8,6 @@ import { NavItems } from "@/components/Header";
 import { MoveUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const getLongestItemWidth = (items: { name: string; href: string }[]) => {
@@ -22,8 +21,6 @@ const getLongestItemWidth = (items: { name: string; href: string }[]) => {
 };
 
 export default function Page() {
-    const pathname = usePathname();
-
     const [isMediumScreen, setIsMediumScreen] = useState(false);
 
     useEffect(() => {
