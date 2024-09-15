@@ -354,7 +354,8 @@ export default function Page() {
                                     disabled={
                                         selectedTokens[0] === null ||
                                         selectedTokens[1] === null ||
-                                        swapPending
+                                        swapPending ||
+                                        amount <= 0
                                     }
                                 >
                                     swap
