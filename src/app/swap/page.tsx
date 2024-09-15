@@ -232,7 +232,7 @@ export default function Page() {
                             <span>Swap</span>
                             <span
                                 className="cursor-pointer text-swapBox"
-                                onClick={() => setAmount(token0Balance)}
+                                onClick={() => setAmount(balance0)}
                             >
                                 Available {balance0.toFixed(4)}{" "}
                                 {selectedTokens[0]?.symbol}
