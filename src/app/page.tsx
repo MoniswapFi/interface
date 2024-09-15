@@ -27,7 +27,7 @@ export default function Home() {
     return (
         <div className="">
             <Link href={"/swap"}>
-                <div className="z-100 enchant-effect flex items-center justify-center gap-2 bg-secondary py-4">
+                <div className="z-100 enchant-effect flex items-center justify-center gap-2 bg-secondary px-2 py-4">
                     <Image src={CongratesIcon} alt="icon" />
                     <p className="minecraft-enchant-text text-xs md:text-base">
                         Moniswap V1 Live on Bartio Testnet. Swap Now!
@@ -53,12 +53,12 @@ export default function Home() {
                 <Image
                     src={Image3}
                     alt="image"
-                    className="absolute bottom-[180px] right-[70px] w-[150px] lg:right-[15%] lg:w-[200px] xl:w-[250px]"
+                    className="absolute bottom-[70px] right-[70px] w-[150px] lg:bottom-[130px] lg:right-[15%] lg:w-[200px] xl:w-[250px]"
                 />
                 <Image
                     src={RectangleBottom}
                     alt="image"
-                    className="absolute -left-[100px] bottom-[100px] w-[200px] lg:bottom-[-50px] lg:left-[-30px] lg:w-[250px] xl:left-0 xl:w-[400px]"
+                    className="absolute -left-[100px] bottom-[-30px] w-[200px] lg:bottom-[-50px] lg:left-[-30px] lg:w-[250px] xl:left-0 xl:w-[400px]"
                 />
                 <div className="max-w-[640px]">
                     <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.08] transition-opacity duration-300 ease-in-out hover:opacity-[0.24] max-md:text-center md:text-9xl">
@@ -255,7 +255,7 @@ export default function Home() {
                     </Link>
                 </div>
 
-                <div className="mt-20 space-y-10 pb-20 text-center">
+                <div className="mt-20 space-y-10 pb-64 text-center">
                     <Image
                         src={Image2}
                         alt="image"
@@ -273,7 +273,7 @@ export default function Home() {
                     <Image
                         src={Image3}
                         alt="image"
-                        className="bottom-[400px] right-[70px] ml-auto mr-[10%] w-[150px] md:absolute md:bottom-[350px] lg:right-[15%] lg:w-[200px] xl:w-[250px]"
+                        className="bottom-[400px] right-[70px] ml-auto mr-[10%] w-[150px] md:absolute md:bottom-[350px] lg:right-[5%] lg:w-[200px] xl:w-[250px]"
                     />
                     <h1 className="font-luckiestGuy text-6xl uppercase text-content-gray/[6] opacity-[0.15] transition-opacity duration-300 ease-in-out hover:opacity-[0.24] max-md:text-center md:text-9xl">
                         moniswap
