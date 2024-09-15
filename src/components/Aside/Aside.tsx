@@ -25,7 +25,7 @@ export const AsideBar: FC<Props> = ({ showMenu, hideMenu }) => {
     return (
         <div
             className={cn(
-                "fixed left-0 top-0 z-10 h-svh w-0 overflow-hidden bg-navBackground duration-200",
+                "fixed left-0 top-0 z-20 h-svh w-0 overflow-hidden bg-navBackground duration-200",
                 {
                     "w-full": showMenu,
                 },
