@@ -100,14 +100,7 @@ export const LeaderBoardTable = () => {
                                         {item.leaderboardCount}x
                                     </TableCell>
                                     <TableCell className="w-[80px] md:w-[200px]">
-                                        {item.leaderboardCount === 0
-                                            ? 0
-                                            : item.leaderboardCount === 1
-                                              ? 200
-                                              : 400 *
-                                                (item.leaderboardCount -
-                                                    1)}{" "}
-                                        points
+                                        {item.points} points
                                     </TableCell>
                                 </TableRow>
                             );
@@ -160,15 +153,7 @@ export const LeaderBoardTable = () => {
                                                 {item.leaderboardCount}x
                                             </TableCell>
                                             <TableCell className="w-[80px] md:w-[200px]">
-                                                {item.leaderboardCount === 0
-                                                    ? 0
-                                                    : item.leaderboardCount ===
-                                                        1
-                                                      ? 200
-                                                      : 400 *
-                                                        (item.leaderboardCount -
-                                                            1)}{" "}
-                                                points
+                                                {item.points} points
                                             </TableCell>
                                         </TableRow>
                                     );

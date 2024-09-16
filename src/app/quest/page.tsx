@@ -217,7 +217,10 @@ export default function Page() {
                 reason: key,
                 points: points,
             });
-            if (!checkQuestStatus("bera_pack")) {
+            if (
+                key !== "bera_pack" ||
+                (key === "bera_pack" && !checkQuestStatus("bera_pack"))
+            ) {
                 await addWalletPoints({
                     address: address as Address,
                     points: points,
