@@ -262,7 +262,11 @@ export default function Page() {
 
                             <div className="flex h-[50px] flex-[3_3_0%] items-center justify-between border border-swapBox bg-btn-black p-3">
                                 <Input
-                                    value={amount.toString()}
+                                    value={
+                                        amount.toString() === "0"
+                                            ? ""
+                                            : amount.toString()
+                                    }
                                     type="number"
                                     onChange={(ev) =>
                                         setAmount(Number(ev.target.value))
