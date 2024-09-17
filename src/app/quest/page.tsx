@@ -67,6 +67,28 @@ const pointsArray = [
         href: "https://x.com/Bera_Land",
     },
     {
+        title: "Follow BeraRoot on X and turn on notification",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Follow BeraRoot on X (Twitter) and turn on your notification.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Join Telegram",
+        key: "beraroot_x",
+        href: "https://x.com/BeraRoot",
+    },
+    {
+        title: "Follow Kingdomly on X and turn on notification",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Follow Kingdomly on X (Twitter) and turn on your notification.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Join Telegram",
+        key: "kingdomly_x",
+        href: "https://x.com/KingdomlyApp",
+    },
+    {
         title: "Join Moniswap Discord",
         points: 500,
         content: [
@@ -87,6 +109,28 @@ const pointsArray = [
         button: "Join Discord",
         key: "beraland_discord",
         href: "https://discord.gg/beraland",
+    },
+    {
+        title: "Join BeraRoot Discord",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Join BeraRoot's Discord server and engage with the community.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
+        ],
+        button: "Join BeraRoot",
+        key: "beraRoot_discord",
+        href: "https://discord.gg/beraroot",
+    },
+    {
+        title: "Join Kingdomly Discord",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Join Kingdomly's Discord server and engage with the community.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
+        ],
+        button: "Join Kingdomly",
+        key: "kingdomly_discord",
+        href: "https://discord.gg/kingdomly",
     },
     {
         title: "Join Cappo Telegram group",
@@ -121,6 +165,7 @@ const pointsArray = [
         key: "moniswap_announce_telegram",
         href: "https://t.me/Moniswap_News",
     },
+
     {
         title: "Trade on Moniswap",
         points: 1000,
