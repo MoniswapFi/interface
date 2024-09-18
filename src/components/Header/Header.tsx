@@ -5,8 +5,9 @@ import { AlignRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ConnectButton } from "../ConnectButton";
+import { VoteModal } from "../Modal/VoteModal";
 
 export const NavItems = [
     {
@@ -42,6 +43,8 @@ type Props = {
 export const Header: FC<Props> = ({ toggleMenuOpen }) => {
     const pathname = usePathname();
 
+    const [showVoteModal, setShowVoteModal] = useState(false);
+
     return (
         <div className="sticky bottom-0 z-10 mt-auto">
             {/* TODO: need to use redux store to sync with vote page */}
@@ -74,7 +77,10 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                             </div>
                         </div>
 
-                        <div className="flex h-[50px] w-full cursor-pointer items-center justify-center bg-navSelected text-[10px] text-gray1 hover:text-white sm:h-auto sm:w-[100px] md:text-sm lg:w-[180px]">
+                        <div
+                            className="flex h-[50px] w-full cursor-pointer items-center justify-center bg-navSelected text-[10px] text-gray1 hover:text-white sm:h-auto sm:w-[100px] md:text-sm lg:w-[180px]"
+                            onClick={() => setShowVoteModal(true)}
+                        >
                             Vote
                         </div>
                     </div>
@@ -115,6 +121,11 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
                     </div>
                 </div>
             </div>
+
+            <VoteModal
+                isOpen={showVoteModal}
+                close={() => setShowVoteModal(false)}
+            />
         </div>
     );
 };
