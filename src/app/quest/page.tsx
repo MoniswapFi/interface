@@ -1,11 +1,15 @@
 "use client";
 
-import { beraPackABI } from "@/assets/abis";
+import { beraPackABI, smileebearsABI } from "@/assets/abis";
 import AirdropImage from "@/assets/images/AirdropWeb.png";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import RingIcon from "@/assets/images/ring.svg";
 import StarIcon from "@/assets/images/star.svg";
-import { __BERA_PACK__, __CHAIN_IDS__ } from "@/config/constants";
+import {
+    __BERA_PACK__,
+    __CHAIN_IDS__,
+    __SMILEE_BERAS__,
+} from "@/config/constants";
 import { APP_URL } from "@/config/env";
 import {
     useGetUserReferredCount,
@@ -189,6 +193,17 @@ const pointsArray = [
         href: "/liquidity",
     },
     {
+        title: "Hold Smilee Beras NFT",
+        points: 10000,
+        content: [
+            "To pass this challenge, you must Hold Smilee Beras NFT.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Check",
+        key: "smileeberas_pack",
+        href: "https://discord.com",
+    },
+    {
         title: "Hold Bera Pack NFT",
         points: 20000,
         content: [
@@ -205,6 +220,7 @@ export default function Page() {
     const { isConnected, address } = useAccount();
     const [showToolTip, setShowToolTip] = useState(false);
     const [beraPackBalance, setBeraPackBalance] = useState(0);
+    const [smileeberasBalance, setSmileeberasBalance] = useState(0);
 
     const { data: wallet, refetch: refetchWallet } = useGetWallet({
         variables: {
@@ -242,18 +258,30 @@ export default function Page() {
     const { mutateAsync: addWalletPoints } = useAddWalletPoints();
 
     const provider = new ethers.JsonRpcProvider("https://arb1.arbitrum.io/rpc");
-    const tokenContract = new ethers.Contract(
+    const berapackTokenContract = new ethers.Contract(
         __BERA_PACK__[__CHAIN_IDS__.arbi_mainnet],
         beraPackABI,
         provider,
     );
+    const smileebearsTokenContract = new ethers.Contract(
+        __SMILEE_BERAS__[__CHAIN_IDS__.arbi_mainnet],
+        smileebearsABI,
+        provider,
+    );
     const getBerapackBalance = async () => {
         if (address) {
-            const balance = await tokenContract.balanceOf(address);
+            const balance = await berapackTokenContract.balanceOf(address);
             setBeraPackBalance(balance);
         }
     };
+    const getSmileeberasBalance = async () => {
+        if (address) {
+            const balance = await smileebearsTokenContract.balanceOf(address);
+            setSmileeberasBalance(balance);
+        }
+    };
     getBerapackBalance();
+    getSmileeberasBalance();
 
     const claimPoints = async (key: string, points: number) => {
         try {
@@ -262,15 +290,10 @@ export default function Page() {
                 reason: key,
                 points: points,
             });
-            if (
-                key !== "bera_pack" ||
-                (key === "bera_pack" && !checkQuestStatus("bera_pack"))
-            ) {
-                await addWalletPoints({
-                    address: address as Address,
-                    points: points,
-                });
-            }
+            await addWalletPoints({
+                address: address as Address,
+                points: points,
+            });
             refetchWallet();
             refetchLists();
         } catch (error) {
@@ -323,9 +346,13 @@ export default function Page() {
 
     useEffect(() => {
         if (beraPackBalance && address && questLists) {
-            claimPoints("bera_pack", 20000);
+            if (!checkQuestStatus("bera_pack")) claimPoints("bera_pack", 20000);
         }
-    }, [beraPackBalance, address, questLists]);
+        if (smileeberasBalance && address && questLists) {
+            if (!checkQuestStatus("smileeberas_pack"))
+                claimPoints("smileeberas_pack", 10000);
+        }
+    }, [beraPackBalance, smileeberasBalance, address, questLists]);
 
     return (
         <div className="relative space-y-5 overflow-hidden p-5 lg:px-20">
