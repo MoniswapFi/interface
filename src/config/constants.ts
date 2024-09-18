@@ -89,6 +89,9 @@ export const __MONI__ = {
 export const __BERA_PACK__ = {
     [__CHAIN_IDS__.arbi_mainnet]: "0x95a07C40eB0441ef0AD69443fA0766A6392c2861",
 };
+export const __SMILEE_BERAS__ = {
+    [__CHAIN_IDS__.arbi_mainnet]: "0x136798606E85fb4086001AB065e5298fa0c37904",
+};
 export const __IDEAL_GAS__ = BigInt(400000);
 
 export const FAQ_TVL = {
