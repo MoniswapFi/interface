@@ -37,6 +37,7 @@ const config: Config = {
                 "text-error": "#FF0F00",
                 darkestGray: "#141414",
                 brightGray: "#7D7D7D",
+                green2: "#34D22C",
             },
             backgroundColor: {
                 primary: "#000000",
