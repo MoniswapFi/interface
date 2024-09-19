@@ -134,7 +134,7 @@ export default function Page() {
                             {PoolTypes.map((item, index) => {
                                 return (
                                     <SelectItem
-                                        key={item.key}
+                                        key={index}
                                         className="data-[hover=true]:border data-[hover=true]:border-btn-primary data-[hover=true]:bg-transparent data-[hover=true]:text-white"
                                     >
                                         {item.text}

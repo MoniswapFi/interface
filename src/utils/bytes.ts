@@ -1,4 +1,9 @@
-import { decodeFunctionResult, encodeFunctionData, type Abi } from "viem";
+import {
+    decodeFunctionResult,
+    encodeFunctionData,
+    encodePacked as viemEncodePacked,
+    type Abi,
+} from "viem";
 
 export const callToBytes = (abi: Abi, functionName: string, args?: any[]) => {
     return encodeFunctionData({
@@ -19,3 +24,6 @@ export const resultFromBytes = <T>(
         data: data as `0x${string}`,
     }) as T;
 };
+
+export const encodePacked = (args: any[], values: any[]) =>
+    viemEncodePacked(args, values);

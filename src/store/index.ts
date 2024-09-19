@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import votingReducer from "./slices/voting";
 import walletSettingsReducer from "./slices/walletSettings";
 
 const persistConfig = {
@@ -17,6 +18,7 @@ export const store = configureStore({
     devTools: process.env.NODE_ENV !== "production",
     reducer: {
         wallet: persistedWalletSettingsReducer,
+        voting: votingReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
