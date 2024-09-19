@@ -1,12 +1,13 @@
 "use client";
 
-import { beraPackABI, smileebearsABI } from "@/assets/abis";
+import { beraPackABI, bruvABI, smileebearsABI } from "@/assets/abis";
 import AirdropImage from "@/assets/images/AirdropWeb.png";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import RingIcon from "@/assets/images/ring.svg";
 import StarIcon from "@/assets/images/star.svg";
 import {
     __BERA_PACK__,
+    __BRUV_BERAS__,
     __CHAIN_IDS__,
     __SMILEE_BERAS__,
 } from "@/config/constants";
@@ -104,6 +105,17 @@ const pointsArray = [
         href: "https://x.com/TheBullas_",
     },
     {
+        title: "Follow Memeswap on X and turn on notification",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Follow Memeswap on X (Twitter) and turn on your notification.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Follow",
+        key: "memeswap_x",
+        href: "https://x.com/memeswapfi",
+    },
+    {
         title: "Join Moniswap Discord",
         points: 500,
         content: [
@@ -157,6 +169,17 @@ const pointsArray = [
         button: "Join Discord",
         key: "bullas_discord",
         href: "https://discord.gg/EY7GQQVm6v",
+    },
+    {
+        title: "Join Memeswap Discord",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Join Memeswap's Discord server and engage with the community.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
+        ],
+        button: "Join Discord",
+        key: "memeswap_discord",
+        href: "https://discord.gg/ksCjFvuVFp",
     },
     {
         title: "Join Cappo Telegram group",
@@ -226,6 +249,17 @@ const pointsArray = [
         href: "https://opensea.io/collection/smilee-beras",
     },
     {
+        title: "Hold Bruuvvprint NFT",
+        points: 10000,
+        content: [
+            "To pass this challenge, you must Hold Bruuvvprint Beras NFT.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Check",
+        key: "bruuvvprint_pack",
+        href: "https://opensea.io/collection/bruuvvprint-memeswap",
+    },
+    {
         title: "Hold Bera Pack NFT",
         points: 20000,
         content: [
@@ -243,6 +277,7 @@ export default function Page() {
     const [showToolTip, setShowToolTip] = useState(false);
     const [beraPackBalance, setBeraPackBalance] = useState(0);
     const [smileeberasBalance, setSmileeberasBalance] = useState(0);
+    const [bruvBalance, setBruvBalance] = useState(0);
 
     const { data: wallet, refetch: refetchWallet } = useGetWallet({
         variables: {
@@ -290,6 +325,11 @@ export default function Page() {
         smileebearsABI,
         provider,
     );
+    const bruvTokenContract = new ethers.Contract(
+        __BRUV_BERAS__[__CHAIN_IDS__.arbi_mainnet],
+        bruvABI,
+        provider,
+    );
     const getBerapackBalance = async () => {
         if (address) {
             const balance = await berapackTokenContract.balanceOf(address);
@@ -302,8 +342,15 @@ export default function Page() {
             setSmileeberasBalance(balance);
         }
     };
+    const getBruvBalance = async () => {
+        if (address) {
+            const balance = await bruvTokenContract.balanceOf(address);
+            setBruvBalance(balance);
+        }
+    };
     getBerapackBalance();
     getSmileeberasBalance();
+    getBruvBalance();
 
     const claimPoints = async (key: string, points: number) => {
         try {
@@ -368,6 +415,9 @@ export default function Page() {
         window.open(twitterUrl, "_blank");
     };
 
+    const renderNFTButtonText = (balance: number, confirmText: string) =>
+        balance ? "Confirmed" : `${confirmText} now!`;
+
     useEffect(() => {
         if (beraPackBalance && address && questLists) {
             if (!checkQuestStatus("bera_pack")) claimPoints("bera_pack", 20000);
@@ -376,7 +426,11 @@ export default function Page() {
             if (!checkQuestStatus("smileeberas_pack"))
                 claimPoints("smileeberas_pack", 10000);
         }
-    }, [beraPackBalance, smileeberasBalance, address, questLists]);
+        if (bruvBalance && address && questLists) {
+            if (!checkQuestStatus("bruuvvprint_pack"))
+                claimPoints("bruuvvprint_pack", 10000);
+        }
+    }, [beraPackBalance, smileeberasBalance, bruvBalance, address, questLists]);
 
     return (
         <div className="relative space-y-5 overflow-hidden p-5 lg:px-20">
@@ -481,7 +535,8 @@ export default function Page() {
                                     })}
 
                                     {item.key === "bera_pack" ||
-                                    item.key === "smileeberas_pack" ? (
+                                    item.key === "smileeberas_pack" ||
+                                    item.key === "bruuvvprint_pack" ? (
                                         <>
                                             <Button
                                                 variant="primary"
@@ -499,23 +554,21 @@ export default function Page() {
                                                     )
                                                 }
                                             >
-                                                {item.key === "bera_pack" ? (
-                                                    <>
-                                                        {beraPackBalance ? (
-                                                            <>Confirmed</>
-                                                        ) : (
-                                                            <>Mint now!</>
+                                                {item.key === "bera_pack"
+                                                    ? renderNFTButtonText(
+                                                          beraPackBalance,
+                                                          "Mint",
+                                                      )
+                                                    : item.key ===
+                                                        "bruuvvprint_pack"
+                                                      ? renderNFTButtonText(
+                                                            bruvBalance,
+                                                            "Buy",
+                                                        )
+                                                      : renderNFTButtonText(
+                                                            smileeberasBalance,
+                                                            "Buy",
                                                         )}
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        {smileeberasBalance ? (
-                                                            <>Confirmed</>
-                                                        ) : (
-                                                            <>Buy now!</>
-                                                        )}
-                                                    </>
-                                                )}
                                             </Button>
                                         </>
                                     ) : (
