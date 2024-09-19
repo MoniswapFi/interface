@@ -93,6 +93,17 @@ const pointsArray = [
         href: "https://x.com/KingdomlyApp",
     },
     {
+        title: "Follow Bullas on X and turn on notification",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Follow Bullas on X (Twitter) and turn on your notification.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Follow",
+        key: "bullas_x",
+        href: "https://x.com/TheBullas_",
+    },
+    {
         title: "Join Moniswap Discord",
         points: 500,
         content: [
@@ -135,6 +146,17 @@ const pointsArray = [
         button: "Join Discord",
         key: "kingdomly_discord",
         href: "https://discord.gg/kingdomly",
+    },
+    {
+        title: "Join Bullas Discord",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Join Bullas's Discord server and engage with the community.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
+        ],
+        button: "Join Discord",
+        key: "bullas_discord",
+        href: "https://discord.gg/EY7GQQVm6v",
     },
     {
         title: "Join Cappo Telegram group",
@@ -201,7 +223,7 @@ const pointsArray = [
         ],
         button: "Check",
         key: "smileeberas_pack",
-        href: "https://discord.com",
+        href: "https://opensea.io/collection/smilee-beras",
     },
     {
         title: "Hold Bera Pack NFT",
@@ -212,7 +234,7 @@ const pointsArray = [
         ],
         button: "Check",
         key: "bera_pack",
-        href: "https://discord.com",
+        href: "https://www.kingdomly.app/bera-packs-",
     },
 ];
 
@@ -317,9 +339,11 @@ export default function Page() {
         [questLists, address],
     );
 
-    const handleMint = () => {
-        if (beraPackBalance || !address) return false;
-        window.open("https://www.kingdomly.app/bera-packs-", "_blank");
+    const handleMint = (key: string, href: string) => {
+        if (!address) return false;
+        if (key === "bera_pack" && beraPackBalance) return false;
+        if (key === "smileeberas_pack" && smileeberasBalance) return false;
+        window.open(href, "_blank");
     };
 
     const handleCopyLink = async () => {
@@ -412,72 +436,6 @@ export default function Page() {
             <div className="bg-brightBlack px-3 py-5">
                 <Accordion variant="splitted">
                     {pointsArray.map((item, index) => {
-                        if (item.key === "bera_pack") {
-                            return (
-                                <AccordionItem
-                                    key={index}
-                                    aria-label={item.title}
-                                    title={
-                                        <div className="flex items-center justify-between gap-2 text-xs lg:text-base">
-                                            <div className="flex items-center">
-                                                <Checkbox
-                                                    size="lg"
-                                                    radius="full"
-                                                    color="warning"
-                                                    classNames={{
-                                                        icon: "text-white",
-                                                        base: "data-[disabled=true]:opacity-100",
-                                                    }}
-                                                    isDisabled
-                                                    isSelected={checkQuestStatus(
-                                                        item.key,
-                                                    )}
-                                                />
-                                                Hold Bera Pack NFT
-                                            </div>
-                                            <div className="flex-shrink-0">
-                                                +20000 points
-                                            </div>
-                                        </div>
-                                    }
-                                    classNames={{
-                                        base: "!bg-darkBlack !rounded-none",
-                                        title: "text-white",
-                                    }}
-                                >
-                                    <div className="space-y-5">
-                                        <p>
-                                            To pass this challenge, you must
-                                            Hold Bera Pack NFT.
-                                        </p>
-                                        <p>
-                                            Please note, we sync this challenge
-                                            every hour so please be patient and
-                                            your progress will automatically
-                                            update.
-                                        </p>
-
-                                        <Button
-                                            variant="primary"
-                                            size="full"
-                                            classNames={{
-                                                base: "text-gray",
-                                            }}
-                                            disabled={checkQuestStatus(
-                                                item.key,
-                                            )}
-                                            onClick={handleMint}
-                                        >
-                                            {beraPackBalance ? (
-                                                <>Confirmed</>
-                                            ) : (
-                                                <>Mint now!</>
-                                            )}
-                                        </Button>
-                                    </div>
-                                </AccordionItem>
-                            );
-                        }
                         return (
                             <AccordionItem
                                 key={index}
@@ -522,27 +480,71 @@ export default function Page() {
                                         );
                                     })}
 
-                                    <Button
-                                        variant="primary"
-                                        size="full"
-                                        onClick={() =>
-                                            handleClick(
-                                                item.href,
-                                                item.key,
-                                                item.points,
-                                            )
-                                        }
-                                        classNames={{
-                                            base: "text-gray",
-                                        }}
-                                        disabled={checkQuestStatus(item.key)}
-                                    >
-                                        {checkQuestStatus(item.key) ? (
-                                            "Confirmed"
-                                        ) : (
-                                            <>{item?.button}</>
-                                        )}
-                                    </Button>
+                                    {item.key === "bera_pack" ||
+                                    item.key === "smileeberas_pack" ? (
+                                        <>
+                                            <Button
+                                                variant="primary"
+                                                size="full"
+                                                classNames={{
+                                                    base: "text-gray",
+                                                }}
+                                                disabled={checkQuestStatus(
+                                                    item.key,
+                                                )}
+                                                onClick={() =>
+                                                    handleMint(
+                                                        item.key,
+                                                        item.href,
+                                                    )
+                                                }
+                                            >
+                                                {item.key === "bera_pack" ? (
+                                                    <>
+                                                        {beraPackBalance ? (
+                                                            <>Confirmed</>
+                                                        ) : (
+                                                            <>Mint now!</>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {smileeberasBalance ? (
+                                                            <>Confirmed</>
+                                                        ) : (
+                                                            <>Buy now!</>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                variant="primary"
+                                                size="full"
+                                                onClick={() =>
+                                                    handleClick(
+                                                        item.href,
+                                                        item.key,
+                                                        item.points,
+                                                    )
+                                                }
+                                                classNames={{
+                                                    base: "text-gray",
+                                                }}
+                                                disabled={checkQuestStatus(
+                                                    item.key,
+                                                )}
+                                            >
+                                                {checkQuestStatus(item.key) ? (
+                                                    "Confirmed"
+                                                ) : (
+                                                    <>{item?.button}</>
+                                                )}
+                                            </Button>
+                                        </>
+                                    )}
                                 </div>
                             </AccordionItem>
                         );
