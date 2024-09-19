@@ -92,6 +92,9 @@ export const __BERA_PACK__ = {
 export const __SMILEE_BERAS__ = {
     [__CHAIN_IDS__.arbi_mainnet]: "0x136798606E85fb4086001AB065e5298fa0c37904",
 };
+export const __BRUV_BERAS__ = {
+    [__CHAIN_IDS__.arbi_mainnet]: "0x26A3C7BFE8C1a6deF5f70006e6a89a9f503fa362",
+};
 export const __IDEAL_GAS__ = BigInt(400000);
 
 export const FAQ_TVL = {
