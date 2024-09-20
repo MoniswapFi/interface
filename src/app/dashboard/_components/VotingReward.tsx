@@ -116,8 +116,12 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
         refetch: refetchLocked,
     } = useLocked(Number(data.lockId));
 
-    const { useGetPoolGauge, useGetGaugeFees, useGetGaugeBribe } =
-        useVoterCore();
+    const {
+        useGetPoolGauge,
+        useGetGaugeFees,
+        useGetGaugeBribe,
+        useLockVoteWeightForPool,
+    } = useVoterCore();
     const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
         useGetPoolGauge(data.pair?.id || zeroAddress);
     const { data: feesId = zeroAddress, refetch: refetchFeesId } =
@@ -140,6 +144,10 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
 
     const [feesTokens, setFeesTokens] = useState<string[]>([]);
     const [bribesTokens, setBribesTokens] = useState<string[]>([]);
+    const { data: allocatedWeight = BigInt(0) } = useLockVoteWeightForPool(
+        Number(data.lockId),
+        data.pair?.id as any,
+    );
     const voteClaimBytes = useMemo(
         () => [
             callToBytes(voterAbi, "claimFees", [
@@ -273,6 +281,16 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
                         <p>
                             {toSF(formatUnits(BigInt(locked.amount), 18))}{" "}
                             <span className="text-textgray">MONI locked</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex flex-col justify-between gap-5 lg:items-end">
+                    <div className="lg:text-right">
+                        <p className="text-textgray">Allocated weight</p>
+                        <p>
+                            {toSF(formatUnits(allocatedWeight, 18))}{" "}
+                            <span className="text-textgray">veMONI</span>
                         </p>
                     </div>
                 </div>
