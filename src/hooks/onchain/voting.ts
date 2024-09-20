@@ -63,6 +63,13 @@ export function useVoterCore() {
             args: [BigInt(blockNumber)],
         });
 
+    const useIncentivizablePools = () =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "length",
+        });
+
     const useVotingExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
@@ -148,5 +155,6 @@ export function useVoterCore() {
         useGaugeClaimable,
         useTotalWeight,
         useEpochVoteEnd,
+        useIncentivizablePools,
     };
 }

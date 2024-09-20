@@ -24,22 +24,36 @@ export default function Page() {
     const useAllPoolsQuery = useAllPools();
     const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
     const { data: tokenlist = [] } = useGetTokenLists({});
-    const { useTotalWeight, useEpochVoteEnd } = useVoterCore();
+    const { useTotalWeight, useEpochVoteEnd, useIncentivizablePools } =
+        useVoterCore();
     const { data: totalWeight = BigInt(0) } = useTotalWeight();
     const { data: currentBlock = BigInt(0), refetch: refetchCurrentBlock } =
         useBlockNumber();
     const { data: voteEnd = BigInt(0), refetch: refetchEpochVoteEnd } =
         useEpochVoteEnd(Number(currentBlock));
     const voteEndDate = useMemo(
-        () => new Date(Number(voteEnd) * 1000),
+        () =>
+            new Date(
+                Date.now() +
+                    (Number(voteEnd) +
+                        (Number(voteEnd) % 604800) +
+                        604800 -
+                        3600) *
+                        1000,
+            ),
         [voteEnd],
     );
+    const {
+        data: incentivizablePools = BigInt(0),
+        refetch: refetchIncentivizablePools,
+    } = useIncentivizablePools();
 
     useWatchBlocks({
         onBlock: async () => {
             await refetchPairs();
             await refetchCurrentBlock();
             await refetchEpochVoteEnd();
+            await refetchIncentivizablePools();
         },
     });
     return (
@@ -96,8 +110,10 @@ export default function Page() {
                     />
 
                     <div className="flex flex-col gap-3">
-                        <p className="text-textgray">Total Incentives</p>
-                        <p>Data currently unavailable</p>
+                        <p className="text-textgray">
+                            Pools available for incentives
+                        </p>
+                        <p>{Number(incentivizablePools)}</p>
                     </div>
 
                     <Divider
@@ -117,7 +133,7 @@ export default function Page() {
 
                     <div className="flex flex-col gap-3">
                         <p className="text-textgray">New Emissions</p>
-                        <p>10,747,755.11</p>
+                        <p>Data currently unavailable</p>
                     </div>
 
                     <Divider
@@ -127,7 +143,7 @@ export default function Page() {
 
                     <div className="flex flex-col gap-3 md:text-right">
                         <p className="text-textgray">Current epoch ends on</p>
-                        <p>{voteEndDate.toISOString()}</p>
+                        <p>{voteEndDate.toUTCString()}</p>
                     </div>
                 </div>
             </div>
