@@ -1,11 +1,8 @@
 "use client";
 
 import Bear4 from "@/assets/images/bear4.png";
-import BearIcon from "@/assets/images/Bera.png";
 import Image2 from "@/assets/images/image2.svg";
-import MoniIcon from "@/assets/images/logo.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
-import { Button } from "@/components/ui/button";
 import { Popover } from "@/components/ui/Popover";
 import {
     FAQ_INCENTIVES,
@@ -13,12 +10,38 @@ import {
     FAQ_TVL,
     PoolTypes,
 } from "@/config/constants";
-import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useGetTokenLists } from "@/hooks/api/tokens";
+import { useAllPools } from "@/hooks/graphql/core";
+import { useVoterCore } from "@/hooks/onchain/voting";
 import { Divider, Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
+import { useMemo } from "react";
+import { formatUnits } from "viem";
+import { useBlockNumber, useWatchBlocks } from "wagmi";
+import { Pool } from "./_components/Pool";
 
 export default function Page() {
+    const useAllPoolsQuery = useAllPools();
+    const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
+    const { data: tokenlist = [] } = useGetTokenLists({});
+    const { useTotalWeight, useEpochVoteEnd } = useVoterCore();
+    const { data: totalWeight = BigInt(0) } = useTotalWeight();
+    const { data: currentBlock = BigInt(0), refetch: refetchCurrentBlock } =
+        useBlockNumber();
+    const { data: voteEnd = BigInt(0), refetch: refetchEpochVoteEnd } =
+        useEpochVoteEnd(Number(currentBlock));
+    const voteEndDate = useMemo(
+        () => new Date(Number(voteEnd) * 1000),
+        [voteEnd],
+    );
+
+    useWatchBlocks({
+        onBlock: async () => {
+            await refetchPairs();
+            await refetchCurrentBlock();
+            await refetchEpochVoteEnd();
+        },
+    });
     return (
         <div className="relative overflow-hidden p-5 md:p-20">
             <Image
@@ -63,8 +86,8 @@ export default function Page() {
 
                 <div className="flex flex-col justify-between gap-3 bg-footer px-5 py-5 text-sm md:flex-row md:gap-0 md:px-10">
                     <div className="flex flex-col gap-3">
-                        <p className="text-textgray">Total Fees</p>
-                        <p>$1,564,105.52</p>
+                        <p className="text-textgray">Total Vote Weight</p>
+                        <p>{Number(formatUnits(totalWeight, 18))}</p>
                     </div>
 
                     <Divider
@@ -74,7 +97,7 @@ export default function Page() {
 
                     <div className="flex flex-col gap-3">
                         <p className="text-textgray">Total Incentives</p>
-                        <p>$1,564,105.52</p>
+                        <p>Data currently unavailable</p>
                     </div>
 
                     <Divider
@@ -84,7 +107,7 @@ export default function Page() {
 
                     <div className="flex flex-col gap-3">
                         <p className="text-textgray">Total Rewards</p>
-                        <p>$1,564,105.52</p>
+                        <p>Data currently unavailable</p>
                     </div>
 
                     <Divider
@@ -103,8 +126,8 @@ export default function Page() {
                     />
 
                     <div className="flex flex-col gap-3 md:text-right">
-                        <p className="text-textgray">Epoch 1 Ends In</p>
-                        <p>6d 16h 16m</p>
+                        <p className="text-textgray">Current epoch ends on</p>
+                        <p>{voteEndDate.toISOString()}</p>
                     </div>
                 </div>
             </div>
@@ -163,88 +186,9 @@ export default function Page() {
                     </div>
                 </div>
 
-                {Array.from({ length: 20 }).map((item, index) => {
+                {pairs.map((item, index) => {
                     return (
-                        <div
-                            className="flex flex-col justify-between gap-3 border-t border-swapBox pt-5 lg:flex-row lg:items-center lg:gap-0"
-                            key={index}
-                        >
-                            <div className="flex lg:w-[25%]">
-                                <div className="flex items-center">
-                                    <Image
-                                        src={BearIcon}
-                                        alt="icon"
-                                        width={30}
-                                    />
-                                    <Image
-                                        src={MoniIcon}
-                                        alt="icon"
-                                        width={30}
-                                        className="-translate-x-3"
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-sm">
-                                        vAMM-MONI/BERA
-                                    </span>
-                                    <span className="bg-darkgray p-1 text-xs text-lightblue">
-                                        Basic Volatile • 1.0%
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between pb-5 lg:block lg:w-[150px] lg:pb-0 lg:text-right">
-                                <span className="text-textgray lg:hidden">
-                                    TVL{" "}
-                                    <Popover content="Popover content here." />
-                                </span>
-                                <div className="flex flex-col gap-3 text-right">
-                                    <span>$9,062,352.53</span>
-                                </div>
-                            </div>
-                            <div className="flex justify-between pb-5 lg:block lg:w-[150px] lg:pb-0 lg:text-right">
-                                <span className="text-textgray lg:hidden">
-                                    {"APR"}{" "}
-                                    <Popover content="Popover content here." />
-                                </span>
-                                <span>$19,233.02</span>
-                            </div>
-                            <div className="flex justify-between pb-5 lg:block lg:w-[150px] lg:pb-0 lg:text-right">
-                                <span className="text-textgray lg:hidden">
-                                    {"Your Deposits"}{" "}
-                                    <Popover content="Popover content here." />
-                                </span>
-                                <div className="flex flex-col gap-3 text-right">
-                                    <span>$7,693,210.16</span>
-                                </div>
-                            </div>
-                            <div className="flex justify-between pb-5 lg:block lg:w-[150px] lg:pb-0 lg:text-right">
-                                <span className="text-textgray lg:hidden">
-                                    {"Staked"}{" "}
-                                    <Popover content="Popover content here." />
-                                </span>
-                                <div className="flex flex-col gap-3 text-right">
-                                    <span>$536,177.02</span>
-                                </div>
-                            </div>
-                            <div className="flex w-full flex-col gap-2 lg:block lg:w-[70px] lg:text-right">
-                                <div className="flex justify-between pb-5 lg:block lg:pb-0">
-                                    <span className="text-textgray lg:hidden">
-                                        vAPR
-                                    </span>
-                                    <span>71.31%</span>
-                                </div>
-                                <Button
-                                    className="w-full text-sm lg:w-fit lg:min-w-0"
-                                    variant="secondary"
-                                >
-                                    <FontAwesomeIcon icon={faThumbsUp} />
-                                    <span className="text-btn-primary lg:hidden">
-                                        Select
-                                    </span>
-                                </Button>
-                            </div>
-                        </div>
+                        <Pool data={item} key={index} tokenlist={tokenlist} />
                     );
                 })}
             </div>

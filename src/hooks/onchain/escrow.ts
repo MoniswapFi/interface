@@ -33,7 +33,15 @@ export function useEscrowCore() {
                 args: [BigInt(tokenId)],
             });
 
-        return { useLocked, useBalanceOfNFT };
+        const useIsApprovedOrOwner = (spender: string, tokenId: number) =>
+            useReadContract({
+                address: escrowAddress,
+                abi: escrowAbi,
+                functionName: "isApprovedOrOwner",
+                args: [spender as `0x${string}`, BigInt(tokenId)],
+            });
+
+        return { useLocked, useBalanceOfNFT, useIsApprovedOrOwner };
     };
     const useEscrowExecutions = (onSettled?: () => any) => {
         const {
@@ -127,6 +135,17 @@ export function useEscrowCore() {
                 { onSettled },
             );
 
+        const approveToSpendNFT = (approved: string, tokenId: number) =>
+            writeContract(
+                {
+                    address: escrowAddress,
+                    abi: escrowAbi,
+                    functionName: "approve",
+                    args: [approved as `0x${string}`, BigInt(tokenId)],
+                },
+                { onSettled },
+            );
+
         return {
             createLock,
             withdraw,
@@ -135,6 +154,7 @@ export function useEscrowCore() {
             increaseAmount,
             increaseUnlockTime,
             transferNFT,
+            approveToSpendNFT,
             isError,
             isSuccess,
             isPending,

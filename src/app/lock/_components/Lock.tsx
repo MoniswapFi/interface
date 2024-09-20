@@ -161,7 +161,15 @@ export const LockItem: FC<LockProps> = ({ data }) => {
 
             <div className="flex flex-col justify-between gap-3 lg:items-end lg:gap-0">
                 <p className="text-textgray">Unlock Date</p>
-                <p>locked for {toSF(Number(data.lockTime) / 31536000)} years</p>
+                <p>
+                    locked for{" "}
+                    {toSF(
+                        (Number(data.lockTime) -
+                            Math.floor(timeInMotion / 1000)) /
+                            31536000,
+                    )}{" "}
+                    years
+                </p>
             </div>
 
             <TransactionInfoModal

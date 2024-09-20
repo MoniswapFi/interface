@@ -2,7 +2,7 @@ import { rewardsAbi, voterAbi } from "@/assets/abis";
 import CheckIcon from "@/assets/images/check.svg";
 import { TransactionInfoModal } from "@/components/Modal";
 import { ChipBadge } from "@/components/ui/chipBadge";
-import { __VOTER__ } from "@/config/constants";
+import { __MULTICALL__, __VOTER__ } from "@/config/constants";
 import type { VotePosition } from "@/graphclient";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
@@ -12,6 +12,7 @@ import { useRewardsCore } from "@/hooks/onchain/rewards";
 import { useVoterCore } from "@/hooks/onchain/voting";
 import { TokenType } from "@/types";
 import { callToBytes, resultFromBytes } from "@/utils/bytes";
+import { toSF } from "@/utils/format";
 import { call } from "@wagmi/core";
 import Image from "next/image";
 import { FC, useEffect, useMemo, useState } from "react";
@@ -104,8 +105,8 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
     const { data: poolSymbol } = usePoolSymbol();
     const { data: fee } = usePoolFee(data.pair?.id as any, stable);
 
-    const { useEscrowReadables } = useEscrowCore();
-    const { useLocked } = useEscrowReadables();
+    const { useEscrowReadables, useEscrowExecutions } = useEscrowCore();
+    const { useLocked, useIsApprovedOrOwner } = useEscrowReadables();
     const {
         data: locked = {
             amount: BigInt(0),
@@ -156,7 +157,6 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
     );
 
     const chainId = useChainId();
-
     const { useRunMulticall } = useMulticall();
     const {
         executeMCall,
@@ -171,6 +171,11 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
 
     const config = useConfig();
     const { address } = useAccount();
+
+    const { data: isApprovedToSpendNFT, refetch: refetchApprovedOrOwner } =
+        useIsApprovedOrOwner(__MULTICALL__[chainId], Number(data.lockId));
+    const { approveToSpendNFT, isPending: approvalPending } =
+        useEscrowExecutions();
 
     useEffect(() => {
         (async () => {
@@ -228,6 +233,7 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
             await refetchBribesId();
             await refetchFeesRewardsLength();
             await refetchBribesRewardsLength();
+            await refetchApprovedOrOwner();
         },
     });
 
@@ -265,7 +271,7 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
                     <div className="lg:text-right">
                         <p className="text-textgray">Lock #{data.lockId}</p>
                         <p>
-                            {formatUnits(BigInt(locked.amount), 18)}{" "}
+                            {toSF(formatUnits(BigInt(locked.amount), 18))}{" "}
                             <span className="text-textgray">MONI locked</span>
                         </p>
                     </div>
@@ -301,14 +307,30 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
                             />
                         ))}
                     </div>
-                    <button
-                        onClick={executeMCall}
-                        disabled={callPending}
-                        className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end"
-                    >
-                        <Image alt="check icon" src={CheckIcon} />
-                        <span>CLAIM</span>
-                    </button>
+                    {isApprovedToSpendNFT ? (
+                        <button
+                            onClick={executeMCall}
+                            disabled={callPending}
+                            className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end"
+                        >
+                            <Image alt="check icon" src={CheckIcon} />
+                            <span>CLAIM</span>
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() =>
+                                approveToSpendNFT(
+                                    __MULTICALL__[chainId],
+                                    Number(data.lockId),
+                                )
+                            }
+                            disabled={approvalPending}
+                            className="flex cursor-pointer items-center gap-2 text-btn-primary lg:justify-end"
+                        >
+                            <Image alt="check icon" src={CheckIcon} />
+                            <span>ALLOW LOCK {data.lockId}</span>
+                        </button>
+                    )}
                 </div>
             </div>
 
