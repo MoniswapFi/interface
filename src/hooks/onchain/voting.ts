@@ -70,6 +70,14 @@ export function useVoterCore() {
             functionName: "length",
         });
 
+    const useLockVoteWeightForPool = (tokenId: number, pool: string) =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "votes",
+            args: [BigInt(tokenId), pool as `0x${string}`],
+        });
+
     const useVotingExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
@@ -156,5 +164,6 @@ export function useVoterCore() {
         useTotalWeight,
         useEpochVoteEnd,
         useIncentivizablePools,
+        useLockVoteWeightForPool,
     };
 }
