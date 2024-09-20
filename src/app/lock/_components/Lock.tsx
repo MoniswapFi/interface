@@ -1,13 +1,14 @@
 import { TransactionInfoModal } from "@/components/Modal";
 import type { Lock } from "@/graphclient";
 import { useGetLockMetadata } from "@/hooks/api/tokens";
+import { useTimeInMotion } from "@/hooks/misc";
 import { useEscrowCore } from "@/hooks/onchain/escrow";
 import { useVoterCore } from "@/hooks/onchain/voting";
+import { toSF } from "@/utils/format";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, useState } from "react";
-import Moment from "react-moment";
 import { formatUnits } from "viem";
 import { useWatchBlocks } from "wagmi";
 
@@ -51,6 +52,8 @@ export const LockItem: FC<LockProps> = ({ data }) => {
     } = useLocked(Number(data.tokenId));
     const { data: weight = BigInt(0), refetch: refetchNFTBalance } =
         useBalanceOfNFT(Number(data.tokenId));
+
+    const timeInMotion = useTimeInMotion();
 
     useWatchBlocks({
         onBlock: async () => {
@@ -160,12 +163,11 @@ export const LockItem: FC<LockProps> = ({ data }) => {
                 <p className="text-textgray">Unlock Date</p>
                 <p>
                     locked for{" "}
-                    <Moment
-                        diff={Date.now()}
-                        date={Number(data.lockTime) * 1000}
-                        unit="years"
-                        decimal
-                    />{" "}
+                    {toSF(
+                        (Number(data.lockTime) -
+                            Math.floor(timeInMotion / 1000)) /
+                            31536000,
+                    )}{" "}
                     years
                 </p>
             </div>

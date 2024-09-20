@@ -40,6 +40,36 @@ export function useVoterCore() {
             args: [poolId as `0x${string}`],
         });
 
+    const useGaugeClaimable = (gaugeId: string) =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "claimable",
+            args: [gaugeId as `0x${string}`],
+        });
+
+    const useTotalWeight = () =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "totalWeight",
+        });
+
+    const useEpochVoteEnd = (blockNumber: number) =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "epochVoteEnd",
+            args: [BigInt(blockNumber)],
+        });
+
+    const useIncentivizablePools = () =>
+        useReadContract({
+            abi: voterAbi,
+            address: voterAddress as `0x${string}`,
+            functionName: "length",
+        });
+
     const useVotingExecutions = (onSettled?: () => any) => {
         const {
             writeContract,
@@ -122,5 +152,9 @@ export function useVoterCore() {
         useGetGaugeBribe,
         useVotingExecutions,
         useGetPoolWeight,
+        useGaugeClaimable,
+        useTotalWeight,
+        useEpochVoteEnd,
+        useIncentivizablePools,
     };
 }
