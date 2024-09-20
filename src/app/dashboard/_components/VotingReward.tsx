@@ -59,6 +59,7 @@ export const FeeOrIncentiveComponent: FC<FeeOrIncentiveProps> = ({
                     alt="icon"
                     width={30}
                     height={30}
+                    className="rounded-full"
                 />
                 {Number(
                     formatUnits(earned, token?.decimals ?? 18),
