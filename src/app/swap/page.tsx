@@ -109,6 +109,9 @@ export default function Page() {
     const slippage = useSelector(
         (state: RootState) => state.wallet.slippageTolerance,
     );
+    const maxSteps = useSelector(
+        (state: RootState) => state.wallet.swapRoutingSteps,
+    );
     const { useBestQuery, useFindBestPath, useSwap } = useAggregatorRouter();
     const {
         data: bestQueryData,
@@ -133,6 +136,7 @@ export default function Page() {
         ),
         address0 as any,
         address1 as any,
+        maxSteps,
     );
     const {
         executeSwap,

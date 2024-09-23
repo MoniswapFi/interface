@@ -2,6 +2,7 @@ import { RootState } from "@/store";
 import {
     changeExecutionDeadlineInMinutes,
     changeSlippageTolerance,
+    changeSwapRoutingSteps,
 } from "@/store/slices/walletSettings";
 import {
     cn,
@@ -22,11 +23,11 @@ type ModalProps = {
 export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
     const dispatch = useDispatch();
 
-    const { slippageTolerance, executionDeadlineInMinutes } = useSelector(
-        (state: RootState) => state.wallet,
-    );
+    const { slippageTolerance, executionDeadlineInMinutes, swapRoutingSteps } =
+        useSelector((state: RootState) => state.wallet);
     const slippageToleranceOptions = [0.5, 1, 5];
     const executionDeadlineOptions = [1, 5, 10, 30];
+    const routeStepsOptions: [1, 2, 3, 4] = [1, 2, 3, 4];
 
     const confirmChange = () => {
         // TODO: init store and save changes
@@ -108,7 +109,6 @@ export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <p className=""></p>
 
                                 <div className="space-y-7">
                                     <div>Transaction Deadline</div>
@@ -135,6 +135,37 @@ export const SettingsModal: FC<ModalProps> = ({ isOpen, close }) => {
                                                     }
                                                 >
                                                     {value} MIN
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-7">
+                                    <div>Maximum Routing Steps</div>
+
+                                    <div className="grid grid-cols-4 text-textgray">
+                                        {routeStepsOptions.map(
+                                            (value, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={cn(
+                                                        "flex cursor-pointer justify-center bg-brightBlack py-7 hover:border hover:border-btn-primary/40",
+                                                        {
+                                                            "border border-btn-primary bg-gradient-to-b from-btn-primary/10 to-arrow-yellow/10 text-white":
+                                                                value ===
+                                                                swapRoutingSteps,
+                                                        },
+                                                    )}
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            changeSwapRoutingSteps(
+                                                                value,
+                                                            ),
+                                                        )
+                                                    }
+                                                >
+                                                    {value}
                                                 </div>
                                             ),
                                         )}
