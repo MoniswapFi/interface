@@ -9,7 +9,8 @@
         "lint": "next lint",
         "format": "prettier --write .",
         "prepare": "husky install",
-        "graph-build": "graphclient build && cpx \"./.graphclient/**/*\" ./src/graphclient --clean && rm -rf .graphclient"
+        "graph-build": "graphclient build && cpx \"./.graphclient/**/*\" ./src/graphclient --clean && rm -rf .graphclient",
+        "export": "next export"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.5.2",

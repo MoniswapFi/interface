@@ -4,12 +4,7 @@ import Bear4 from "@/assets/images/bear4.png";
 import Image2 from "@/assets/images/image2.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { Popover } from "@/components/ui/Popover";
-import {
-    FAQ_INCENTIVES,
-    FAQ_TOTAL_REWARD,
-    FAQ_TVL,
-    PoolTypes,
-} from "@/config/constants";
+import { FAQ_TOTAL_REWARD, FAQ_TVL, PoolTypes } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { useAllPools } from "@/hooks/graphql/core";
 import { useVoterCore } from "@/hooks/onchain/voting";
@@ -190,8 +185,8 @@ export default function Page() {
                         {"Fees"}
                     </div>
                     <div className="hidden w-[150px] text-right text-textlightgray lg:block">
-                        {FAQ_INCENTIVES.title}
-                        <Popover content={`${FAQ_INCENTIVES.description}`} />
+                        {"Your Deposits"}
+                        <Popover content="How much you have deposited into the pool." />
                     </div>
                     <div className="hidden w-[150px] text-right text-textlightgray lg:block">
                         {FAQ_TOTAL_REWARD.title}
