@@ -27,7 +27,7 @@ type PoolProps = {
 };
 
 export const Pool: FC<PoolProps> = ({ data, tokenlist }) => {
-    const { useGetPoolGauge } = useVoterCore();
+    const { useGetPoolGauge, useGaugeClaimable } = useVoterCore();
 
     const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
         useGetPoolGauge(data.id);
@@ -35,6 +35,8 @@ export const Pool: FC<PoolProps> = ({ data, tokenlist }) => {
     const { useRewardRate, useBalanceOf } = useGaugeReadables(gaugeId);
     const { data: rewardRate = BigInt(0), refetch: refetchRewardRate } =
         useRewardRate();
+    const { data: gaugeClaimable = BigInt(0), refetch: refetchGaugeClaimable } =
+        useGaugeClaimable(gaugeId);
 
     const { useStableFee, useVolatileFee } = useProtocolCore();
     const { data: stableFee } = useStableFee();
@@ -112,6 +114,7 @@ export const Pool: FC<PoolProps> = ({ data, tokenlist }) => {
             await refetchBalanceOf();
             await refetchGaugeId();
             await refetchRewardRate();
+            await refetchGaugeClaimable();
         },
     });
     return (
@@ -157,7 +160,7 @@ export const Pool: FC<PoolProps> = ({ data, tokenlist }) => {
             </div>
             <div className="flex justify-between pb-5 lg:block lg:w-[150px] lg:pb-0 lg:text-right">
                 <span className="text-textgray lg:hidden">
-                    {"APR"} <Popover content="Popover content here." />
+                    {"Fees"} <Popover content="Popover content here." />
                 </span>
                 <span>{Number(rewardRate)}%</span>
             </div>
@@ -179,18 +182,10 @@ export const Pool: FC<PoolProps> = ({ data, tokenlist }) => {
             </div>
             <div className="flex justify-between pb-5 lg:block lg:w-[150px] lg:pb-0 lg:text-right">
                 <span className="text-textgray lg:hidden">
-                    {"Staked"} <Popover content="Popover content here." />
+                    {"Total Reward"} <Popover content="Popover content here." />
                 </span>
                 <div className="flex flex-col gap-3 text-right">
-                    <span>
-                        $
-                        {toSF(
-                            Number(data.token0.derivedUSD) *
-                                token0AmountInGauge +
-                                Number(data.token1.derivedUSD) *
-                                    token1AmountInGauge,
-                        )}
-                    </span>
+                    <span>{toSF(formatUnits(gaugeClaimable, 18))} MONI</span>
                 </div>
             </div>
             <div className="flex w-full flex-col gap-2 lg:block lg:w-[70px] lg:text-right">
