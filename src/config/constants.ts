@@ -80,6 +80,12 @@ export const __MULTICALL__ = {
 export const __VOTING_ESCROW__ = {
     [__CHAIN_IDS__.bera_testnet]: "0xd11163343Ca6a4e5feADdbB979567A7853e6F20a",
 };
+export const __PRICE_ORACLE__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0x6D2015Dce2d839c23806278E4DA30500766AC44D",
+};
+export const __DEDICATED_PRICE_SOURCE__ = {
+    [__CHAIN_IDS__.bera_testnet]: "0xd25758eD9D4555ceb2A3c27374aE08Cd470b6Fe3",
+};
 export const __WRAPPED_ETHER__ = {
     [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
 };

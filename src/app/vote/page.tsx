@@ -1,47 +1,76 @@
 "use client";
 
+import { voterAbi } from "@/assets/abis";
 import Bear4 from "@/assets/images/bear4.png";
 import Image2 from "@/assets/images/image2.svg";
 import Rectangle from "@/assets/images/Rectangle_t.svg";
 import { Popover } from "@/components/ui/Popover";
-import { FAQ_TOTAL_REWARD, FAQ_TVL, PoolTypes } from "@/config/constants";
+import {
+    FAQ_TOTAL_REWARD,
+    FAQ_TVL,
+    PoolTypes,
+    __DEDICATED_PRICE_SOURCE__,
+    __MONI__,
+    __VOTER__,
+} from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
 import { useAllPools } from "@/hooks/graphql/core";
+import { useGetAverageValueInUSDByPriceSource } from "@/hooks/onchain/oracle";
 import { useVoterCore } from "@/hooks/onchain/voting";
+import { callToBytes, resultFromBytes } from "@/utils/bytes";
+import { toSF } from "@/utils/format";
 import { Divider, Select, SelectItem } from "@nextui-org/react";
+import { call } from "@wagmi/core";
 import Image from "next/image";
-import { useMemo } from "react";
-import { formatUnits } from "viem";
-import { useBlockNumber, useWatchBlocks } from "wagmi";
+import { useEffect, useMemo, useState } from "react";
+import { formatUnits, zeroAddress } from "viem";
+import {
+    useAccount,
+    useBlock,
+    useChainId,
+    useConfig,
+    useWatchBlocks,
+} from "wagmi";
 import { Pool } from "./_components/Pool";
 
 export default function Page() {
     const useAllPoolsQuery = useAllPools();
     const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
     const { data: tokenlist = [] } = useGetTokenLists({});
-    const { useTotalWeight, useEpochVoteEnd, useIncentivizablePools } =
+    const { useTotalWeight, useEpochNext, useIncentivizablePools } =
         useVoterCore();
     const { data: totalWeight = BigInt(0) } = useTotalWeight();
-    const { data: currentBlock = BigInt(0), refetch: refetchCurrentBlock } =
-        useBlockNumber();
-    const { data: voteEnd = BigInt(0), refetch: refetchEpochVoteEnd } =
-        useEpochVoteEnd(Number(currentBlock));
-    const voteEndDate = useMemo(
-        () =>
-            new Date(
-                Date.now() +
-                    (Number(voteEnd) +
-                        (Number(voteEnd) % 604800) +
-                        604800 -
-                        3600) *
-                        1000,
-            ),
-        [voteEnd],
+    const { data: currentBlock, refetch: refetchCurrentBlock } = useBlock();
+    const { data: voteNext = BigInt(0), refetch: refetchEpochVoteEnd } =
+        useEpochNext(Number(currentBlock?.timestamp ?? 0));
+    const voteNextDate = useMemo(
+        () => new Date(Number(voteNext) * 1000),
+        [voteNext],
     );
     const {
         data: incentivizablePools = BigInt(0),
         refetch: refetchIncentivizablePools,
     } = useIncentivizablePools();
+
+    const config = useConfig();
+    const { address } = useAccount();
+    const chainId = useChainId();
+    const voterAddress = useMemo(() => __VOTER__[chainId], [chainId]);
+
+    const [totalRewards, setTotalRewards] = useState(0);
+    const moni = useMemo(() => __MONI__[chainId], [chainId]);
+    const priceSource = useMemo(
+        () => __DEDICATED_PRICE_SOURCE__[chainId],
+        [chainId],
+    );
+    const {
+        data: usdValue = [BigInt(0), BigInt(0)],
+        refetch: refetchUSDValue,
+    } = useGetAverageValueInUSDByPriceSource(
+        priceSource,
+        moni,
+        BigInt(totalRewards),
+    );
 
     useWatchBlocks({
         onBlock: async () => {
@@ -49,8 +78,60 @@ export default function Page() {
             await refetchCurrentBlock();
             await refetchEpochVoteEnd();
             await refetchIncentivizablePools();
+            await refetchUSDValue();
         },
     });
+
+    useEffect(() => {
+        (async () => {
+            const length = Number(incentivizablePools);
+            let totalClaimable: number = Number(0);
+
+            for (let i = 0; i < length; i++) {
+                const { data: resBytes0 = zeroAddress } = await call(config, {
+                    data: callToBytes(voterAbi, "pools", [BigInt(i)]),
+                    to: voterAddress as `0x${string}`,
+                    account: address,
+                });
+
+                const result0 = resultFromBytes<string>(
+                    voterAbi,
+                    "pools",
+                    resBytes0,
+                );
+
+                const { data: resBytes1 = zeroAddress } = await call(config, {
+                    data: callToBytes(voterAbi, "gauges", [result0]),
+                    to: voterAddress as `0x${string}`,
+                    account: address,
+                });
+
+                const result1 = resultFromBytes<string>(
+                    voterAbi,
+                    "gauges",
+                    resBytes1,
+                );
+
+                const { data: resBytes2 = zeroAddress } = await call(config, {
+                    data: callToBytes(voterAbi, "claimable", [result1]),
+                    to: voterAddress as `0x${string}`,
+                    account: address,
+                });
+
+                console.log("Gauge ", result1);
+
+                const result2 = resultFromBytes<bigint>(
+                    voterAbi,
+                    "claimable",
+                    resBytes2,
+                );
+
+                totalClaimable += Number(result2);
+            }
+            setTotalRewards(totalClaimable);
+        })();
+    }, [incentivizablePools, config, voterAddress, address]);
+
     return (
         <div className="relative overflow-hidden p-5 md:p-20">
             <Image
@@ -117,11 +198,11 @@ export default function Page() {
                     />
 
                     <div className="flex flex-col gap-3">
-                        <p className="text-textgray">Total Rewards</p>
-                        <p>Data currently unavailable</p>
+                        <p className="text-textgray">Total Claimable Rewards</p>
+                        <p>${toSF(formatUnits(usdValue[0], 18))}</p>
                     </div>
 
-                    <Divider
+                    {/* <Divider
                         orientation="vertical"
                         className="h-[1px] bg-textlightgray max-md:w-full md:h-auto"
                     />
@@ -129,7 +210,7 @@ export default function Page() {
                     <div className="flex flex-col gap-3">
                         <p className="text-textgray">New Emissions</p>
                         <p>Data currently unavailable</p>
-                    </div>
+                    </div> */}
 
                     <Divider
                         orientation="vertical"
@@ -137,8 +218,8 @@ export default function Page() {
                     />
 
                     <div className="flex flex-col gap-3 md:text-right">
-                        <p className="text-textgray">Current epoch ends on</p>
-                        <p>{voteEndDate.toUTCString()}</p>
+                        <p className="text-textgray">Next epoch begins on</p>
+                        <p>{voteNextDate.toUTCString()}</p>
                     </div>
                 </div>
             </div>
