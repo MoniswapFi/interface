@@ -1,23 +1,22 @@
 "use client";
 
-import { NextUIProvider } from "@nextui-org/react";
-import { structuralSharing } from "@wagmi/core/query";
-import { FC, PropsWithChildren, useState } from "react";
-import { AsideBar } from "../components/Aside";
-import { Footer } from "../components/Footer";
-import { Header } from "../components/Header";
-
 import { persistor, store } from "@/store";
+import { NextUIProvider } from "@nextui-org/react";
 import {
     darkTheme,
     getDefaultConfig,
     RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { hashFn } from "@wagmi/core/query";
+import { FC, PropsWithChildren, useState } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { WagmiProvider } from "wagmi";
 import { berachainTestnetbArtio } from "wagmi/chains";
+import { AsideBar } from "../components/Aside";
+import { Footer } from "../components/Footer";
+import { Header } from "../components/Header";
 
 const web3Config = getDefaultConfig({
     appName: "MoniswapFi",
@@ -29,7 +28,7 @@ const web3Config = getDefaultConfig({
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            structuralSharing,
+            queryKeyHashFn: hashFn,
         },
     },
 });
