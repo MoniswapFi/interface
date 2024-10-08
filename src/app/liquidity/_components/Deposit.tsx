@@ -332,6 +332,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
                                             alt={token0.symbol}
                                             width={24}
                                             height={24}
+                                            className="rounded-full"
                                         />
                                         <span>{token0.symbol}</span>
                                     </div>
@@ -388,6 +389,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
                                             alt={token1.symbol}
                                             width={24}
                                             height={24}
+                                            className="rounded-full"
                                         />
                                         <span>{token1.symbol}</span>
                                     </div>
