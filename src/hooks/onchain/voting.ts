@@ -55,11 +55,11 @@ export function useVoterCore() {
             functionName: "totalWeight",
         });
 
-    const useEpochVoteEnd = (blockNumber: number) =>
+    const useEpochNext = (blockNumber: number) =>
         useReadContract({
             abi: voterAbi,
             address: voterAddress as `0x${string}`,
-            functionName: "epochVoteEnd",
+            functionName: "epochNext",
             args: [BigInt(blockNumber)],
         });
 
@@ -162,7 +162,7 @@ export function useVoterCore() {
         useGetPoolWeight,
         useGaugeClaimable,
         useTotalWeight,
-        useEpochVoteEnd,
+        useEpochNext,
         useIncentivizablePools,
         useLockVoteWeightForPool,
     };
