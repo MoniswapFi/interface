@@ -1,6 +1,7 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/react";
+import { structuralSharing } from "@wagmi/core/query";
 import { FC, PropsWithChildren, useState } from "react";
 import { AsideBar } from "../components/Aside";
 import { Footer } from "../components/Footer";
@@ -25,7 +26,13 @@ const web3Config = getDefaultConfig({
     ssr: true,
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            structuralSharing,
+        },
+    },
+});
 
 type Props = PropsWithChildren;
 
