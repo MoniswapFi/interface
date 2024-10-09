@@ -127,6 +127,17 @@ const pointsArray = [
         href: "https://x.com/beracana",
     },
     {
+        title: "Follow CappyBera on X and turn on notification",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Follow CappyBera on X (Twitter) and turn on your notification.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update.",
+        ],
+        button: "Follow",
+        key: "cappybera_x",
+        href: "https://x.com/Cappy_BeraNFTs",
+    },
+    {
         title: "Join Moniswap Discord",
         points: 500,
         content: [
@@ -202,6 +213,17 @@ const pointsArray = [
         button: "Join Discord",
         key: "beracana_discord",
         href: "https://discord.gg/QGQxZJWHuE",
+    },
+    {
+        title: "Join CappyBera Discord",
+        points: 500,
+        content: [
+            "To pass this challenge, you must Join CappyBera's Discord server and engage with the community.",
+            "Please note, we sync this challenge every hour so please be patient and your progress will automatically update. ",
+        ],
+        button: "Join Discord",
+        key: "cappybera_discord",
+        href: "https://discord.gg/VvmTrdrFRz",
     },
     {
         title: "Join Cappo Telegram group",
