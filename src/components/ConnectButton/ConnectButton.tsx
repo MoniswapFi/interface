@@ -38,9 +38,9 @@ export const ConnectButton: FC<Props> = ({ className }) => {
 
     const { mutateAsync: createWallet } = useCreateWallet();
 
-    const creatWallet = async () => {
+    const runWalletCreation = async () => {
         if (address) {
-            const referral = await searchParams.get("referral");
+            const referral = searchParams.get("referral");
             createWallet({
                 address: address as Address,
                 referral: referral ?? "",
@@ -49,7 +49,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
     };
 
     useEffect(() => {
-        creatWallet();
+        runWalletCreation();
     }, [address]);
 
     return (
@@ -66,7 +66,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
             ) : (
                 <Button
                     variant="primary"
-                    onPress={openConnectModal}
+                    onClick={openConnectModal}
                     className={className}
                 >
                     Connect
