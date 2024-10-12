@@ -311,7 +311,7 @@ export default function Page() {
                             </div>
                         </div>
                         <p className="text-right text-swapBox">
-                            ${toSF(amountInUSDValue[0])}
+                            ${toSF(formatUnits(amountInUSDValue[0], 18))}
                         </p>
                     </div>
 
@@ -369,7 +369,7 @@ export default function Page() {
                             </div>
                         </div>
                         <p className="text-right text-swapBox">
-                            ${toSF(amountOutUSDValue[0])}
+                            ${toSF(formatUnits(amountOutUSDValue[0], 18))}
                         </p>
                     </div>
                 </div>
