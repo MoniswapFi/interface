@@ -16,6 +16,7 @@ import {
     __WRAPPED_ETHER__,
 } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
+import { useGetAverageValueInUSD } from "@/hooks/onchain/oracle";
 import { useAggregatorRouter } from "@/hooks/onchain/swap";
 import {
     useERC20Allowance,
@@ -24,13 +25,13 @@ import {
 } from "@/hooks/onchain/wallet";
 import { RootState } from "@/store";
 import { TokenType } from "@/types";
-import { formatNumber } from "@/utils/format";
+import { toSF } from "@/utils/format";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ArrowRightLeft, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits, parseUnits, zeroAddress } from "viem";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
 
 export default function Page() {
@@ -126,8 +127,12 @@ export default function Page() {
     );
     const amountOutFormatted = useMemo(
         () =>
-            Number(bestQueryData?.amountOut ?? 0) /
-            Math.pow(10, selectedTokens[1]?.decimals ?? 18),
+            Number(
+                formatUnits(
+                    bestQueryData?.amountOut ?? BigInt(0),
+                    selectedTokens[1]?.decimals ?? 18,
+                ),
+            ),
         [bestQueryData?.amountOut, selectedTokens[1]?.decimals],
     );
     const { data: bestPathData, refetch: refetchBestPath } = useFindBestPath(
@@ -185,6 +190,24 @@ export default function Page() {
         ),
     );
 
+    const {
+        data: amountInUSDValue = [BigInt(0), BigInt(0)],
+        refetch: refetchAmountInUSDValue,
+    } = useGetAverageValueInUSD(
+        address0 ?? zeroAddress,
+        parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
+    );
+    const {
+        data: amountOutUSDValue = [BigInt(0), BigInt(0)],
+        refetch: refetchAmountOutUSDValue,
+    } = useGetAverageValueInUSD(
+        address1 ?? zeroAddress,
+        parseUnits(
+            amountOutFormatted.toString(),
+            selectedTokens[1]?.decimals ?? 18,
+        ),
+    );
+
     useEffect(() => {
         if (!hasLoadedDefaultTokens) {
             if (tokenLists.length) {
@@ -213,6 +236,9 @@ export default function Page() {
 
     useWatchBlocks({
         onBlock: async () => {
+            await refetchAmountInUSDValue();
+            await refetchAmountOutUSDValue();
+
             if (amount > 0) {
                 await refetchBestQuery();
                 await refetchBestPath();
@@ -285,7 +311,7 @@ export default function Page() {
                             </div>
                         </div>
                         <p className="text-right text-swapBox">
-                            ${formatNumber(amount)}
+                            ${toSF(amountInUSDValue[0])}
                         </p>
                     </div>
 
@@ -343,7 +369,7 @@ export default function Page() {
                             </div>
                         </div>
                         <p className="text-right text-swapBox">
-                            ${formatNumber(amountOutFormatted)}
+                            ${toSF(amountOutUSDValue[0])}
                         </p>
                     </div>
                 </div>
