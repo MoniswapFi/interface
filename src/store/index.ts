@@ -5,25 +5,25 @@ import votingReducer from "./slices/voting";
 import walletSettingsReducer from "./slices/walletSettings";
 
 const persistConfig = {
-    key: "root",
-    storage,
+  key: "root",
+  storage,
 };
 
 const persistedWalletSettingsReducer = persistReducer(
-    persistConfig,
-    walletSettingsReducer,
+  persistConfig,
+  walletSettingsReducer,
 );
 
 export const store = configureStore({
-    devTools: process.env.NODE_ENV !== "production",
-    reducer: {
-        wallet: persistedWalletSettingsReducer,
-        voting: votingReducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }),
+  devTools: process.env.NODE_ENV !== "production",
+  reducer: {
+    wallet: persistedWalletSettingsReducer,
+    voting: votingReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const persistor = persistStore(store);

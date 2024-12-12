@@ -1,20 +1,20 @@
 import {
-    DEFAULT_TITLE,
-    LIQUIDITY_DESCRIPTION,
-    LIQUIDITY_TITLE,
-    TITLE_BREAKER,
+  DEFAULT_TITLE,
+  LIQUIDITY_DESCRIPTION,
+  LIQUIDITY_TITLE,
+  TITLE_BREAKER,
 } from "@/config/seo";
 import * as React from "react";
 
 export const metadata = {
-    title: `${LIQUIDITY_TITLE} ${TITLE_BREAKER} ${DEFAULT_TITLE}`,
-    description: `${LIQUIDITY_DESCRIPTION}`,
+  title: `${LIQUIDITY_TITLE} ${TITLE_BREAKER} ${DEFAULT_TITLE}`,
+  description: `${LIQUIDITY_DESCRIPTION}`,
 };
 
 export default function ComponentsLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return <>{children}</>;
+  return <>{children}</>;
 }

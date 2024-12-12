@@ -1,35 +1,35 @@
 query IndexSinglePair($id: ID!) {
-    pair(id: $id) {
-        id
-        stable
-        volumeUSD
-        reserveUSD
-        reserve0
-        reserve1
-        volumeToken0
-        volumeToken1
-        untrackedVolumeUSD
-        feesUSD
-        totalAmount0Claimable
-        totalAmount1Claimable
-        token0 {
-            id
-            symbol
-            name
-            decimals
-            totalSupply
-        }
-        token1 {
-            id
-            symbol
-            name
-            decimals
-            totalSupply
-        }
-        pairHourData {
-            id
-            hourlyVolumeUSD
-            hourStartUnix
-        }
+  pair(id: $id) {
+    id
+    stable
+    volumeUSD
+    reserveUSD
+    reserve0
+    reserve1
+    volumeToken0
+    volumeToken1
+    untrackedVolumeUSD
+    feesUSD
+    totalAmount0Claimable
+    totalAmount1Claimable
+    token0 {
+      id
+      symbol
+      name
+      decimals
+      totalSupply
     }
+    token1 {
+      id
+      symbol
+      name
+      decimals
+      totalSupply
+    }
+    pairHourData {
+      id
+      hourlyVolumeUSD
+      hourStartUnix
+    }
+  }
 }
