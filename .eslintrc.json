@@ -1,15 +1,15 @@
 {
-    "extends": [
-        "next/core-web-vitals",
-        "plugin:@tanstack/eslint-plugin-query/recommended"
-    ],
-    "plugins": ["deprecation"],
-    "rules": {
-        "@next/next/no-sync-scripts": "off",
-        "deprecation/deprecation": "warn",
-        "react-hooks/rules-of-hooks": "off"
-    },
-    "parserOptions": {
-        "project": "./tsconfig.json"
-    }
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
+  ],
+  "plugins": ["deprecation"],
+  "rules": {
+    "@next/next/no-sync-scripts": "off",
+    "deprecation/deprecation": "warn",
+    "react-hooks/rules-of-hooks": "off"
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
 }

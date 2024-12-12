@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 
 export function useTimeInMotion() {
-    const [currentTime, setCurrentTime] = useState(Date.now());
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime(Date.now());
-        }, 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
 
-        return () => {
-            clearInterval(interval);
-        };
-    }, []);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
-    return currentTime;
+  return currentTime;
 }

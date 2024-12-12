@@ -1,20 +1,20 @@
 import {
-    DEFAULT_TITLE,
-    TITLE_BREAKER,
-    VOTE_DESCRIPTION,
-    VOTE_TITLE,
+  DEFAULT_TITLE,
+  TITLE_BREAKER,
+  VOTE_DESCRIPTION,
+  VOTE_TITLE,
 } from "@/config/seo";
 import * as React from "react";
 
 export const metadata = {
-    title: `${VOTE_TITLE} ${TITLE_BREAKER} ${DEFAULT_TITLE}`,
-    description: `${VOTE_DESCRIPTION}`,
+  title: `${VOTE_TITLE} ${TITLE_BREAKER} ${DEFAULT_TITLE}`,
+  description: `${VOTE_DESCRIPTION}`,
 };
 
 export default function ComponentsLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return <>{children}</>;
+  return <>{children}</>;
 }

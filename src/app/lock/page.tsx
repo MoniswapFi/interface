@@ -13,96 +13,95 @@ import { useWatchBlocks } from "wagmi";
 import { LockItem } from "./_components/Lock";
 
 export default function Page() {
-    const useLocksQuery = useLocks();
-    const { data: locks = [], refetch: refetchLocks } = useLocksQuery();
+  const useLocksQuery = useLocks();
+  const { data: locks = [], refetch: refetchLocks } = useLocksQuery();
 
-    useWatchBlocks({
-        onBlock: async () => {
-            await refetchLocks();
-        },
-    });
+  useWatchBlocks({
+    onBlock: async () => {
+      await refetchLocks();
+    },
+  });
 
-    return (
-        <div className="relative overflow-hidden p-5 md:p-20">
-            <Image
-                src={Rectangle}
-                alt="image"
-                className="absolute -right-[100px] -top-[100px] w-[250px] lg:w-[200px]"
-            />
-            <Image
-                src={Image2}
-                alt="image"
-                className="absolute top-0 w-[200px] lg:right-[250px] lg:w-[250px] xl:right-[350px] xl:w-[300px] 2xl:right-[400px]"
-            />
-            <Image
-                src={Bear4}
-                alt="bear"
-                className="relative right-0 z-[1] m-auto mt-20 lg:absolute lg:right-[100px] lg:top-10 lg:m-0 xl:right-[200px]"
-            />
-            <div className="relative space-y-10 pt-10">
-                <div className="flex max-w-[520px] flex-col gap-5">
-                    <div className="flex flex-col gap-3">
-                        <h2 className="text-3xl md:text-[50px]">
-                            Create{" "}
-                            <span className="text-gradient from-btn-primary to-gold">
-                                Lock
-                            </span>{" "}
-                            And
-                        </h2>
+  return (
+    <div className="relative overflow-hidden p-5 md:p-20">
+      <Image
+        src={Rectangle}
+        alt="image"
+        className="absolute -right-[100px] -top-[100px] w-[250px] lg:w-[200px]"
+      />
+      <Image
+        src={Image2}
+        alt="image"
+        className="absolute top-0 w-[200px] lg:right-[250px] lg:w-[250px] xl:right-[350px] xl:w-[300px] 2xl:right-[400px]"
+      />
+      <Image
+        src={Bear4}
+        alt="bear"
+        className="relative right-0 z-[1] m-auto mt-20 lg:absolute lg:right-[100px] lg:top-10 lg:m-0 xl:right-[200px]"
+      />
+      <div className="relative space-y-10 pt-10">
+        <div className="flex max-w-[520px] flex-col gap-5">
+          <div className="flex flex-col gap-3">
+            <h2 className="text-3xl md:text-[50px]">
+              Create{" "}
+              <span className="text-gradient from-btn-primary to-gold">
+                Lock
+              </span>{" "}
+              And
+            </h2>
 
-                        <h2 className="text-3xl md:text-[50px]">
-                            Gain Voting{" "}
-                            <span className="text-gradient from-btn-primary to-gold">
-                                Power
-                            </span>
-                        </h2>
-                    </div>
+            <h2 className="text-3xl md:text-[50px]">
+              Gain Voting{" "}
+              <span className="text-gradient from-btn-primary to-gold">
+                Power
+              </span>
+            </h2>
+          </div>
 
-                    <p className="text-sm text-swapBox md:text-[15px]">
-                        Lock MONI into veMONI to earn and govern. Vote with
-                        veMONI to earn incentives and trading fees.
-                    </p>
-                </div>
+          <p className="text-sm text-swapBox md:text-[15px]">
+            Lock MONI into veMONI to earn and govern. Vote with veMONI to earn
+            incentives and trading fees.
+          </p>
+        </div>
 
-                <div className="space-y-5 lg:!mt-20">
-                    <div className="flex items-center justify-between">
-                        <div>Locks</div>
+        <div className="space-y-5 lg:!mt-20">
+          <div className="flex items-center justify-between">
+            <div>Locks</div>
 
-                        <Link href={"/lock/create"}>
-                            <Button variant="primary" size="sm">
-                                Create Lock
-                            </Button>
-                        </Link>
-                    </div>
+            <Link href={"/lock/create"}>
+              <Button variant="primary" size="sm">
+                Create Lock
+              </Button>
+            </Link>
+          </div>
 
-                    {locks.length > 0 ? (
-                        <div className="flex w-full flex-col items-center justify-start gap-3">
-                            {locks.map((lock) => (
-                                <LockItem data={lock} key={lock.id} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
-                            <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
-                                <FontAwesomeIcon icon={faInfo} size="xs" />
-                            </span>
-                            To receive incentives, and fees, create a lock and
-                            vote with it.
-                        </div>
-                    )}
-                </div>
+          {locks.length > 0 ? (
+            <div className="flex w-full flex-col items-center justify-start gap-3">
+              {locks.map((lock) => (
+                <LockItem data={lock} key={lock.id} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+              <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+                <FontAwesomeIcon icon={faInfo} size="xs" />
+              </span>
+              To receive incentives, and fees, create a lock and vote with it.
+            </div>
+          )}
+        </div>
 
-                <div className="space-y-7">
-                    <div>Relay</div>
+        <div className="space-y-7">
+          <div>Relay</div>
 
-                    <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
-                        <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
-                            <FontAwesomeIcon icon={faInfo} size="xs" />
-                        </span>
-                        Relays are coming soon. Stay surfing.
-                    </div>
+          <div className="flex w-full gap-3 bg-footer px-5 py-3 text-textgray md:items-center">
+            <span className="flex h-[20px] w-[20px] flex-shrink-0 items-center justify-center rounded-full border border-textgray">
+              <FontAwesomeIcon icon={faInfo} size="xs" />
+            </span>
+            Relays are coming soon. Stay surfing.
+          </div>
 
-                    {/* <div className="space-y-5 text-sm">
+          {/* <div className="space-y-5 text-sm">
                         {Array.from({ length: 3 }).map((item, index) => {
                             return (
                                 <div key={index}>
@@ -199,8 +198,8 @@ export default function Page() {
                             );
                         })}
                     </div> */}
-                </div>
-            </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

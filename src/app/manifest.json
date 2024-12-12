@@ -1,28 +1,28 @@
 {
-    "theme_color": "#f59855",
-    "background_color": "#000000",
-    "icons": [
-        {
-            "purpose": "maskable",
-            "sizes": "512x512",
-            "src": "/icon512_maskable.png",
-            "type": "image/png"
-        },
-        {
-            "purpose": "any",
-            "sizes": "512x512",
-            "src": "/icon512_rounded.png",
-            "type": "image/png"
-        }
-    ],
-    "orientation": "any",
-    "display": "standalone",
-    "dir": "auto",
-    "lang": "en-US",
-    "name": "Moniswap",
-    "short_name": "Moniswap",
-    "start_url": "https://bartio.moniswap.xyz",
-    "scope": "/",
-    "description": "Moniswap is a next-generation AMM that combines the best of Curve, Convex and Uniswap, designed to serve as the liquidity hub for the Berachain. Moniswap's flywheel allows protocols to build deep liquidity in a capital-efficient manner by directing $MONI emissions to their pools.",
-    "id": "bartio-moni-app"
+  "theme_color": "#f59855",
+  "background_color": "#000000",
+  "icons": [
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/icon512_maskable.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "/icon512_rounded.png",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "any",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "en-US",
+  "name": "Moniswap",
+  "short_name": "Moniswap",
+  "start_url": "https://bartio.moniswap.xyz",
+  "scope": "/",
+  "description": "Moniswap is a next-generation AMM that combines the best of Curve, Convex and Uniswap, designed to serve as the liquidity hub for the Berachain. Moniswap's flywheel allows protocols to build deep liquidity in a capital-efficient manner by directing $MONI emissions to their pools.",
+  "id": "bartio-moni-app"
 }
