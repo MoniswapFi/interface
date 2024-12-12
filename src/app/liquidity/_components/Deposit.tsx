@@ -13,6 +13,7 @@ import {
 import { useSinglePoolInfo } from "@/hooks/graphql/core";
 import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
 import { useGaugeCore } from "@/hooks/onchain/gauge";
+import { useGetAverageValueInUSD } from "@/hooks/onchain/oracle";
 import { useVoterCore } from "@/hooks/onchain/voting";
 import {
   useERC20Allowance,
@@ -191,15 +192,34 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
   const { data: rewardRate = BigInt(0), refetch: refetchRewardRate } =
     useRewardRate();
 
+  const {
+    data: amount0USDValue = [BigInt(0), BigInt(0)],
+    refetch: refetchAmount0USDValue,
+  } = useGetAverageValueInUSD(
+    firstAddress ?? zeroAddress,
+    parseUnits(amount0.toString(), token0.decimals),
+  );
+  const {
+    data: amount1USDValue = [BigInt(0), BigInt(0)],
+    refetch: refetchAmount1USDValue,
+  } = useGetAverageValueInUSD(
+    secondAddress ?? zeroAddress,
+    parseUnits(amount1.toString(), token1.decimals),
+  );
+
   useWatchBlocks({
     onBlock: async () => {
-      await refetchAllowance0();
-      await refetchAllowance1();
-      await refetchPoolSupply();
-      await refetchPair();
-      await refetchQuote();
-      await refetchGaugeId();
-      await refetchRewardRate();
+      await Promise.all([
+        refetchAmount0USDValue(),
+        refetchAmount1USDValue(),
+        refetchAllowance0(),
+        refetchAllowance1(),
+        refetchPoolSupply(),
+        refetchPair(),
+        refetchQuote(),
+        refetchGaugeId(),
+        refetchRewardRate(),
+      ]);
     },
   });
 
@@ -341,7 +361,9 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
                   />
                 </div>
               </div>
-              <p className="text-right text-swapBox">$23.45</p>
+              <p className="text-right text-swapBox">
+                ${toSF(formatUnits(amount0USDValue[0], 18))}
+              </p>
             </div>
 
             <div className="relative">
@@ -396,7 +418,9 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
                   />
                 </div>
               </div>
-              <p className="text-right text-swapBox">$23.45</p>
+              <p className="text-right text-swapBox">
+                ${toSF(formatUnits(amount1USDValue[0], 18))}
+              </p>
             </div>
           </div>
 

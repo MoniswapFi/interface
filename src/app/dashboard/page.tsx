@@ -21,8 +21,7 @@ export default function Page() {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchAccountPositions();
-      await refetchVotePositions();
+      await Promise.all([refetchAccountPositions(), refetchVotePositions()]);
     },
   });
 

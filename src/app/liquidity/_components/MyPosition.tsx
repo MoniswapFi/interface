@@ -91,10 +91,12 @@ const Position: FC<SinglePositionProps> = ({ data }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchPoolSupply();
-      await refetchGaugeId();
-      await refetchBalanceOf();
-      await refetchRate();
+      await Promise.all([
+        refetchPoolSupply(),
+        refetchGaugeId(),
+        refetchBalanceOf(),
+        refetchRate(),
+      ]);
     },
   });
 

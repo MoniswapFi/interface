@@ -57,8 +57,7 @@ export const LockItem: FC<LockProps> = ({ data }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchLocked();
-      await refetchNFTBalance();
+      await Promise.all([refetchLocked(), refetchNFTBalance()]);
     },
   });
 

@@ -226,13 +226,15 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchLocked();
-      await refetchGaugeId();
-      await refetchFeesId();
-      await refetchBribesId();
-      await refetchFeesRewardsLength();
-      await refetchBribesRewardsLength();
-      await refetchApprovedOrOwner();
+      await Promise.all([
+        refetchLocked(),
+        refetchGaugeId(),
+        refetchFeesId(),
+        refetchBribesId(),
+        refetchFeesRewardsLength(),
+        refetchBribesRewardsLength(),
+        refetchApprovedOrOwner(),
+      ]);
     },
   });
 

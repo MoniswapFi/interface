@@ -9,10 +9,11 @@ import {
 } from "@/hooks/onchain/core";
 import { useGaugeCore } from "@/hooks/onchain/gauge";
 import { useVoterCore } from "@/hooks/onchain/voting";
+import { toSF } from "@/utils/format";
 import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import { FC, useMemo, useState } from "react";
-import { formatUnits, zeroAddress } from "viem";
+import { formatEther, formatUnits, zeroAddress } from "viem";
 import { useWatchBlocks } from "wagmi";
 
 type LPRewardProps = {
@@ -80,11 +81,13 @@ export const LiquidityReward: FC<LPRewardProps> = ({ data }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchClaimable0();
-      await refetchClaimable1();
-      await refetchGaugeId();
-      await refetchEarned();
-      await refetchRewardRate();
+      await Promise.all([
+        refetchClaimable0(),
+        refetchClaimable1(),
+        refetchGaugeId(),
+        refetchEarned(),
+        refetchRewardRate(),
+      ]);
     },
   });
 
@@ -122,7 +125,7 @@ export const LiquidityReward: FC<LPRewardProps> = ({ data }) => {
 
         <div className="lg:text-right">
           <p className="text-textgray">Emissions Rate</p>
-          <p>{Number(rewardRate)}%</p>
+          <p>{toSF(formatEther(rewardRate))}%</p>
         </div>
         <Divider className="bg-swapBox lg:hidden" />
 

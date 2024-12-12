@@ -152,12 +152,14 @@ export default function Page() {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchPoolsList();
-      await refetchGaugeId();
-      await refetchRewardRate();
-      await refetchPoolWeight();
-      await refetchBribeId();
-      await refetchAllowance();
+      await Promise.all([
+        refetchPoolsList(),
+        refetchGaugeId(),
+        refetchRewardRate(),
+        refetchPoolWeight(),
+        refetchBribeId(),
+        refetchAllowance(),
+      ]);
     },
   });
 
