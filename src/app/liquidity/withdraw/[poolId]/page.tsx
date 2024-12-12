@@ -17,7 +17,7 @@ import { div } from "@/utils/math";
 import { Divider, Slider } from "@nextui-org/react";
 import Image from "next/image";
 import { FC, useMemo, useState } from "react";
-import { formatUnits, parseUnits, zeroAddress } from "viem";
+import { formatEther, formatUnits, parseUnits, zeroAddress } from "viem";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
 
 type PageProps = {
@@ -176,7 +176,7 @@ const Page: FC<PageProps> = ({ params }) => {
 
             <div className="text-right text-navDefault">
               <p>APR</p>
-              <p>{Number(rewardRate)}%</p>
+              <p>{toSF(formatEther(rewardRate))}%</p>
             </div>
           </div>
 

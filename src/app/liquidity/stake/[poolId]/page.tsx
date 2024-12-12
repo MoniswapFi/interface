@@ -121,11 +121,13 @@ const Page: FC<PageProps> = ({ params }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchGaugeId();
-      await refetchPoolSupply();
-      await refetchPair();
-      await refetchAllowance();
-      await refetchRewardRate();
+      await Promise.all([
+        refetchGaugeId(),
+        refetchPoolSupply(),
+        refetchPair(),
+        refetchAllowance(),
+        refetchRewardRate(),
+      ]);
     },
   });
 

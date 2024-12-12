@@ -208,14 +208,18 @@ export default function Page() {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchAmountInUSDValue();
-      await refetchAmountOutUSDValue();
+      const promises: Promise<any>[] = [];
 
-      if (amount > 0) {
-        await refetchBestQuery();
-        await refetchBestPath();
-        await refetchAllowance();
-      }
+      promises.push(refetchAmountInUSDValue(), refetchAmountOutUSDValue());
+
+      if (amount > 0)
+        promises.push(
+          refetchBestQuery(),
+          refetchBestPath(),
+          refetchAllowance(),
+        );
+
+      await Promise.all(promises);
     },
   });
 

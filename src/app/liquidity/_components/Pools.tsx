@@ -47,8 +47,7 @@ const Pool: FC<PoolProps> = ({ data, tokenlist, stableFee, volatileFee }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchGaugeId();
-      await refetchRewardRate();
+      await Promise.all([refetchGaugeId(), refetchRewardRate()]);
     },
   });
 

@@ -54,9 +54,7 @@ const Page: FC<PageProps> = ({ params }) => {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchLocks();
-      await refetchLocked();
-      await refetchNFTBalance();
+      await Promise.all([refetchLocks(), refetchLocked(), refetchNFTBalance()]);
     },
   });
 

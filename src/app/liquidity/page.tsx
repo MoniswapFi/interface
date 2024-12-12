@@ -53,9 +53,11 @@ export default function Page() {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchPairs();
-      await refetchFactoryInfo();
-      await refetchPositions();
+      await Promise.all([
+        refetchPairs(),
+        refetchFactoryInfo(),
+        refetchPositions(),
+      ]);
     },
   });
 

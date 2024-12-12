@@ -81,8 +81,7 @@ export default function Page() {
 
   useWatchBlocks({
     onBlock: async () => {
-      await refetchStablePool();
-      await refetchVolatilePool();
+      await Promise.all([refetchStablePool(), refetchVolatilePool()]);
     },
   });
 
