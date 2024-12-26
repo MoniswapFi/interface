@@ -12,7 +12,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAppKit } from "@reown/appkit/react";
 import { Settings } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -31,7 +31,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
   const searchParams = useSearchParams();
 
   const { isOpen, onOpenChange } = useDisclosure();
-  const { openConnectModal } = useConnectModal();
+  const { open: openConnectModal } = useAppKit();
   const { isConnected, address } = useAccount();
   const [showSettingModal, setShowSettingModal] = useState(false);
   const [showDisconnectModal, setShowDisconnectModal] = useState(false);
@@ -66,7 +66,7 @@ export const ConnectButton: FC<Props> = ({ className }) => {
       ) : (
         <Button
           variant="primary"
-          onClick={openConnectModal}
+          onClick={() => openConnectModal()}
           className={className}
         >
           Connect
