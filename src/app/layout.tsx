@@ -1,8 +1,9 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
-import "@rainbow-me/rainbowkit/styles.css";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { useMemo } from "react";
 import "./globals.css";
-import { Providers } from "./providers";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "Moniswap",
@@ -15,10 +16,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const _headers = useMemo(() => headers(), []);
   return (
     <html lang="en">
       <body className="bg-black font-minecraft text-white">
-        <Providers>
+        <Providers cookies={_headers.get("cookie")}>
           <main className="flex-1">{children}</main>
         </Providers>
       </body>
