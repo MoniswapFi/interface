@@ -82,12 +82,12 @@ export default function Home() {
 
         <div className="flex w-full items-center justify-center gap-5">
           <Link href={"/swap"}>
-            <Button variant="primary" className="w-[150px]">
+            <Button href="/swap" variant="primary" className="w-[150px]">
               Swap
             </Button>
           </Link>
           <Link href={"/quest"}>
-            <Button variant="secondary" className="w-[150px]">
+            <Button href="/quest" variant="secondary" className="w-[150px]">
               Join Quest
             </Button>
           </Link>
