@@ -55,9 +55,9 @@ export const TransactionInfoModal: FC<Props> = ({
               >
                 <p>Transaction</p>
                 {type === "success" ? (
-                  <span>Successful</span>
+                  <span>Submitted</span>
                 ) : (
-                  <span>ERROR</span>
+                  <span>Error</span>
                 )}
               </div>
 
