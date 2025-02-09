@@ -1,16 +1,12 @@
-import { __API_CHAIN_NAMES__ } from "@/config/constants";
 import { NFTMetadata, TokenType } from "@/types";
 import { APIURL } from "@/utils/api";
 import { TokenURIReader } from "@/utils/token-uri-reader";
 import { createQuery } from "react-query-kit";
-import { useChainId } from "wagmi";
 
 export const useGetTokenLists = createQuery({
   queryKey: ["_tokens_"],
   fetcher: async (): Promise<TokenType[]> => {
-    const chainId = useChainId();
-    const chainName = __API_CHAIN_NAMES__[chainId];
-    const url = new APIURL(`/tokens/${chainName}`);
+    const url = new APIURL("/tokens/berachain");
     const response = await fetch(url);
     return response.json();
   },

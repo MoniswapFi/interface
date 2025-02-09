@@ -24,9 +24,10 @@ import { AsideBar } from "../components/Aside";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 
-const networks = (
-  process.env.SCENE === "mainnet" ? [berachain] : [berachainTestnetbArtio]
-) as [AppKitNetwork, ...AppKitNetwork[]];
+const networks = [berachain, berachainTestnetbArtio] as [
+  AppKitNetwork,
+  ...AppKitNetwork[],
+];
 
 const adapter = new WagmiAdapter({
   multiInjectedProviderDiscovery: true,
@@ -50,8 +51,7 @@ createAppKit({
   adapters: [adapter],
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
   networks,
-  defaultNetwork:
-    process.env.SCENE === "mainnet" ? berachain : berachainTestnetbArtio,
+  defaultNetwork: berachain,
   themeMode: "dark",
 });
 
