@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { formatEther, zeroAddress } from "viem";
-import { useWatchBlocks } from "wagmi";
+import { useChainId, useWatchBlocks } from "wagmi";
 import { Button } from "../../../components/ui/button";
 import { Popover } from "../../../components/ui/Popover";
 import {
@@ -134,7 +134,8 @@ const Pool: FC<PoolProps> = ({ data, tokenlist, stableFee, volatileFee }) => {
 };
 
 export const Pools: FC<PoolsProps> = ({ data }) => {
-  const { data: tokenlist = [] } = useGetTokenLists({});
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
   const { useStableFee, useVolatileFee } = useProtocolCore();
   const { data: stableFee } = useStableFee();
   const { data: volatileFee } = useVolatileFee();

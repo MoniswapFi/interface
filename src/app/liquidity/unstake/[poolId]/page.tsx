@@ -17,7 +17,7 @@ import { Divider, Slider } from "@nextui-org/react";
 import Image from "next/image";
 import { FC, useMemo, useState } from "react";
 import { formatEther, formatUnits, parseUnits, zeroAddress } from "viem";
-import { useAccount, useWatchBlocks } from "wagmi";
+import { useAccount, useChainId, useWatchBlocks } from "wagmi";
 
 type PageProps = {
   params: {
@@ -31,7 +31,8 @@ const Page: FC<PageProps> = ({ params }) => {
 
   const { isConnected } = useAccount();
 
-  const { data: tokenlist = [] } = useGetTokenLists();
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
 
   const { usePoolFee } = useProtocolCore();
   const { usePoolSymbol, usePoolTotalSupply, usePoolStability } =
