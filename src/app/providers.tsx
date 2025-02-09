@@ -50,7 +50,8 @@ createAppKit({
   adapters: [adapter],
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
   networks,
-  defaultNetwork: berachainTestnetbArtio,
+  defaultNetwork:
+    process.env.SCENE === "mainnet" ? berachain : berachainTestnetbArtio,
   themeMode: "dark",
 });
 
