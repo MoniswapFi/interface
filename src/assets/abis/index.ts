@@ -12571,69 +12571,6 @@ export const oracleABI = [
         type: "uint256",
       },
     ],
-    name: "getAverageValueInAllStables",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "int256",
-        name: "",
-        type: "int256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract IPriceSource",
-        name: "_pS",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "getAverageValueInAllStablesBySource",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "_avgEXP",
-        type: "uint256",
-      },
-      {
-        internalType: "int256",
-        name: "_avgNormal",
-        type: "int256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_value",
-        type: "uint256",
-      },
-    ],
     name: "getAverageValueInETH",
     outputs: [
       {
@@ -12708,133 +12645,6 @@ export const oracleABI = [
         internalType: "int256",
         name: "_avgNormal",
         type: "int256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_token",
-        type: "address",
-      },
-    ],
-    name: "getUnitValueInAllStables",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "_sourceAddress",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "_sourceName",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "_exponentiatedUSDTValue",
-            type: "uint256",
-          },
-          {
-            internalType: "int256",
-            name: "_normalUSDTValue",
-            type: "int256",
-          },
-          {
-            internalType: "uint256",
-            name: "_exponentiatedUSDCValue",
-            type: "uint256",
-          },
-          {
-            internalType: "int256",
-            name: "_normalUSDCValue",
-            type: "int256",
-          },
-          {
-            internalType: "uint256",
-            name: "_exponentiatedDAIValue",
-            type: "uint256",
-          },
-          {
-            internalType: "int256",
-            name: "_normalDAIValue",
-            type: "int256",
-          },
-        ],
-        internalType: "struct Oracle.UnitValueInStablesPerSource[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract IPriceSource",
-        name: "_pS",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_token",
-        type: "address",
-      },
-    ],
-    name: "getUnitValueInAllStablesBySource",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "_sourceAddress",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "_sourceName",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "_exponentiatedUSDTValue",
-            type: "uint256",
-          },
-          {
-            internalType: "int256",
-            name: "_normalUSDTValue",
-            type: "int256",
-          },
-          {
-            internalType: "uint256",
-            name: "_exponentiatedUSDCValue",
-            type: "uint256",
-          },
-          {
-            internalType: "int256",
-            name: "_normalUSDCValue",
-            type: "int256",
-          },
-          {
-            internalType: "uint256",
-            name: "_exponentiatedDAIValue",
-            type: "uint256",
-          },
-          {
-            internalType: "int256",
-            name: "_normalDAIValue",
-            type: "int256",
-          },
-        ],
-        internalType: "struct Oracle.UnitValueInStablesPerSource",
-        name: "_values",
-        type: "tuple",
       },
     ],
     stateMutability: "view",
@@ -12938,5 +12748,159 @@ export const oracleABI = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
+  },
+] as const;
+
+export const wethABI = [
+  {
+    constant: true,
+    inputs: [],
+    name: "name",
+    outputs: [{ name: "", type: "string" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "guy", type: "address" },
+      { name: "wad", type: "uint256" },
+    ],
+    name: "approve",
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "totalSupply",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "src", type: "address" },
+      { name: "dst", type: "address" },
+      { name: "wad", type: "uint256" },
+    ],
+    name: "transferFrom",
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [{ name: "wad", type: "uint256" }],
+    name: "withdraw",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "decimals",
+    outputs: [{ name: "", type: "uint8" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "address" }],
+    name: "balanceOf",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "symbol",
+    outputs: [{ name: "", type: "string" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "dst", type: "address" },
+      { name: "wad", type: "uint256" },
+    ],
+    name: "transfer",
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [],
+    name: "deposit",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [
+      { name: "", type: "address" },
+      { name: "", type: "address" },
+    ],
+    name: "allowance",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  { payable: true, stateMutability: "payable", type: "fallback" },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "src", type: "address" },
+      { indexed: true, name: "guy", type: "address" },
+      { indexed: false, name: "wad", type: "uint256" },
+    ],
+    name: "Approval",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "src", type: "address" },
+      { indexed: true, name: "dst", type: "address" },
+      { indexed: false, name: "wad", type: "uint256" },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "dst", type: "address" },
+      { indexed: false, name: "wad", type: "uint256" },
+    ],
+    name: "Deposit",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "src", type: "address" },
+      { indexed: false, name: "wad", type: "uint256" },
+    ],
+    name: "Withdrawal",
+    type: "event",
   },
 ] as const;

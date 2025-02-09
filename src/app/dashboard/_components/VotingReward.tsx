@@ -343,6 +343,7 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
       <TransactionInfoModal
         isOpen={showTXInfoModal}
         close={() => {
+          setShowTXInfoModal(false);
           resetCall();
         }}
         type={callSuccess ? "success" : callError ? "failure" : "failure"}

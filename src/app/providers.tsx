@@ -1,9 +1,13 @@
 "use client";
 
+import { berachain } from "@/config/_appkit";
 import { persistor, store } from "@/store";
 import { NextUIProvider } from "@nextui-org/react";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
-import { AppKitNetwork, berachainTestnetbArtio } from "@reown/appkit/networks";
+import {
+  type AppKitNetwork,
+  berachainTestnetbArtio,
+} from "@reown/appkit/networks";
 import { createAppKit } from "@reown/appkit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { hashFn } from "@wagmi/core/query";
@@ -20,10 +24,9 @@ import { AsideBar } from "../components/Aside";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 
-const networks = [berachainTestnetbArtio] as [
-  AppKitNetwork,
-  ...AppKitNetwork[],
-];
+const networks = (
+  process.env.SCENE === "mainnet" ? [berachain] : [berachainTestnetbArtio]
+) as [AppKitNetwork, ...AppKitNetwork[]];
 
 const adapter = new WagmiAdapter({
   multiInjectedProviderDiscovery: true,
@@ -59,7 +62,7 @@ const Providers: FC<Props> = ({ children, cookies }) => {
   const [showMenu, setShowMenu] = useState(false);
   const initialState = cookieToInitialState(web3Config, cookies);
 
-  const toggleMenuOpen = useCallback(() => setShowMenu(!showMenu), []);
+  const toggleMenuOpen = useCallback(() => setShowMenu(!showMenu), [showMenu]);
 
   return (
     <ReduxProvider store={store}>
