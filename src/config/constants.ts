@@ -58,19 +58,19 @@ export const __POOL__GRAPH__URLs__ = {
   [__CHAIN_IDS__.bera_testnet]:
     "api.goldsky.com/api/public/project_clws3jv71bgap01u93r59ccbm/subgraphs/moniswap-bartio-pools/v1.0.0/gn",
   [__CHAIN_IDS__.bera]:
-    "https://api.goldsky.com/api/public/project_cm6w9m5xc0lua011oadkseioi/subgraphs/moniswap-pools/v1.0.0/gn",
+    "api.goldsky.com/api/public/project_cm6w9m5xc0lua011oadkseioi/subgraphs/moniswap-pools/v1.0.0/gn",
 };
 export const __VOTER__GRAPH__URLs__ = {
   [__CHAIN_IDS__.bera_testnet]:
     "api.goldsky.com/api/public/project_clws3jv71bgap01u93r59ccbm/subgraphs/moniswap-bartio-voter/v1.0.1/gn",
   [__CHAIN_IDS__.bera]:
-    "https://api.goldsky.com/api/public/project_cm6w9m5xc0lua011oadkseioi/subgraphs/moniswap-voter/v1.0.1/gn",
+    "api.goldsky.com/api/public/project_cm6w9m5xc0lua011oadkseioi/subgraphs/moniswap-voter/v1.0.1/gn",
 };
 export const __ESCROW__GRAPH__URLs__ = {
   [__CHAIN_IDS__.bera_testnet]:
     "api.goldsky.com/api/public/project_clws3jv71bgap01u93r59ccbm/subgraphs/moniswap-bartio-escrow/v1.0.0/gn",
   [__CHAIN_IDS__.bera]:
-    "https://api.goldsky.com/api/public/project_cm6w9m5xc0lua011oadkseioi/subgraphs/moniswap-ve/v1.0.0/gn",
+    "api.goldsky.com/api/public/project_cm6w9m5xc0lua011oadkseioi/subgraphs/moniswap-ve/v1.0.0/gn",
 };
 export const __ETHER__ = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 export const __AGGREGATOR_ROUTERS__ = {
