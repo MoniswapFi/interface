@@ -8,7 +8,6 @@ COPY .graphclientrc.yml /
 COPY *.json /
 COPY *.mjs /
 RUN yarn
-ENV SCENE=mainnet
 RUN yarn graph-build && yarn build
 EXPOSE 3000
 ENTRYPOINT yarn start
