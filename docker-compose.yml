@@ -1,9 +1,17 @@
 services:
-  app:
-    container_name: moniswap-app
+  app-bartio:
+    container_name: moniswap-bartio-app
     hostname: app
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - 13000:3000
+  app-mainnet:
+    container_name: moniswap-mainnet-app
+    hostname: app
+    build:
+      context: .
+      dockerfile: mainnet.Dockerfile
+    ports:
+      - 18181:3000

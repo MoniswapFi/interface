@@ -23,6 +23,7 @@ import {
   useERC20Balance,
   useNativeBalance,
 } from "@/hooks/onchain/wallet";
+import { useWETH_ETHProcesses } from "@/hooks/onchain/weth";
 import { RootState } from "@/store";
 import { TokenType } from "@/types";
 import { toSF } from "@/utils/format";
@@ -83,14 +84,14 @@ export default function Page() {
       selectedTokens[0]?.address === __ETHER__
         ? wrappedEther
         : selectedTokens[0]?.address,
-    [selectedTokens[0]?.address, wrappedEther],
+    [selectedTokens, wrappedEther],
   );
   const address1 = useMemo(
     () =>
       selectedTokens[1]?.address === __ETHER__
         ? wrappedEther
         : selectedTokens[1]?.address,
-    [selectedTokens[1]?.address, wrappedEther],
+    [selectedTokens, wrappedEther],
   );
 
   const slippage = useSelector(
@@ -117,7 +118,7 @@ export default function Page() {
           selectedTokens[1]?.decimals ?? 18,
         ),
       ),
-    [bestQueryData?.amountOut, selectedTokens[1]?.decimals],
+    [bestQueryData?.amountOut, selectedTokens],
   );
   const { data: bestPathData, refetch: refetchBestPath } = useFindBestPath(
     Number(parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18)),
@@ -148,6 +149,31 @@ export default function Page() {
     () => setShowTXInfoModal(true),
   );
 
+  const {
+    executeDeposit,
+    executeWithdrawal,
+    isError: wethEthError,
+    isPending: wethEthPending,
+    isSuccess: wethEthSuccess,
+    hash: wethEthHash,
+    reset: resetWethEthSwap,
+  } = useWETH_ETHProcesses(amount, () => setShowTXInfoModal(true));
+
+  const executeTx = useCallback(() => {
+    if (address0 === wrappedEther && address1 === wrappedEther) {
+      if (selectedTokens[0]!.address === __ETHER__) executeDeposit();
+      else executeWithdrawal();
+    } else executeSwap();
+  }, [
+    address0,
+    address1,
+    executeDeposit,
+    executeSwap,
+    executeWithdrawal,
+    selectedTokens,
+    wrappedEther,
+  ]);
+
   const { useAllowance, useApproval } = useERC20Allowance(address0 as any);
   const { data: allowance, refetch: refetchAllowance } = useAllowance(
     router as any,
@@ -157,7 +183,7 @@ export default function Page() {
       Number(
         formatUnits(allowance ?? BigInt(0), selectedTokens[0]?.decimals ?? 18),
       ),
-    [allowance, selectedTokens[0]?.decimals],
+    [allowance, selectedTokens],
   );
   const { executeApproval, isPending: approvalPending } = useApproval(
     router as any,
@@ -198,13 +224,7 @@ export default function Page() {
         setHasLoadedDefaultTokens(true);
       }
     }
-  }, [
-    hasLoadedDefaultTokens,
-    tokenLists,
-    moni,
-    selectedTokens[0],
-    selectedTokens[1],
-  ]);
+  }, [hasLoadedDefaultTokens, tokenLists, moni, selectedTokens]);
 
   useWatchBlocks({
     onBlock: async () => {
@@ -348,8 +368,8 @@ export default function Page() {
               {allowedToSpend >= amount ||
               selectedTokens[0]?.address === __ETHER__ ? (
                 <Button
-                  onClick={executeSwap}
-                  isLoading={swapPending}
+                  onClick={executeTx}
+                  isLoading={swapPending || wethEthPending}
                   className="capitalize"
                   variant="primary"
                   size="full"
@@ -357,10 +377,15 @@ export default function Page() {
                     selectedTokens[0] === null ||
                     selectedTokens[1] === null ||
                     swapPending ||
+                    wethEthPending ||
                     amount <= 0
                   }
                 >
-                  swap
+                  {address0 === wrappedEther && address1 === wrappedEther
+                    ? selectedTokens[0]?.address === __ETHER__
+                      ? "deposit"
+                      : "withdraw"
+                    : "swap"}
                 </Button>
               ) : (
                 <Button
@@ -452,10 +477,18 @@ export default function Page() {
         isOpen={showTXInfoModal}
         close={() => {
           setShowTXInfoModal(false);
-          resetSwap();
+          if (address0 === wrappedEther && address1 === wrappedEther)
+            resetWethEthSwap();
+          else resetSwap();
         }}
-        type={swapSuccess ? "success" : swapError ? "failure" : "failure"}
-        txHash={swapHash}
+        type={
+          swapSuccess || wethEthSuccess
+            ? "success"
+            : swapError || wethEthError
+              ? "failure"
+              : "failure"
+        }
+        txHash={swapHash ?? wethEthHash}
       />
     </div>
   );
