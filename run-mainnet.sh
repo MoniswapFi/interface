@@ -1,0 +1,1 @@
+sudo docker compose build app-mainnet && sudo docker compose up -d app-mainnet
