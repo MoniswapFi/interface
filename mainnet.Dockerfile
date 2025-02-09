@@ -10,4 +10,4 @@ COPY *.mjs /
 RUN yarn
 RUN yarn graph-build && yarn build
 EXPOSE 3000
-ENTRYPOINT export SCENE=mainnet && yarn start
+ENTRYPOINT yarn start

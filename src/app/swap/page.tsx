@@ -44,7 +44,9 @@ export default function Page() {
   const [amount, setAmount] = useState(0.0);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
-  const { data: tokenLists = [] } = useGetTokenLists({});
+  const { data: tokenLists = [] } = useGetTokenLists({
+    variables: { chainId },
+  });
   const [selectedTokens, setSelectedTokens] = useState<
     [TokenType | null, TokenType | null]
   >([null, null]);

@@ -31,8 +31,8 @@ const Page: FC<PageProps> = ({ params }) => {
   const [showTXInfoModal, setShowTXInfoModal] = useState(false);
 
   const { isConnected } = useAccount();
-
-  const { data: tokenlist = [] } = useGetTokenLists();
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
 
   const { usePoolFee } = useProtocolCore();
   const { usePoolSymbol, usePoolTotalSupply, usePoolStability } =
@@ -82,7 +82,6 @@ const Page: FC<PageProps> = ({ params }) => {
   const { useGetPoolGauge } = useVoterCore();
   const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
     useGetPoolGauge(params.poolId);
-  const chainId = useChainId();
   const router = useMemo(() => __PROTOCOL_ROUTERS__[chainId], [chainId]);
   const { useRemoveLiquidity } = useProtocolCore();
 

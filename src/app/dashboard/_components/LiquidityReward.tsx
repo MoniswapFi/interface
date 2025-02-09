@@ -14,14 +14,15 @@ import { Divider } from "@nextui-org/react";
 import Image from "next/image";
 import { FC, useMemo, useState } from "react";
 import { formatEther, formatUnits, zeroAddress } from "viem";
-import { useWatchBlocks } from "wagmi";
+import { useChainId, useWatchBlocks } from "wagmi";
 
 type LPRewardProps = {
   data: AccountPosition;
 };
 
 export const LiquidityReward: FC<LPRewardProps> = ({ data }) => {
-  const { data: tokenlist = [] } = useGetTokenLists();
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
   const [showTXInfoModal, setShowTXInfoModal] = useState(false);
   const token0 = useMemo(
     () =>

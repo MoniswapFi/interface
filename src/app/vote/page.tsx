@@ -36,7 +36,8 @@ import { Pool } from "./_components/Pool";
 export default function Page() {
   const useAllPoolsQuery = useAllPools();
   const { data: pairs = [], refetch: refetchPairs } = useAllPoolsQuery();
-  const { data: tokenlist = [] } = useGetTokenLists({});
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
   const { useTotalWeight, useEpochNext, useIncentivizablePools } =
     useVoterCore();
   const { data: totalWeight = BigInt(0) } = useTotalWeight();
@@ -54,7 +55,6 @@ export default function Page() {
 
   const config = useConfig();
   const { address } = useAccount();
-  const chainId = useChainId();
   const voterAddress = useMemo(() => __VOTER__[chainId], [chainId]);
 
   const [totalRewards, setTotalRewards] = useState(0);

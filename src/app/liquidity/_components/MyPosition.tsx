@@ -24,7 +24,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FC, useMemo } from "react";
 import { formatEther, formatUnits, zeroAddress } from "viem";
-import { useWatchBlocks } from "wagmi";
+import { useChainId, useWatchBlocks } from "wagmi";
 
 type AccountPositionProps = {
   data: AccountPosition[];
@@ -36,8 +36,8 @@ type SinglePositionProps = {
 
 const Position: FC<SinglePositionProps> = ({ data }) => {
   const { push } = useRouter();
-
-  const { data: tokenlist = [] } = useGetTokenLists({});
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
   const { useStableFee, useVolatileFee } = useProtocolCore();
   const { data: stableFee } = useStableFee();
   const { data: volatileFee } = useVolatileFee();

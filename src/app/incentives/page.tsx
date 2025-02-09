@@ -43,7 +43,9 @@ export default function Page() {
 
   const selectedTokens = useMemo(() => [selectedToken, null], [selectedToken]);
 
-  const { data: tokenLists = [] } = useGetTokenLists({});
+  const { data: tokenLists = [] } = useGetTokenLists({
+    variables: { chainId },
+  });
   const moni = useMemo(() => __MONI__[chainId], [chainId]);
   const useAllPoolsQuery = useAllPools();
   const { data: poolsList = [], refetch: refetchPoolsList } =

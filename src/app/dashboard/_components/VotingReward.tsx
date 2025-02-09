@@ -77,7 +77,8 @@ export const FeeOrIncentiveComponent: FC<FeeOrIncentiveProps> = ({
 };
 
 export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
-  const { data: tokenlist = [] } = useGetTokenLists();
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
   const [showTXInfoModal, setShowTXInfoModal] = useState(false);
   const token0 = useMemo(
     () =>
@@ -163,7 +164,6 @@ export const VotingReward: FC<VotingRewardProps> = ({ data }) => {
     [feesId, feesTokens, data.lockId, bribesId, bribesTokens],
   );
 
-  const chainId = useChainId();
   const { useRunMulticall } = useMulticall();
   const {
     executeMCall,

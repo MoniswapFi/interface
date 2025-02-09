@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation";
 import { FC, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { zeroAddress } from "viem";
-import { useAccount, useBlockNumber } from "wagmi";
+import { useAccount, useBlockNumber, useChainId } from "wagmi";
 import { ConnectButton } from "../ConnectButton";
 import { TransactionInfoModal } from "../Modal";
 import { VoteModal } from "../Modal/VoteModal";
@@ -58,7 +58,8 @@ export const Header: FC<Props> = ({ toggleMenuOpen }) => {
 
   const [showTXInfoModal, setShowTXInfoModal] = useState(false);
   const [showVoteModal, setShowVoteModal] = useState(false);
-  const { data: tokenlist = [] } = useGetTokenLists({});
+  const chainId = useChainId();
+  const { data: tokenlist = [] } = useGetTokenLists({ variables: { chainId } });
   const useLocksQuery = useLocks();
   const { data: locks = [] } = useLocksQuery();
   const { data: currentBlock = BigInt(0) } = useBlockNumber();

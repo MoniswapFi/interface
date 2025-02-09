@@ -22,7 +22,10 @@ import { Deposit } from "../_components/Deposit";
 export default function Page() {
   const [showDepositComponent, setShowDepositComponent] = useState(false);
   const [isStableDeposit, setIsStableDeposit] = useState(false);
-  const { data: tokenLists = [] } = useGetTokenLists({});
+  const chainId = useChainId();
+  const { data: tokenLists = [] } = useGetTokenLists({
+    variables: { chainId },
+  });
   const [selectedTokens, setSelectedTokens] = useState<
     [TokenType | null, TokenType | null]
   >([null, null]);
@@ -30,8 +33,6 @@ export default function Page() {
   const query = useSearchParams();
   const { push } = useRouter();
   const pathName = usePathname();
-
-  const chainId = useChainId();
   const wrappedEther = useMemo(() => __WRAPPED_ETHER__[chainId], [chainId]);
   const firstAddress = useMemo(
     () =>
