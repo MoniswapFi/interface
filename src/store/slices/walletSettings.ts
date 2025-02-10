@@ -7,7 +7,7 @@ interface WalletSettingsSliceInterface {
 }
 
 const initialState: WalletSettingsSliceInterface = {
-  slippageTolerance: 0.5,
+  slippageTolerance: 5,
   executionDeadlineInMinutes: 30,
   swapRoutingSteps: 4,
 };
