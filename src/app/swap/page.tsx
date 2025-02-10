@@ -368,7 +368,8 @@ export default function Page() {
           {isConnected ? (
             <>
               {allowedToSpend >= amount ||
-              selectedTokens[0]?.address === __ETHER__ ? (
+              selectedTokens[0]?.address === __ETHER__ ||
+              (address0 === wrappedEther && address1 === wrappedEther) ? (
                 <Button
                   onClick={executeTx}
                   isLoading={swapPending || wethEthPending}
