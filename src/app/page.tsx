@@ -1,3 +1,5 @@
+"use client";
+
 import BEAR1 from "@/assets/images/Bear1.png";
 import BEAR2 from "@/assets/images/bear2.png";
 import BEAR3 from "@/assets/images/bear3.png";
