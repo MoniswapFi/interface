@@ -21,16 +21,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MoveUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
+import { useChainId, useChains } from "wagmi";
 import { Button } from "../components/ui/button";
 
 export default function Home() {
+  const chainId = useChainId();
+  const chains = useChains();
+  const activeChain = useMemo(
+    () => chains.find((chain) => chain.id === chainId),
+    [chainId, chains],
+  );
   return (
     <div className="">
       <Link href={"/swap"}>
         <div className="z-100 enchant-effect flex items-center justify-center gap-2 bg-secondary px-2 py-4">
           <Image src={CongratesIcon} alt="icon" />
           <p className="minecraft-enchant-text text-xs md:text-base">
-            Moniswap V1 Live on Bartio Testnet. Swap Now!
+            Moniswap V1 Live on {activeChain?.name}. Swap Now!
           </p>
         </div>
       </Link>

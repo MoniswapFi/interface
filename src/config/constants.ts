@@ -99,11 +99,11 @@ export const __VOTING_ESCROW__ = {
 };
 export const __PRICE_ORACLE__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x6D2015Dce2d839c23806278E4DA30500766AC44D",
-  [__CHAIN_IDS__.bera]: "0x4a61F6a5ee25d04271fec17471E727a089c7A22D",
+  [__CHAIN_IDS__.bera]: "0xCA6f864adD2cF45bf2b28FBbC990216Cc759B0Ca",
 };
 export const __DEDICATED_PRICE_SOURCE__ = {
   [__CHAIN_IDS__.bera_testnet]: "0xd25758eD9D4555ceb2A3c27374aE08Cd470b6Fe3",
-  [__CHAIN_IDS__.bera]: "0xC481263897F96B4781219EDF5cfAa95ec49c200c",
+  [__CHAIN_IDS__.bera]: "0x34D9a3E8B5Df4DEdB388EB14b7416f76BFFf4E6f",
 };
 export const __WRAPPED_ETHER__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
