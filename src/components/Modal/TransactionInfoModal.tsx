@@ -2,6 +2,7 @@
 
 import TXFailedImage from "@/assets/images/tx_failed.svg";
 import TXSuccessImage from "@/assets/images/tx_success.svg";
+import { __EXPLORERs__ } from "@/config/constants";
 import {
   cn,
   Modal,
@@ -12,6 +13,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
+import { useChainId } from "wagmi";
 import { Button } from "../ui/button";
 
 type Props = {
@@ -27,6 +29,7 @@ export const TransactionInfoModal: FC<Props> = ({
   type = "success",
   txHash,
 }) => {
+  const chainId = useChainId();
   return (
     <Modal
       isOpen={isOpen}
@@ -63,7 +66,7 @@ export const TransactionInfoModal: FC<Props> = ({
 
               {txHash && (
                 <Link
-                  href={`https://bartio.beratrail.io/tx/${txHash}`}
+                  href={`${__EXPLORERs__[chainId]}/tx/${txHash}`}
                   target="_blank"
                   className="uppercase underline"
                 >

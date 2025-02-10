@@ -54,6 +54,10 @@ export const __API_CHAIN_NAMES__ = {
   [__CHAIN_IDS__.bera_testnet]: "bartio",
   [__CHAIN_IDS__.bera]: "berachain",
 };
+export const __EXPLORERs__ = {
+  [__CHAIN_IDS__.bera_testnet]: "https://bartio.beratrail.io",
+  [__CHAIN_IDS__.bera]: "https://berascan.com",
+};
 export const __POOL__GRAPH__URLs__ = {
   [__CHAIN_IDS__.bera_testnet]:
     "api.goldsky.com/api/public/project_clws3jv71bgap01u93r59ccbm/subgraphs/moniswap-bartio-pools/v1.0.0/gn",
