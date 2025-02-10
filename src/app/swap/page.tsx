@@ -386,8 +386,8 @@ export default function Page() {
                 >
                   {address0 === wrappedEther && address1 === wrappedEther
                     ? selectedTokens[0]?.address === __ETHER__
-                      ? "deposit"
-                      : "withdraw"
+                      ? "wrap"
+                      : "unwrap"
                     : "swap"}
                 </Button>
               ) : (
