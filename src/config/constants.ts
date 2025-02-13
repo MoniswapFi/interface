@@ -117,6 +117,10 @@ export const __MONI__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
   [__CHAIN_IDS__.bera]: "0x64FAF984Bf60dE19e24238521814cA98574E3b00",
 };
+export const __HONEY__ = {
+  [__CHAIN_IDS__.bera_testnet]: "0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03",
+  [__CHAIN_IDS__.bera]: "0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce",
+};
 export const __BERA_PACK__ = {
   [__CHAIN_IDS__.arbi_mainnet]: "0x95a07C40eB0441ef0AD69443fA0766A6392c2861",
 };
