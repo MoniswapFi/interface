@@ -115,7 +115,7 @@ export default function Page() {
   const amountOutFormatted = useMemo(
     () =>
       address0 === wrappedEther && address1 === wrappedEther
-        ? 1
+        ? amount
         : Number(
             formatUnits(
               bestQueryData?.amountOut ?? BigInt(0),
