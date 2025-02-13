@@ -98,15 +98,15 @@ export default function Page() {
 
             <p>
               Locking for {duration / 31536000} years for{" "}
-              {toSF((duration / 31536000 / 4) * amount)} veMONI voting power.
+              {toSF((duration / 31536000 / 2) * amount)} veMONI voting power.
             </p>
 
             <Slider
               onChange={(value) => setDuration(value as number)}
               size="md"
               step={86400}
-              maxValue={126144000}
-              minValue={604800}
+              maxValue={63072000}
+              minValue={2629746}
               aria-label="Temperature"
               defaultValue={duration}
               color="warning"
@@ -118,8 +118,16 @@ export default function Page() {
               }}
               marks={[
                 {
-                  value: 604800,
-                  label: "7 D",
+                  value: 2629746,
+                  label: "1 M",
+                },
+                {
+                  value: 7889238,
+                  label: "3 M",
+                },
+                {
+                  value: 15778476,
+                  label: "6 M",
                 },
                 {
                   value: 31536000,
@@ -128,14 +136,6 @@ export default function Page() {
                 {
                   value: 63072000,
                   label: "2 Y",
-                },
-                {
-                  value: 94608000,
-                  label: "3 Y",
-                },
-                {
-                  value: 126144000,
-                  label: "4 Y",
                 },
               ]}
             />

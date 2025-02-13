@@ -132,8 +132,8 @@ const Page: FC<PageProps> = ({ params }) => {
               onChange={(value) => setDuration(value as number)}
               size="md"
               step={86400}
-              maxValue={126144000}
-              minValue={604800}
+              maxValue={63072000}
+              minValue={7889238}
               aria-label="Temperature"
               defaultValue={duration}
               isDisabled={maxLockSelected}
@@ -146,19 +146,19 @@ const Page: FC<PageProps> = ({ params }) => {
               }}
               marks={[
                 {
-                  value: 31536000,
+                  value: 7889238,
                   label: "Min",
                 },
                 {
+                  value: 15778476,
+                  label: ".",
+                },
+                {
+                  value: 31536000,
+                  label: ".",
+                },
+                {
                   value: 63072000,
-                  label: ".",
-                },
-                {
-                  value: 94608000,
-                  label: ".",
-                },
-                {
-                  value: 126144000,
                   label: "Max",
                 },
               ]}
