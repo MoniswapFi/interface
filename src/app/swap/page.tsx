@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import {
   __AGGREGATOR_ROUTERS__,
   __ETHER__,
-  __MONI__,
+  __HONEY__,
   __WRAPPED_ETHER__,
 } from "@/config/constants";
 import { useGetTokenLists } from "@/hooks/api/tokens";
@@ -62,7 +62,7 @@ export default function Page() {
 
   const router = useMemo(() => __AGGREGATOR_ROUTERS__[chainId], [chainId]);
   const wrappedEther = useMemo(() => __WRAPPED_ETHER__[chainId], [chainId]);
-  const moni = useMemo(() => __MONI__[chainId], [chainId]);
+  const honey = useMemo(() => __HONEY__[chainId], [chainId]);
   const { balance: etherBalance } = useNativeBalance();
   const { balance: token0Balance } = useERC20Balance(
     selectedTokens[0]?.address as any,
@@ -114,13 +114,21 @@ export default function Page() {
   );
   const amountOutFormatted = useMemo(
     () =>
-      Number(
-        formatUnits(
-          bestQueryData?.amountOut ?? BigInt(0),
-          selectedTokens[1]?.decimals ?? 18,
-        ),
-      ),
-    [bestQueryData?.amountOut, selectedTokens],
+      address0 === wrappedEther && address1 === wrappedEther
+        ? 1
+        : Number(
+            formatUnits(
+              bestQueryData?.amountOut ?? BigInt(0),
+              selectedTokens[1]?.decimals ?? 18,
+            ),
+          ),
+    [
+      address0,
+      address1,
+      bestQueryData?.amountOut,
+      selectedTokens,
+      wrappedEther,
+    ],
   );
   const { data: bestPathData, refetch: refetchBestPath } = useFindBestPath(
     Number(parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18)),
@@ -214,7 +222,7 @@ export default function Page() {
     if (!hasLoadedDefaultTokens) {
       if (tokenLists.length) {
         const token0 = tokenLists.find(
-          (token) => token.address.toLowerCase() === moni.toLowerCase(),
+          (token) => token.address.toLowerCase() === honey.toLowerCase(),
         );
         const token1 = tokenLists.find(
           (token) => token.address.toLowerCase() === __ETHER__.toLowerCase(),
@@ -226,7 +234,7 @@ export default function Page() {
         setHasLoadedDefaultTokens(true);
       }
     }
-  }, [hasLoadedDefaultTokens, tokenLists, moni, selectedTokens]);
+  }, [hasLoadedDefaultTokens, tokenLists, honey, selectedTokens]);
 
   useWatchBlocks({
     onBlock: async () => {
