@@ -1,6 +1,7 @@
 "use client";
 import BackgroundLoader from "@/components/Home/BackgroundLoader";
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 // Define an interface for the hexagon coordinates
@@ -66,12 +67,16 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex max-w-6xl justify-center gap-12">
-          <button className="bg-white px-12 py-6 text-black md:w-72 md:px-0">
-            START TRADING
-          </button>
-          <button className="bg-[#F59855] py-6 text-white sm:px-12 md:w-72 md:px-0">
-            WHAT IS MONISWAP?
-          </button>
+          <Link href="/swap">
+            <button className="bg-white px-12 py-6 text-black md:w-72 md:px-0">
+              START TRADING
+            </button>
+          </Link>
+          <Link href="https://docs.moniswap.xyz/" target="_blank">
+            <button className="bg-[#F59855] py-6 text-white sm:px-12 md:w-72 md:px-0">
+              WHAT IS MONISWAP?
+            </button>
+          </Link>
         </div>
       </main>
     </div>
