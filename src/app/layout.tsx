@@ -19,7 +19,7 @@ export default function RootLayout({
   const _headers = useMemo(() => headers(), []);
   return (
     <html lang="en">
-      <body className="bg-black font-minecraft text-white">
+      <body className="bg-gray-900 font-minecraft text-white">
         <Providers cookies={_headers.get("cookie")}>
           <main className="flex-1">{children}</main>
         </Providers>

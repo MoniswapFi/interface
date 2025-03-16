@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🐻 MoniSwap
 
-## Getting Started
+<div align="center">
+  <img src="src/assets/images/logo.svg" alt="MoniSwap Logo" width="200" />
+  <h3>The Premier DEX & Aggregator for Berachain</h3>
+</div>
 
-First, run the development server:
+## 🌟 Overview
+
+MoniSwap is a cutting-edge decentralized exchange (DEX) and aggregator designed specifically for the Berachain ecosystem. Our platform provides seamless, efficient, and secure currency exchange services with a focus on user experience and deep liquidity.
+
+## ✨ Features
+
+- **DEX Trading**: Swap tokens with minimal slippage and competitive rates
+- **Liquidity Provision**: Earn rewards by providing liquidity to pools
+- **Governance**: Participate in protocol decisions through voting
+- **Staking**: Lock tokens to earn protocol rewards and voting rights
+- **Quest System**: Engage with the platform to earn additional rewards
+- **Real-time Analytics**: Track your positions and rewards on the dashboard
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 16+
+- Yarn or NPM
+
+### Installation
 
 ```bash
-npm run dev
-# or
+# Clone the repository
+git clone https://github.com/MoniswapFi/interface.git
+cd interface
+
+# Install dependencies
+yarn install
+
+# Run the development server
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔧 Development
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
 
-## Learn More
+# Run a production build locally
+yarn start
 
-To learn more about Next.js, take a look at the following resources:
+# Run tests
+yarn test
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Run Docker container
+docker-compose up
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 🤝 Contributing
 
-## Deploy on Vercel
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔗 Links
+
+- [Website](https://moniswap.fi)
+- [Documentation](https://docs.moniswap.fi)
+- [Twitter](https://twitter.com/MoniswapFi)
+- [Discord](https://discord.gg/moniswap)
+- [Berachain](https://berachain.com)
