@@ -12790,3 +12790,2205 @@ export const wethABI = [
     type: "event",
   },
 ] as const;
+
+// Helpers ABIs
+export const veNFTHelperABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_rewardDistro",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_poolHelper",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_poolFactory",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "MAX_POOLS",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MAX_RESULTS",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "allPoolRewards",
+    outputs: [
+      {
+        components: [
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "id",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256",
+              },
+              {
+                internalType: "uint8",
+                name: "decimals",
+                type: "uint8",
+              },
+              {
+                internalType: "address",
+                name: "pool",
+                type: "address",
+              },
+              {
+                internalType: "address",
+                name: "token",
+                type: "address",
+              },
+              {
+                internalType: "address",
+                name: "fee",
+                type: "address",
+              },
+              {
+                internalType: "address",
+                name: "bribe",
+                type: "address",
+              },
+              {
+                internalType: "string",
+                name: "symbol",
+                type: "string",
+              },
+            ],
+            internalType: "struct veNFTHelper.veReward[]",
+            name: "rewards",
+            type: "tuple[]",
+          },
+        ],
+        internalType: "struct veNFTHelper.AllPoolRewards[]",
+        name: "rewards",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAllNFTs",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "decimals",
+            type: "uint8",
+          },
+          {
+            internalType: "bool",
+            name: "voted",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "uint128",
+            name: "amount",
+            type: "uint128",
+          },
+          {
+            internalType: "uint256",
+            name: "voting_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "rebase_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "lockEnd",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vote_ts",
+            type: "uint256",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "pool",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "weight",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct veNFTHelper.PoolVote[]",
+            name: "votes",
+            type: "tuple[]",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "token",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "tokenSymbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenDecimals",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct veNFTHelper.veNFT[]",
+        name: "_veNFT",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_user",
+        type: "address",
+      },
+    ],
+    name: "getNFTFromAddress",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "decimals",
+            type: "uint8",
+          },
+          {
+            internalType: "bool",
+            name: "voted",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "uint128",
+            name: "amount",
+            type: "uint128",
+          },
+          {
+            internalType: "uint256",
+            name: "voting_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "rebase_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "lockEnd",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vote_ts",
+            type: "uint256",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "pool",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "weight",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct veNFTHelper.PoolVote[]",
+            name: "votes",
+            type: "tuple[]",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "token",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "tokenSymbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenDecimals",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct veNFTHelper.veNFT[]",
+        name: "venft",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "getNFTFromId",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "decimals",
+            type: "uint8",
+          },
+          {
+            internalType: "bool",
+            name: "voted",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "uint128",
+            name: "amount",
+            type: "uint128",
+          },
+          {
+            internalType: "uint256",
+            name: "voting_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "rebase_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "lockEnd",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "vote_ts",
+            type: "uint256",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "pool",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "weight",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct veNFTHelper.PoolVote[]",
+            name: "votes",
+            type: "tuple[]",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "token",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "tokenSymbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenDecimals",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct veNFTHelper.veNFT",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "poolFactory",
+    outputs: [
+      {
+        internalType: "contract IPoolFactory",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "poolHelper",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "rewardDisitributor",
+    outputs: [
+      {
+        internalType: "contract IRewardsDistributor",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_poolFactory",
+        type: "address",
+      },
+    ],
+    name: "setPoolFactory",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_poolHelper",
+        type: "address",
+      },
+    ],
+    name: "setPoolHelper",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_rewardDistro",
+        type: "address",
+      },
+    ],
+    name: "setRewardDistro",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+    ],
+    name: "setVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_pool",
+        type: "address",
+      },
+    ],
+    name: "singlePoolReward",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "decimals",
+            type: "uint8",
+          },
+          {
+            internalType: "address",
+            name: "pool",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "token",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "fee",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "bribe",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "symbol",
+            type: "string",
+          },
+        ],
+        internalType: "struct veNFTHelper.veReward[]",
+        name: "_reward",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "underlyingToken",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ve",
+    outputs: [
+      {
+        internalType: "contract IVotingEscrow",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "voter",
+    outputs: [
+      {
+        internalType: "contract Voter",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+] as const;
+
+export const exchangeHelperABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_tradeHelper",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_wETH",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "tokenA",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenB",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "multiHops",
+        type: "bool",
+      },
+    ],
+    name: "calculatePriceImpact",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBribesInUSDForAllPools",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "totalValue",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "bribes",
+        type: "uint256[]",
+      },
+      {
+        internalType: "contract Pool[]",
+        name: "pools",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract Pool",
+        name: "pool",
+        type: "address",
+      },
+    ],
+    name: "getBribesInUSDForPool",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "totalValue",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getFeesInUSDForAllPools",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "totalValue",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "fees",
+        type: "uint256[]",
+      },
+      {
+        internalType: "contract Pool[]",
+        name: "pools",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract Pool",
+        name: "pool",
+        type: "address",
+      },
+    ],
+    name: "getFeesInUSDForPool",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "totalValue",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTVLInUSDForAllPools",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "totalTVL",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "tvls",
+        type: "uint256[]",
+      },
+      {
+        internalType: "contract Pool[]",
+        name: "pools",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract Pool",
+        name: "pool",
+        type: "address",
+      },
+    ],
+    name: "getTVLInUSDForPool",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "token0VL",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "token1VL",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "totalVL",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "from",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "to",
+        type: "uint256",
+      },
+    ],
+    name: "getTotalVolumeLockedPerTime",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "tvlPerTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "volumes",
+        type: "uint256[]",
+      },
+      {
+        internalType: "contract Pool[]",
+        name: "pools",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract Pool",
+        name: "pool",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "from",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "to",
+        type: "uint256",
+      },
+    ],
+    name: "getVolumeLockedPerTimeForPool",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "token0Volume",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "token1Volume",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "token0VolumeUSD",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "token1VolumeUSD",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "totalVolumeUSD",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "poolFactory",
+    outputs: [
+      {
+        internalType: "contract IPoolFactory",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "priceOracle",
+    outputs: [
+      {
+        internalType: "contract Oracle",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_priceOracle",
+        type: "address",
+      },
+    ],
+    name: "setPriceOracle",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tradeHelper",
+    outputs: [
+      {
+        internalType: "contract ITradeHelper",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "voter",
+    outputs: [
+      {
+        internalType: "contract Voter",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "wETH",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+] as const;
+
+export const poolHelperABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_factory",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "InvalidPool",
+    type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "oldVoter",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "newVoter",
+        type: "address",
+      },
+    ],
+    name: "Voter",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_user",
+        type: "address",
+      },
+    ],
+    name: "getAllPools",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "pool_address",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "symbol",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "stable",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "total_supply",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "token0",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "token0_symbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "token0_decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "reserve0",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "claimable0",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "token1",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "token1_symbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "token1_decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "reserve1",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "claimable1",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "gauge",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "gauge_total_supply",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "fees",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "bribe",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "emissions",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "emissions_token",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "emissions_token_decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_lp_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_token0_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_token1_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_gauge_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_gauge_earned",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct PoolHelper.PoolInformation[]",
+        name: "pools",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_pool",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_account",
+        type: "address",
+      },
+    ],
+    name: "getPool",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "pool_address",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "symbol",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "stable",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "total_supply",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "token0",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "token0_symbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "token0_decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "reserve0",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "claimable0",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "token1",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "token1_symbol",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "token1_decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "reserve1",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "claimable1",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "gauge",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "gauge_total_supply",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "fees",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "bribe",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "emissions",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "emissions_token",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "emissions_token_decimals",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_lp_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_token0_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_token1_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_gauge_balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "account_gauge_earned",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct PoolHelper.PoolInformation",
+        name: "poolInfo",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_pool",
+        type: "address",
+      },
+    ],
+    name: "getPoolBribe",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "epochTimestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "totalSupply",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "pool",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "token",
+                type: "address",
+              },
+              {
+                internalType: "uint8",
+                name: "decimals",
+                type: "uint8",
+              },
+              {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256",
+              },
+              {
+                internalType: "string",
+                name: "symbol",
+                type: "string",
+              },
+            ],
+            internalType: "struct PoolHelper.TokenBribe[]",
+            name: "bribes",
+            type: "tuple[]",
+          },
+        ],
+        internalType: "struct PoolHelper.PoolBribeEpoch[]",
+        name: "_poolEpoch",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_pool",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_token",
+        type: "address",
+      },
+    ],
+    name: "left",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "rewardPerEpoch",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "poolFactory",
+    outputs: [
+      {
+        internalType: "contract IPoolFactory",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+    ],
+    name: "setVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "underlyingToken",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "voter",
+    outputs: [
+      {
+        internalType: "contract IVoter",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+] as const;
+
+export const tradeHelperABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_factory",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "factory",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountOut",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+    ],
+    name: "getAmountIn",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "stable",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountOut",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+    ],
+    name: "getAmountInStable",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountOut",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+    ],
+    name: "getAmountInVolatile",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+    ],
+    name: "getAmountOut",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "stable",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+    ],
+    name: "getAmountOutStable",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+    ],
+    name: "getAmountOutVolatile",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountOut",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "from",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "to",
+            type: "address",
+          },
+          {
+            internalType: "bool",
+            name: "stable",
+            type: "bool",
+          },
+        ],
+        internalType: "struct ITradeHelper.Route[]",
+        name: "routes",
+        type: "tuple[]",
+      },
+    ],
+    name: "getAmountsIn",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "from",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "to",
+            type: "address",
+          },
+          {
+            internalType: "bool",
+            name: "stable",
+            type: "bool",
+          },
+        ],
+        internalType: "struct ITradeHelper.Route[]",
+        name: "routes",
+        type: "tuple[]",
+      },
+    ],
+    name: "getAmountsOut",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "tokenA",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenB",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "stable",
+        type: "bool",
+      },
+    ],
+    name: "poolFor",
+    outputs: [
+      {
+        internalType: "address",
+        name: "pool",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "tokenA",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenB",
+        type: "address",
+      },
+    ],
+    name: "sortTokens",
+    outputs: [
+      {
+        internalType: "address",
+        name: "token0",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "token1",
+        type: "address",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+] as const;
+
+export const rewardHelperABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_factory",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "address[]",
+        name: "pools",
+        type: "address[]",
+      },
+    ],
+    name: "getExpectedClaimForNextEpoch",
+    outputs: [
+      {
+        components: [
+          {
+            components: [
+              {
+                internalType: "address[]",
+                name: "tokens",
+                type: "address[]",
+              },
+              {
+                internalType: "string[]",
+                name: "symbols",
+                type: "string[]",
+              },
+              {
+                internalType: "uint256[]",
+                name: "decimals",
+                type: "uint256[]",
+              },
+              {
+                internalType: "uint256[]",
+                name: "amounts",
+                type: "uint256[]",
+              },
+            ],
+            internalType: "struct RewardHelper.Bribe[]",
+            name: "bribes",
+            type: "tuple[]",
+          },
+        ],
+        internalType: "struct RewardHelper.Rewards[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "pool",
+        type: "address",
+      },
+    ],
+    name: "getPoolBribe",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address[]",
+            name: "tokens",
+            type: "address[]",
+          },
+          {
+            internalType: "string[]",
+            name: "symbols",
+            type: "string[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "decimals",
+            type: "uint256[]",
+          },
+          {
+            internalType: "uint256[]",
+            name: "amounts",
+            type: "uint256[]",
+          },
+        ],
+        internalType: "struct RewardHelper.Bribe[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "poolFactory",
+    outputs: [
+      {
+        internalType: "contract IPoolFactory",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_voter",
+        type: "address",
+      },
+    ],
+    name: "setVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "underlyingToken",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "voter",
+    outputs: [
+      {
+        internalType: "contract IVoter",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+] as const;

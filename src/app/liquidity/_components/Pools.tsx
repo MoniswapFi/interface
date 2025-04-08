@@ -1,18 +1,15 @@
-import { type Pair } from "@/graphclient";
-import { useGetTokenLists } from "@/hooks/api/tokens";
-import { useProtocolCore } from "@/hooks/onchain/core";
-import { useGaugeCore } from "@/hooks/onchain/gauge";
-import { useVoterCore } from "@/hooks/onchain/voting";
-import { TokenType } from "@/types";
-import { toSF } from "@/utils/format";
+import { ERC20ItemType, useGetTokenLists } from "@/hooks/api/tokens";
+import { useTimeInMotion } from "@/hooks/misc";
+import { PoolType, useHelpers, useProtocolCore } from "@/hooks/onchain/core";
+import { toSF, treatWETHAsETHIfApplicable } from "@/utils/format";
 import { faInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, SelectItem } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
-import { formatEther, zeroAddress } from "viem";
-import { useChainId, useWatchBlocks } from "wagmi";
+import { FC, useMemo } from "react";
+import { formatEther } from "viem";
+import { useChainId } from "wagmi";
 import { Button } from "../../../components/ui/button";
 import { Popover } from "../../../components/ui/Popover";
 import {
@@ -24,56 +21,69 @@ import {
 } from "../../../config/constants";
 
 type PoolsProps = {
-  data: Pair[];
+  data: PoolType[];
 };
 
 type PoolProps = {
-  data: Pair;
-  tokenlist: TokenType[];
+  data: PoolType;
+  tokenlist: ERC20ItemType[];
   stableFee: bigint | undefined;
   volatileFee: bigint | undefined;
 };
 
 const Pool: FC<PoolProps> = ({ data, tokenlist, stableFee, volatileFee }) => {
+  const chainId = useChainId();
   const { push } = useRouter();
-  const { useGetPoolGauge } = useVoterCore();
+  const timeInMotion = useTimeInMotion();
+  const timeCompact = useMemo(
+    () => Math.floor(timeInMotion / 1000),
+    [timeInMotion],
+  );
+  const dayAgo = useMemo(() => timeCompact - 60 * 60 * 24, [timeCompact]);
+  const token0 = useMemo(
+    () =>
+      tokenlist.find(
+        (token) => token.address.toLowerCase() === data.token0.toLowerCase(),
+      ),
+    [data.token0, tokenlist],
+  );
+  const token1 = useMemo(
+    () =>
+      tokenlist.find(
+        (token) => token.address.toLowerCase() === data.token1.toLowerCase(),
+      ),
+    [data.token1, tokenlist],
+  );
 
-  const { data: gaugeId = zeroAddress, refetch: refetchGaugeId } =
-    useGetPoolGauge(data.id);
-  const { useGaugeReadables } = useGaugeCore();
-  const { useRewardRate } = useGaugeReadables(gaugeId);
-  const { data: rewardRate = BigInt(0), refetch: refetchRewardRate } =
-    useRewardRate();
-
-  useWatchBlocks({
-    onBlock: async () => {
-      await Promise.all([refetchGaugeId(), refetchRewardRate()]);
-    },
-  });
+  const {
+    useGetTVLForPool,
+    useGetFeesForPool,
+    useGetVolumeLockedPerTimeForPool,
+  } = useHelpers();
+  const { data: quotes } = useGetTVLForPool(data.pool_address);
+  const {
+    data: [, , , , volume24Hr],
+  } = useGetVolumeLockedPerTimeForPool(
+    data.pool_address,
+    BigInt(dayAgo),
+    BigInt(timeCompact),
+    60000,
+  );
+  const { data: fees } = useGetFeesForPool(data.pool_address, 60000);
 
   return (
     <div className="flex flex-col justify-between gap-3 border-t border-swapBox pt-5 lg:flex-row lg:items-center lg:gap-0">
       <div className="flex lg:w-[25%]">
         <div className="flex items-center">
           <Image
-            src={
-              tokenlist.find(
-                (tt) =>
-                  tt.address.toLowerCase() === data.token0.id.toLowerCase(),
-              )?.logoURI ?? ""
-            }
+            src={token0?.logoURI || ""}
             alt="icon"
             width={30}
             height={30}
             className="rounded-full"
           />
           <Image
-            src={
-              tokenlist.find(
-                (tt) =>
-                  tt.address.toLowerCase() === data.token1.id.toLowerCase(),
-              )?.logoURI ?? ""
-            }
+            src={token1?.logoURI || ""}
             alt="icon"
             width={30}
             height={30}
@@ -81,10 +91,7 @@ const Pool: FC<PoolProps> = ({ data, tokenlist, stableFee, volatileFee }) => {
           />
         </div>
         <div className="flex flex-col">
-          <span className="text-sm">
-            {data.stable ? "sAMM" : "vAMM"}-{data.token0.symbol}/
-            {data.token1.symbol}
-          </span>
+          <span className="text-sm">{data.symbol}</span>
           <span className="bg-darkgray p-1 text-xs text-lightblue">
             Basic {data.stable ? "Stable" : "Volatile"} •{" "}
             {Number((data.stable ? stableFee : volatileFee) ?? 0) / 100}%
@@ -96,31 +103,31 @@ const Pool: FC<PoolProps> = ({ data, tokenlist, stableFee, volatileFee }) => {
         <span className="text-textgray lg:hidden">
           TVL <Popover content="Total volume locked." />
         </span>
-        <span>${toSF(data.reserveUSD)}</span>
+        <span>${toSF(formatEther(quotes[2]))}</span>
       </div>
       <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
         <span className="text-textgray lg:hidden">
-          {"Fees <24H>"} <Popover content="Accrued fees." />
+          {"Fees"} <Popover content="Accrued fees." />
         </span>
-        ${toSF(data.feesUSD)}
+        ${toSF(formatEther(fees))}
       </div>
       <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
         <span className="text-textgray lg:hidden">
           {"Volume <24H>"} <Popover content="24-hour volume." />
         </span>
-        ${toSF(data.volumeUSD)}
+        ${toSF(formatEther(volume24Hr))}
       </div>
       <div className="flex justify-between lg:block lg:w-[130px] lg:text-right">
         <span className="text-textgray lg:hidden">
-          {"APR <24H>"} <Popover content="Deposit rate." />
+          {"APR"} <Popover content="Emissions rate." />
         </span>
-        {toSF(formatEther(rewardRate))}%
+        {toSF(formatEther(data.emissions))}%
       </div>
       <div>
         <Button
           onClick={() =>
             push(
-              `/liquidity/deposit?token0=${data.token0.id}&token1=${data.token1.id}`,
+              `/liquidity/deposit?token0=${treatWETHAsETHIfApplicable(data.token0, chainId)}&token1=${treatWETHAsETHIfApplicable(data.token1, chainId)}`,
             )
           }
           className="w-full text-btn-primary lg:min-w-0"
@@ -128,6 +135,7 @@ const Pool: FC<PoolProps> = ({ data, tokenlist, stableFee, volatileFee }) => {
           <FontAwesomeIcon icon={faPlus} />{" "}
           <span className="lg:hidden">Add Liquidity</span>
         </Button>
+        
       </div>
     </div>
   );

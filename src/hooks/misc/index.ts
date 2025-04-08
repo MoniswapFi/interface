@@ -15,3 +15,12 @@ export function useTimeInMotion() {
 
   return currentTime;
 }
+
+export function useSetInterval(cb: () => void, ms: number = 1000) {
+  return useEffect(() => {
+    const interval = setInterval(cb, ms);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [cb, ms]);
+}

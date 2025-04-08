@@ -1,3 +1,8 @@
+import {
+  __CHAIN_IDS__,
+  __ETHER__,
+  __WRAPPED_ETHER__,
+} from "@/config/constants";
 import { Address } from "viem";
 
 export const truncateAddress = (address: Address) => {
@@ -24,3 +29,18 @@ export const formatNumber = (value?: any, opts?: Intl.NumberFormatOptions) => {
     ...opts,
   }).format(n);
 };
+
+export const treatETHAsWETHIfApplicable = (
+  address: Address,
+  chainId: number = __CHAIN_IDS__.bera_bepolia,
+) => {
+  const weth = __WRAPPED_ETHER__[chainId];
+  return address.toLowerCase() === __ETHER__.toLowerCase()
+    ? (weth as Address)
+    : address;
+};
+
+export const treatWETHAsETHIfApplicable = (address: Address, chainId: number = __CHAIN_IDS__.bera_bepolia) => {
+  const weth = __WRAPPED_ETHER__[chainId];
+  return address.toLowerCase() === weth.toLowerCase() ? __ETHER__ : address;
+}

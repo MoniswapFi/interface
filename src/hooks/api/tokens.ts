@@ -1,16 +1,14 @@
-import { __API_CHAIN_NAMES__ } from "@/config/constants";
-import { NFTMetadata, TokenType } from "@/types";
-import { APIURL } from "@/utils/api";
+import { NFTMetadata } from "@/types";
+import { getTokenlist } from "@/utils/assets";
 import { TokenURIReader } from "@/utils/token-uri-reader";
 import { createQuery } from "react-query-kit";
 
+export type ERC20ItemType = Awaited<ReturnType<typeof getTokenlist>>[number];
+
 export const useGetTokenLists = createQuery({
   queryKey: ["_tokens_"],
-  fetcher: async (variables: { chainId: number }): Promise<TokenType[]> => {
-    const chainName = __API_CHAIN_NAMES__[variables.chainId];
-    const url = new APIURL(`/tokens/${chainName}`);
-    const response = await fetch(url);
-    return response.json();
+  fetcher: async (variables: { chainId: number }): Promise<ERC20ItemType[]> => {
+    return getTokenlist(variables.chainId);
   },
 });
 

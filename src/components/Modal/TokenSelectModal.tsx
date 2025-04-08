@@ -1,6 +1,7 @@
-import { __ETHER__ } from "@/config/constants";
-import { useERC20Balance, useNativeBalance } from "@/hooks/onchain/wallet";
-import { TokenType } from "@/types";
+import type { ERC20ItemType } from "@/hooks/api/tokens";
+import { useGetAverageValueInUSD } from "@/hooks/onchain/oracle";
+import { useGetBalance } from "@/hooks/onchain/wallet";
+import { toSF } from "@/utils/format";
 import {
   Divider,
   Input,
@@ -13,19 +14,20 @@ import {
 import clsx from "clsx";
 import Image from "next/image";
 import { FC, MouseEventHandler, useMemo, useState } from "react";
+import { formatEther, formatUnits } from "viem";
 
 type ModalProps = {
   isOpen: boolean;
   close: () => void;
-  tokenLists: TokenType[];
-  onItemClick: (token: TokenType) => any;
-  selectedTokens: [TokenType, TokenType];
+  tokenLists: ERC20ItemType[];
+  onItemClick: (token: ERC20ItemType) => any;
+  selectedTokens: [ERC20ItemType, ERC20ItemType];
 };
 
 type TokenSelectableItemProps = {
   onSelect: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
-  item: TokenType;
+  item: ERC20ItemType;
 };
 
 const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
@@ -33,19 +35,12 @@ const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
   disabled,
   item,
 }) => {
-  const { isLoading: erc20BalanceLoading, balance: erc20Balance } =
-    useERC20Balance(item.address as any);
-  const { isLoading: nativeBalanceLoading, balance: nativeBalance } =
-    useNativeBalance();
-  const isLoading = useMemo(
-    () => erc20BalanceLoading || nativeBalanceLoading,
-    [erc20BalanceLoading, nativeBalanceLoading],
+  const { isLoading, balance } = useGetBalance(item.address, 15000);
+  const { data: quote = [BigInt(0), BigInt(0)] } = useGetAverageValueInUSD(
+    item.address,
+    balance,
+    10000,
   );
-  const balance = useMemo(
-    () => (item.address === __ETHER__ ? nativeBalance : erc20Balance),
-    [item.address, nativeBalance, erc20Balance],
-  );
-
   return (
     <button
       onClick={onSelect}
@@ -72,8 +67,12 @@ const TokenSelectableItem: FC<TokenSelectableItemProps> = ({
         <Spinner size="sm" />
       ) : (
         <div className="flex flex-col items-end">
-          <span className="text-xl">{balance.toFixed(4)}</span>
-          <span className="text-textlightgray">$0</span>
+          <span className="text-xl">
+            {toSF(formatUnits(balance, item.decimals))}
+          </span>
+          <span className="text-textlightgray">
+            ${toSF(formatEther(quote[0]))}
+          </span>
         </div>
       )}
     </button>

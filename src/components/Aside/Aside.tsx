@@ -20,7 +20,7 @@ export const AsideBar: FC<Props> = ({ showMenu, hideMenu }) => {
 
   useEffect(() => {
     hideMenu();
-  }, [pathname]);
+  }, [hideMenu, pathname]);
 
   return (
     <div

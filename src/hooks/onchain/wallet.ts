@@ -1,73 +1,50 @@
-import { erc20Abi } from "@/assets/abis";
-import {
-  useAccount,
-  useBalance,
-  useReadContract,
-  useWatchBlocks,
-  useWriteContract,
-} from "wagmi";
+import { Address } from "viem";
+import { useWatchBlocks, useWriteContract } from "wagmi";
 
-export function useNativeBalance() {
-  const { address } = useAccount();
-  const {
-    data: balance,
-    refetch,
-    isLoading,
-    isError,
-  } = useBalance({
-    address,
-  });
+import { __ETHER__ } from "@/config/constants";
+import { useMemo } from "react";
+import { erc20Abi, zeroAddress } from "viem";
+import { useAccount, useBalance, useReadContract } from "wagmi";
 
-  useWatchBlocks({
-    onBlock: () => {
-      refetch()
-        .then(() => console.info("Refetched native balance"))
-        .catch(console.debug);
-    },
-  });
+export function useGetBalance(
+  tokenAddress: Address = zeroAddress,
+  refetchInterval = 30000,
+) {
+  const { address = zeroAddress } = useAccount();
+  const { data: etherData = { value: BigInt(0) }, isFetching: etherFetching } =
+    useBalance({
+      address,
+      query: {
+        enabled:
+          tokenAddress === zeroAddress ||
+          tokenAddress.toLowerCase() === __ETHER__.toLowerCase(),
+        refetchInterval,
+      },
+    });
+  const { data: erc20Balance = BigInt(0), isFetching: erc20Fetching } =
+    useReadContract({
+      address: tokenAddress,
+      abi: erc20Abi,
+      functionName: "balanceOf",
+      args: [address],
+      query: {
+        enabled:
+          tokenAddress !== zeroAddress &&
+          tokenAddress.toLowerCase() !== __ETHER__.toLowerCase() &&
+          address !== zeroAddress,
+        refetchInterval,
+      },
+    });
 
-  return {
-    balance: !!balance ? Number(balance.value) / Math.pow(10, 18) : 0,
-    isLoading,
-    isError,
-  };
-}
-
-export function useERC20Balance(tokenAddress: `0x${string}`) {
-  const { address } = useAccount();
-  const { data: decimals } = useReadContract({
-    abi: erc20Abi,
-    functionName: "decimals",
-    address: tokenAddress,
-  });
-  const {
-    data: balance,
-    refetch,
-    isLoading,
-    isError,
-  } = useReadContract({
-    abi: erc20Abi,
-    functionName: "balanceOf",
-    args: [!address ? "0x" : address],
-    address: tokenAddress,
-  });
-
-  useWatchBlocks({
-    onBlock: () => {
-      refetch()
-        .then(() =>
-          console.info("Refetched account balance for %s", tokenAddress),
-        )
-        .catch(console.debug);
-    },
-  });
-
-  return {
-    balance:
-      !!balance && !!decimals ? Number(balance) / Math.pow(10, decimals) : 0,
-    isLoading,
-    isError,
-  };
+  // No need to return bothe balances separately. Just return based on token address
+  return useMemo(
+    () =>
+      tokenAddress.toLowerCase() === __ETHER__.toLowerCase() ||
+      tokenAddress === zeroAddress
+        ? { balance: etherData.value, isLoading: etherFetching }
+        : { balance: erc20Balance, isLoading: erc20Fetching },
+    [tokenAddress, etherData.value, etherFetching, erc20Balance, erc20Fetching],
+  );
 }
 
 export function useERC20BalanceOfOther(

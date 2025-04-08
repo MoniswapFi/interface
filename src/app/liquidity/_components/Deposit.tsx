@@ -10,19 +10,19 @@ import {
   __PROTOCOL_ROUTERS__,
   __WRAPPED_ETHER__,
 } from "@/config/constants";
+import { type ERC20ItemType } from "@/hooks/api/tokens";
 import { useSinglePoolInfo } from "@/hooks/graphql/core";
-import { usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
+import { useHelpers, usePoolMetadata, useProtocolCore } from "@/hooks/onchain/core";
 import { useGaugeCore } from "@/hooks/onchain/gauge";
 import { useGetAverageValueInUSD } from "@/hooks/onchain/oracle";
 import { useVoterCore } from "@/hooks/onchain/voting";
 import {
   useERC20Allowance,
-  useERC20Balance,
-  useNativeBalance,
+  useGetBalance
 } from "@/hooks/onchain/wallet";
 import { RootState } from "@/store";
 import { TokenType } from "@/types";
-import { toSF } from "@/utils/format";
+import { toSF, treatETHAsWETHIfApplicable } from "@/utils/format";
 import { div } from "@/utils/math";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ChevronDown, Plus, Scale } from "lucide-react";
@@ -33,8 +33,8 @@ import { formatEther, formatUnits, parseUnits, zeroAddress } from "viem";
 import { useAccount, useChainId, useWatchBlocks } from "wagmi";
 
 type DepositProps = {
-  token0: TokenType;
-  token1: TokenType;
+  token0: ERC20ItemType;
+  token1: ERC20ItemType;
   stable: boolean;
 };
 
@@ -49,59 +49,32 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
   const wrappedEther = useMemo(() => __WRAPPED_ETHER__[chainId], [chainId]);
   const router = useMemo(() => __PROTOCOL_ROUTERS__[chainId], [chainId]);
-  const firstAddress = useMemo(
-    () => (token0.address === __ETHER__ ? wrappedEther : token0.address),
-    [wrappedEther, token0.address],
-  );
-  const secondAddress = useMemo(
-    () => (token1.address === __ETHER__ ? wrappedEther : token1.address),
-    [wrappedEther, token1.address],
-  );
+  const firstAddress = treatETHAsWETHIfApplicable(token0.address, chainId);
+  const secondAddress = treatETHAsWETHIfApplicable(token0.address, chainId);
 
-  const { useGetPool, useAddLiquidity, useQuoteAddLiquidity, usePoolFee } =
+  const { useGetPool: useGetPoolAddress, useAddLiquidity, useQuoteAddLiquidity, usePoolFee } =
     useProtocolCore();
-  const { data: poolAddress = zeroAddress } = useGetPool(
-    firstAddress as any,
-    secondAddress as any,
+  const { data: poolAddress = zeroAddress } = useGetPoolAddress(
+    firstAddress,
+    secondAddress,
     stable,
   );
-  const { data: fee } = usePoolFee(poolAddress as any, stable);
-  const { usePoolSymbol, usePoolTotalSupply } = usePoolMetadata(
-    poolAddress as any,
-  );
-  const { data: poolSymbol } = usePoolSymbol();
-  const { data: poolTotalSupply, refetch: refetchPoolSupply } =
-    usePoolTotalSupply();
-  const useIndexedPool = useSinglePoolInfo(poolAddress?.toLowerCase());
-  const { data: pair, refetch: refetchPair } = useIndexedPool();
-
-  const { balance: etherBalance } = useNativeBalance();
-  const { balance: token0Balance } = useERC20Balance(token0.address as any);
-  const { balance: token1Balance } = useERC20Balance(token1.address as any);
-  const balance0 = useMemo(
-    () => (token0.address === __ETHER__ ? etherBalance : token0Balance),
-    [etherBalance, token0.address, token0Balance],
-  );
-  const balance1 = useMemo(
-    () => (token1.address === __ETHER__ ? etherBalance : token1Balance),
-    [etherBalance, token0.address, token1Balance],
-  );
-  const { balance: position } = useERC20Balance(poolAddress as any);
-  const formattedTS = useMemo(
-    () => Number(formatUnits(poolTotalSupply ?? BigInt(1), 18)),
-    [poolTotalSupply],
-  );
+  const { useGetSinglePool } = useHelpers();
+  const { data: poolInformation, refetch: refetchPoolInformation } = useGetSinglePool(poolAddress);
+  const { data: fee } = usePoolFee(poolInformation.pool_address ?? zeroAddress, poolInformation.stable ?? stable);
+  const { balance: token0Balance } = useGetBalance(token0.address);
+  const { balance: token1Balance } = useGetBalance(token1.address);
   const positionRatio = useMemo(
-    () => div(position, formattedTS),
-    [formattedTS, position],
+    () => (poolInformation.account_lp_balance * BigInt(1000)) / poolInformation.total_supply,
+    [poolInformation.account_lp_balance, poolInformation.total_supply],
   );
   const token0Deposited = useMemo(
-    () => positionRatio * Number(pair?.reserve0 ?? "0"),
-    [pair?.reserve0, positionRatio],
+    () => (positionRatio * poolInformation.reserve0) / BigInt(1000),
+    [poolInformation.reserve0, positionRatio],
   );
   const token1Deposited = useMemo(
-    () => positionRatio * Number(pair?.reserve1 ?? "0"),
-    [pair?.reserve1, positionRatio],
+    () => (positionRatio * poolInformation.reserve1) / BigInt(1000),
+    [poolInformation.reserve1, positionRatio],
   );
 
   const {
@@ -109,8 +82,8 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
     isFetching: quoteFetching,
     refetch: refetchQuote,
   } = useQuoteAddLiquidity(
-    firstAddress as any,
-    secondAddress as any,
+    firstAddress,
+    secondAddress,
     stable,
     Number(parseUnits(amount0.toString(), token0.decimals)),
     Number(parseUnits(amount1.toString(), token1.decimals)),
@@ -125,8 +98,8 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
     isError: depositError,
     reset: resetDeposit,
   } = useAddLiquidity(
-    firstAddress as any,
-    secondAddress as any,
+    firstAddress,
+    secondAddress,
     stable,
     Number(parseUnits(amount0.toString(), token0.decimals)),
     Number(parseUnits(amount1.toString(), token1.decimals)),
@@ -135,17 +108,11 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
 
   const executeTx = useCallback(
     () =>
-      firstAddress.toLowerCase() === wrappedEther.toLowerCase() ||
-      secondAddress.toLowerCase() === wrappedEther.toLowerCase()
+      token0.address.toLowerCase() === __ETHER__.toLowerCase() ||
+      token1.address.toLowerCase() === __ETHER__.toLowerCase()
         ? executeAddLiquidityETH()
         : executeAddLiquidity(),
-    [
-      firstAddress,
-      secondAddress,
-      executeAddLiquidity,
-      executeAddLiquidityETH,
-      wrappedEther,
-    ],
+    [token0.address, token1.address, executeAddLiquidityETH, executeAddLiquidity],
   );
 
   const { useAllowance: useAllowance0, useApproval: useApproval0 } =
@@ -214,8 +181,6 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
         refetchAmount1USDValue(),
         refetchAllowance0(),
         refetchAllowance1(),
-        refetchPoolSupply(),
-        refetchPair(),
         refetchQuote(),
         refetchGaugeId(),
         refetchRewardRate(),
@@ -253,8 +218,8 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
               </div>
               <div>
                 <>
-                  {!!poolAddress && poolAddress !== zeroAddress ? (
-                    <span>{poolSymbol}</span>
+                  {!!poolInformation ? (
+                    <span>{poolInformation.symbol}</span>
                   ) : (
                     <span>
                       {stable ? "sAMM" : "vAMM"}-{token0.symbol}/{token1.symbol}
@@ -302,16 +267,16 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
               <div className="flex flex-col items-end justify-start gap-1">
                 <div>
                   <span className="text-swapBox">
-                    {!!pair ? toSF(token0Deposited) : 0.0}
+                    {!!poolInformation ? toSF(token0Deposited) : 0.0}
                   </span>{" "}
-                  <span>{pair?.token0.symbol ?? token0.symbol}</span>
+                  <span>{poolInformation?.token0_symbol ?? token0.symbol}</span>
                 </div>
 
                 <div>
                   <span className="text-swapBox">
-                    {!!pair ? toSF(token1Deposited) : 0.0}
+                    {!!poolInformation ? toSF(token1Deposited) : 0.0}
                   </span>{" "}
-                  <span>{pair?.token1.symbol ?? token1.symbol}</span>
+                  <span>{poolInformation.token1_symbol ?? token1.symbol}</span>
                 </div>
               </div>
             </div>
@@ -323,7 +288,7 @@ export const Deposit: FC<DepositProps> = ({ token0, token1, stable }) => {
               <p className="flex justify-between">
                 <span>Token Amount</span>
                 <span className="text-swapBox">
-                  Available {balance0.toFixed(4)} {token0.symbol}
+                  Available {toSF(formatUnits(token0Balance, token0.decimals))} {token0.symbol}
                 </span>
               </p>
 

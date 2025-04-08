@@ -49,6 +49,7 @@ export const __CHAIN_IDS__ = {
   bera_testnet: 80084,
   arbi_mainnet: 42161,
   bera: 80094,
+  bera_bepolia: 80069,
 };
 export const __API_CHAIN_NAMES__ = {
   [__CHAIN_IDS__.bera_testnet]: "bartio",
@@ -57,6 +58,7 @@ export const __API_CHAIN_NAMES__ = {
 export const __EXPLORERs__ = {
   [__CHAIN_IDS__.bera_testnet]: "https://bartio.beratrail.io",
   [__CHAIN_IDS__.bera]: "https://berascan.com",
+  [__CHAIN_IDS__.bera_bepolia]: "https://bepolia.beratrail.io",
 };
 export const __POOL__GRAPH__URLs__ = {
   [__CHAIN_IDS__.bera_testnet]:
@@ -80,10 +82,12 @@ export const __ETHER__ = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 export const __AGGREGATOR_ROUTERS__ = {
   [__CHAIN_IDS__.bera_testnet]: "0xbcC7Eee299c89CBD285A996d461499c7a9af753A",
   [__CHAIN_IDS__.bera]: "0x14Cd5F86b184AD00D237Db8b7F626B8BF6473fF6",
+  [__CHAIN_IDS__.bera_bepolia]: "0x79cC64e40CF1b79E54d80fAB5De924efdC1e90d9",
 };
 export const __PROTOCOL_ROUTERS__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x19042106AABFA3A2cDf46Ea160aA6fa9Db31c261",
   [__CHAIN_IDS__.bera]: "0xf00EB8c6877d18B97C47013AfAc2049584c91bDb",
+  [__CHAIN_IDS__.bera_bepolia]: "0x023AF3A2F01982A07c80BDe582E48b4B9b491034",
 };
 export const __POOL_FACTORIES__ = {
   [__CHAIN_IDS__.bera_testnet]: "0xa933091dd8b94D07cE68DF5eA96822A45e3EA819",
@@ -92,6 +96,7 @@ export const __POOL_FACTORIES__ = {
 export const __VOTER__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x6399081084Aff4A927E8704E77bC939703bd892c",
   [__CHAIN_IDS__.bera]: "0x8160C59218be97F301a857cD8E72e5d3446621df",
+  [__CHAIN_IDS__.bera_bepolia]: "0x1515B7652185388925F5D8283496753883416f09",
 };
 export const __MULTICALL__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x7A723417Ff14DD3CF58917e46614479edFEE5eAD",
@@ -100,6 +105,7 @@ export const __MULTICALL__ = {
 export const __VOTING_ESCROW__ = {
   [__CHAIN_IDS__.bera_testnet]: "0xd11163343Ca6a4e5feADdbB979567A7853e6F20a",
   [__CHAIN_IDS__.bera]: "0xB8da258a2B2A8AE31Aab6494D7DC784dC96e5b78",
+  [__CHAIN_IDS__.bera_bepolia]: "0x106f65e8ac8Fb84024e583AE1abAf7552E7EE80d",
 };
 export const __PRICE_ORACLE__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x6D2015Dce2d839c23806278E4DA30500766AC44D",
@@ -112,10 +118,12 @@ export const __DEDICATED_PRICE_SOURCE__ = {
 export const __WRAPPED_ETHER__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
   [__CHAIN_IDS__.bera]: "0x6969696969696969696969696969696969696969",
+  [__CHAIN_IDS__.bera_bepolia]: "0x6969696969696969696969696969696969696969",
 };
 export const __MONI__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x5A3740947AdEdADDE6B3034222B779549F0aC42F",
   [__CHAIN_IDS__.bera]: "0x64FAF984Bf60dE19e24238521814cA98574E3b00",
+  [__CHAIN_IDS__.bera_bepolia]: "0xc361d30b85736f4795a474946C9ca24378373bCF",
 };
 export const __HONEY__ = {
   [__CHAIN_IDS__.bera_testnet]: "0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03",
@@ -131,6 +139,20 @@ export const __BRUV_BERAS__ = {
   [__CHAIN_IDS__.arbi_mainnet]: "0x26A3C7BFE8C1a6deF5f70006e6a89a9f503fa362",
 };
 export const __IDEAL_GAS__ = BigInt(400000);
+
+// Helpers
+export const __POOL_HELPER__ = {
+  [__CHAIN_IDS__.bera_bepolia]: "0x2D67FC1622099Ed068a2049c83773D9016c4aaEf",
+};
+export const __TRADE_HELPER__ = {
+  [__CHAIN_IDS__.bera_bepolia]: "0xEeeC1d828520fC26541624c4e2E34376220CB93a",
+};
+export const __VE_NFT_HELPER__ = {
+  [__CHAIN_IDS__.bera_bepolia]: "0xa45328cB9B5215cc18937AB123fCf44a6815b6C1",
+};
+export const __EXCHANGE_HELPER__ = {
+  [__CHAIN_IDS__.bera_bepolia]: "0xCA6f864adD2cF45bf2b28FBbC990216Cc759B0Ca",
+};
 
 export const FAQ_TVL = {
   title: "TVL",

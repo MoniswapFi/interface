@@ -1,13 +1,24 @@
-import { poolAbi, poolFactoryAbi, protocolRouterAbi } from "@/assets/abis";
 import {
+  exchangeHelperABI,
+  poolAbi,
+  poolFactoryAbi,
+  poolHelperABI,
+  protocolRouterAbi,
+  veNFTHelperABI,
+} from "@/assets/abis";
+import {
+  __EXCHANGE_HELPER__,
   __POOL_FACTORIES__,
+  __POOL_HELPER__,
   __PROTOCOL_ROUTERS__,
+  __VE_NFT_HELPER__,
   __WRAPPED_ETHER__,
 } from "@/config/constants";
 import { RootState } from "@/store";
 import { mul } from "@/utils/math";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
+import { Address, zeroAddress } from "viem";
 import {
   useAccount,
   useChainId,
@@ -406,3 +417,141 @@ export function usePoolMetadata(poolAddress: `0x${string}`) {
     useClaimable1,
   };
 }
+
+export function useHelpers() {
+  const chainId = useChainId();
+  const { address = zeroAddress } = useAccount();
+  const poolHelper = useMemo(() => __POOL_HELPER__[chainId], [chainId]);
+  const veNFTHelper = useMemo(() => __VE_NFT_HELPER__[chainId], [chainId]);
+  const exchangeHelper = useMemo(() => __EXCHANGE_HELPER__[chainId], [chainId]);
+
+  const useGetAllPools = (refetchInterval: number = 30000) => {
+    const { data = [], ...rest } = useReadContract({
+      address: poolHelper as Address,
+      abi: poolHelperABI,
+      functionName: "getAllPools",
+      args: [address],
+      query: { enabled: address !== zeroAddress, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  const useGetSinglePool = (poolAddress: Address, refetchInterval: number = 30000) => {
+    const { data, ...rest } = useReadContract({
+      address: poolHelper as Address,
+      abi: poolHelperABI,
+      functionName: "getPool",
+      args: [poolAddress, address],
+      query: { enabled: address !== zeroAddress && poolAddress !== zeroAddress, refetchInterval },
+    });
+    return { data: data!, ...rest };
+  }
+
+  const useGetAllVeNFTs = (refetchInterval: number = 30000) => {
+    const { data = [], ...rest } = useReadContract({
+      address: veNFTHelper as Address,
+      abi: veNFTHelperABI,
+      functionName: "getNFTFromAddress",
+      args: [address],
+      query: { enabled: address !== zeroAddress, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  const useGetTVL = (refetchInterval: number = 30000) => {
+    const { data = [BigInt(0), [], []], ...rest } = useReadContract({
+      address: exchangeHelper as Address,
+      abi: exchangeHelperABI,
+      functionName: "getTVLInUSDForAllPools",
+      query: { enabled: true, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  const useGetTVLForPool = (pool: Address, refetchInterval: number = 30000) => {
+    const { data = [BigInt(0), BigInt(0), BigInt(0)], ...rest } =
+      useReadContract({
+        address: exchangeHelper as Address,
+        abi: exchangeHelperABI,
+        functionName: "getTVLInUSDForPool",
+        args: [pool],
+        query: { enabled: true, refetchInterval },
+      });
+    return { data, ...rest };
+  };
+
+  const useGetFees = (refetchInterval: number = 30000) => {
+    const { data = [BigInt(0), [], []], ...rest } = useReadContract({
+      address: exchangeHelper as Address,
+      abi: exchangeHelperABI,
+      functionName: "getFeesInUSDForAllPools",
+      query: { enabled: true, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  const useGetFeesForPool = (
+    pool: Address,
+    refetchInterval: number = 30000,
+  ) => {
+    const { data = BigInt(0), ...rest } = useReadContract({
+      address: exchangeHelper as Address,
+      abi: exchangeHelperABI,
+      functionName: "getFeesInUSDForPool",
+      args: [pool],
+      query: { enabled: true, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  const useGetVolumeLockedPerTime = (
+    from: bigint,
+    to: bigint,
+    refetchInterval: number = 30000,
+  ) => {
+    const { data = [BigInt(0), [], []], ...rest } = useReadContract({
+      address: exchangeHelper as Address,
+      abi: exchangeHelperABI,
+      functionName: "getTotalVolumeLockedPerTime",
+      args: [from, to],
+      query: { enabled: true, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  const useGetVolumeLockedPerTimeForPool = (
+    pool: Address,
+    from: bigint,
+    to: bigint,
+    refetchInterval: number = 30000,
+  ) => {
+    const {
+      data = [BigInt(0), BigInt(0), BigInt(0), BigInt(0), BigInt(0)],
+      ...rest
+    } = useReadContract({
+      address: exchangeHelper as Address,
+      abi: exchangeHelperABI,
+      functionName: "getVolumeLockedPerTimeForPool",
+      args: [pool, from, to],
+      query: { enabled: true, refetchInterval },
+    });
+    return { data, ...rest };
+  };
+
+  return {
+    useGetAllPools,
+    useGetAllVeNFTs,
+    useGetTVL,
+    useGetTVLForPool,
+    useGetFees,
+    useGetFeesForPool,
+    useGetVolumeLockedPerTime,
+    useGetVolumeLockedPerTimeForPool,
+    useGetSinglePool
+  };
+}
+
+type GetAllPoolsFuncType = ReturnType<typeof useHelpers>["useGetAllPools"];
+type GetAllVeNFTsFuncType = ReturnType<typeof useHelpers>["useGetAllVeNFTs"];
+export type PoolType = ReturnType<GetAllPoolsFuncType>["data"][number];
+export type VeNFTPoolType = ReturnType<GetAllVeNFTsFuncType>["data"][number];

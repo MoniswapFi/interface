@@ -12,28 +12,24 @@ import { Button } from "@/components/ui/button";
 import {
   __AGGREGATOR_ROUTERS__,
   __ETHER__,
-  __HONEY__,
+  __MONI__,
   __WRAPPED_ETHER__,
 } from "@/config/constants";
-import { useGetTokenLists } from "@/hooks/api/tokens";
+import { type ERC20ItemType, useGetTokenLists } from "@/hooks/api/tokens";
+import { useSetInterval } from "@/hooks/misc";
 import { useGetAverageValueInUSD } from "@/hooks/onchain/oracle";
 import { useAggregatorRouter } from "@/hooks/onchain/swap";
-import {
-  useERC20Allowance,
-  useERC20Balance,
-  useNativeBalance,
-} from "@/hooks/onchain/wallet";
+import { useERC20Allowance, useGetBalance } from "@/hooks/onchain/wallet";
 import { useWETH_ETHProcesses } from "@/hooks/onchain/weth";
 import { RootState } from "@/store";
-import { TokenType } from "@/types";
 import { toSF } from "@/utils/format";
 import { Divider, Input, Spinner } from "@nextui-org/react";
 import { ArrowRightLeft, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { formatUnits, parseUnits, zeroAddress } from "viem";
-import { useAccount, useChainId, useWatchBlocks } from "wagmi";
+import { formatUnits, getAddress, parseUnits, zeroAddress } from "viem";
+import { useAccount, useChainId } from "wagmi";
 
 export default function Page() {
   const [showTXInfoModal, setShowTXInfoModal] = useState(false);
@@ -44,11 +40,12 @@ export default function Page() {
   const [amount, setAmount] = useState(0.0);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
-  const { data: tokenLists = [] } = useGetTokenLists({
-    variables: { chainId },
-  });
+  const { data: tokenLists = [], refetch: refetchTokensList } =
+    useGetTokenLists({
+      variables: { chainId },
+    });
   const [selectedTokens, setSelectedTokens] = useState<
-    [TokenType | null, TokenType | null]
+    [ERC20ItemType | null, ERC20ItemType | null]
   >([null, null]);
 
   const [hasLoadedDefaultTokens, setHasLoadedDefaultTokens] = useState(false);
@@ -62,23 +59,17 @@ export default function Page() {
 
   const router = useMemo(() => __AGGREGATOR_ROUTERS__[chainId], [chainId]);
   const wrappedEther = useMemo(() => __WRAPPED_ETHER__[chainId], [chainId]);
-  const honey = useMemo(() => __HONEY__[chainId], [chainId]);
-  const { balance: etherBalance } = useNativeBalance();
-  const { balance: token0Balance } = useERC20Balance(
-    selectedTokens[0]?.address as any,
-  );
-  const { balance: token1Balance } = useERC20Balance(
-    selectedTokens[1]?.address as any,
-  );
+  const moni = useMemo(() => __MONI__[chainId], [chainId]);
+  const { balance: token0Balance } = useGetBalance(selectedTokens[0]?.address);
+  const { balance: token1Balance } = useGetBalance(selectedTokens[1]?.address);
+
   const balance0 = useMemo(
-    () =>
-      selectedTokens[0]?.address === __ETHER__ ? etherBalance : token0Balance,
-    [etherBalance, selectedTokens[0]?.address, token0Balance, selectedTokens],
+    () => toSF(formatUnits(token0Balance, selectedTokens[0]?.decimals ?? 18)),
+    [selectedTokens, token0Balance],
   );
   const balance1 = useMemo(
-    () =>
-      selectedTokens[1]?.address === __ETHER__ ? etherBalance : token1Balance,
-    [etherBalance, selectedTokens[1]?.address, token1Balance, selectedTokens],
+    () => toSF(formatUnits(token1Balance, selectedTokens[1]?.decimals ?? 18)),
+    [selectedTokens, token1Balance],
   );
 
   const address0 = useMemo(
@@ -125,11 +116,13 @@ export default function Page() {
     [
       address0,
       address1,
+      amount,
       bestQueryData?.amountOut,
       selectedTokens,
       wrappedEther,
     ],
   );
+
   const { data: bestPathData, refetch: refetchBestPath } = useFindBestPath(
     Number(parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18)),
     address0 as any,
@@ -200,29 +193,25 @@ export default function Page() {
     Number(parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18)),
   );
 
-  const {
-    data: amountInUSDValue = [BigInt(0), BigInt(0)],
-    refetch: refetchAmountInUSDValue,
-  } = useGetAverageValueInUSD(
-    address0 ?? zeroAddress,
-    parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
-  );
-  const {
-    data: amountOutUSDValue = [BigInt(0), BigInt(0)],
-    refetch: refetchAmountOutUSDValue,
-  } = useGetAverageValueInUSD(
-    address1 ?? zeroAddress,
-    parseUnits(
-      amountOutFormatted.toString(),
-      selectedTokens[1]?.decimals ?? 18,
-    ),
-  );
+  const { data: amountInUSDValue = [BigInt(0), BigInt(0)] } =
+    useGetAverageValueInUSD(
+      address0 ? getAddress(address0) : zeroAddress,
+      parseUnits(amount.toString(), selectedTokens[0]?.decimals ?? 18),
+    );
+  const { data: amountOutUSDValue = [BigInt(0), BigInt(0)] } =
+    useGetAverageValueInUSD(
+      address1 ? getAddress(address1) : zeroAddress,
+      parseUnits(
+        amountOutFormatted.toString(),
+        selectedTokens[1]?.decimals ?? 18,
+      ),
+    );
 
   useEffect(() => {
     if (!hasLoadedDefaultTokens) {
       if (tokenLists.length) {
         const token0 = tokenLists.find(
-          (token) => token.address.toLowerCase() === honey.toLowerCase(),
+          (token) => token.address.toLowerCase() === moni.toLowerCase(),
         );
         const token1 = tokenLists.find(
           (token) => token.address.toLowerCase() === __ETHER__.toLowerCase(),
@@ -234,24 +223,36 @@ export default function Page() {
         setHasLoadedDefaultTokens(true);
       }
     }
-  }, [hasLoadedDefaultTokens, tokenLists, honey, selectedTokens]);
+  }, [hasLoadedDefaultTokens, tokenLists, moni, selectedTokens]);
 
-  useWatchBlocks({
-    onBlock: async () => {
-      const promises: Promise<any>[] = [];
+  // Fetch tokenlist every 30 secs
+  useSetInterval(() => {
+    void refetchTokensList();
+  }, 30000);
 
-      promises.push(refetchAmountInUSDValue(), refetchAmountOutUSDValue());
+  useSetInterval(() => {
+    void refetchBestPath();
+    void refetchBestQuery();
+    void refetchAllowance();
+  }, 5000);
 
-      if (amount > 0)
-        promises.push(
-          refetchBestQuery(),
-          refetchBestPath(),
-          refetchAllowance(),
-        );
+  // Line removed for optimal implementation
+  // useWatchBlocks({
+  //   onBlock: async () => {
+  //     const promises: Promise<any>[] = [];
 
-      await Promise.all(promises);
-    },
-  });
+  //     promises.push(refetchAmountInUSDValue(), refetchAmountOutUSDValue());
+
+  //     if (amount > 0)
+  //       promises.push(
+  //         refetchBestQuery(),
+  //         refetchBestPath(),
+  //         refetchAllowance(),
+  //       );
+
+  //     await Promise.all(promises);
+  //   },
+  // });
 
   return (
     <div className="p-5 pb-20">
@@ -268,9 +269,9 @@ export default function Page() {
               <span>Swap</span>
               <span
                 className="cursor-pointer text-swapBox"
-                onClick={() => setAmount(balance0)}
+                onClick={() => setAmount(Number(balance0))}
               >
-                Available {balance0.toFixed(4)} {selectedTokens[0]?.symbol}
+                Available {balance0} {selectedTokens[0]?.symbol}
               </span>
             </p>
 
@@ -328,7 +329,7 @@ export default function Page() {
             <p className="flex justify-between">
               <span>For</span>
               <span className="text-swapBox">
-                Available {balance1.toFixed(4)} {selectedTokens[1]?.symbol}
+                Available {balance1} {selectedTokens[1]?.symbol}
               </span>
             </p>
 
@@ -468,14 +469,14 @@ export default function Page() {
 
       <TokenSelectModal
         isOpen={showModal0}
-        selectedTokens={selectedTokens as [TokenType, TokenType]}
+        selectedTokens={selectedTokens as [ERC20ItemType, ERC20ItemType]}
         close={() => setShowModal0(false)}
         tokenLists={tokenLists}
         onItemClick={(t) => setSelectedTokens([t, selectedTokens[1]])}
       />
       <TokenSelectModal
         isOpen={showModal1}
-        selectedTokens={selectedTokens as [TokenType, TokenType]}
+        selectedTokens={selectedTokens as [ERC20ItemType, ERC20ItemType]}
         close={() => setShowModal1(false)}
         tokenLists={tokenLists}
         onItemClick={(t) => setSelectedTokens([selectedTokens[0], t])}

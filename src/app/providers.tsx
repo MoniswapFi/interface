@@ -1,6 +1,6 @@
 "use client";
 
-import { berachain } from "@/config/_appkit";
+import { berachain, berachainBepolia } from "@/config/_appkit";
 import { persistor, store } from "@/store";
 import { NextUIProvider } from "@nextui-org/react";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
@@ -14,6 +14,7 @@ import { hashFn } from "@wagmi/core/query";
 import { FC, PropsWithChildren, useCallback, useState } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { createClient, http } from "viem";
 import {
   WagmiProvider,
   cookieStorage,
@@ -24,12 +25,13 @@ import { AsideBar } from "../components/Aside";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 
-const networks = [berachain, berachainTestnetbArtio] as [
+const networks = [berachainBepolia, berachain, berachainTestnetbArtio] as [
   AppKitNetwork,
   ...AppKitNetwork[],
 ];
 
 const adapter = new WagmiAdapter({
+  client: ({ chain }) => createClient({ chain, transport: http() }),
   multiInjectedProviderDiscovery: true,
   networks,
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
@@ -51,7 +53,7 @@ createAppKit({
   adapters: [adapter],
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
   networks,
-  defaultNetwork: berachain,
+  defaultNetwork: berachainBepolia,
   themeMode: "dark",
 });
 

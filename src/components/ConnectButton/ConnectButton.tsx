@@ -3,7 +3,6 @@
 import Coinbase from "@/assets/images/coinbase.svg";
 import Metamask from "@/assets/images/metamask.svg";
 import WalletConnect from "@/assets/images/walletconnect.svg";
-import { useCreateWallet } from "@/hooks/api/wallet";
 import { truncateAddress } from "@/utils/format";
 import {
   Modal,
@@ -16,8 +15,8 @@ import { useAppKit } from "@reown/appkit/react";
 import { Settings } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { FC, useEffect, useState } from "react";
-import { Address, zeroAddress } from "viem";
+import { FC, useState } from "react";
+import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";
 import { DisconnectModal } from "../DisconnectModal/DisconnectModal";
 import { SettingsModal } from "../Modal";
@@ -36,21 +35,21 @@ export const ConnectButton: FC<Props> = ({ className }) => {
   const [showSettingModal, setShowSettingModal] = useState(false);
   const [showDisconnectModal, setShowDisconnectModal] = useState(false);
 
-  const { mutateAsync: createWallet } = useCreateWallet();
+  // const { mutateAsync: createWallet } = useCreateWallet();
 
-  const runWalletCreation = async () => {
-    if (address) {
-      const referral = searchParams.get("referral");
-      createWallet({
-        address: address as Address,
-        referral: referral ?? "",
-      });
-    }
-  };
+  // const runWalletCreation = async () => {
+  //   if (address) {
+  //     const referral = searchParams.get("referral");
+  //     createWallet({
+  //       address: address as Address,
+  //       referral: referral ?? "",
+  //     });
+  //   }
+  // };
 
-  useEffect(() => {
-    runWalletCreation();
-  }, [address]);
+  // useEffect(() => {
+  //   runWalletCreation();
+  // }, [address]);
 
   return (
     <>
